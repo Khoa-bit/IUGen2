@@ -1,5 +1,8 @@
-import { mapCourses } from "../../pages/compute/hookForm";
-import exp from "constants";
+import {
+  mapCourses,
+  ClassObject,
+  toClassObject,
+} from "../../pages/compute/hookForm";
 
 describe("mapCourses", () => {
   it("should return courses Map with respective course ID (with labs)", function () {
@@ -52,5 +55,41 @@ describe("mapCourses", () => {
     expect(coursesMap.get("IT134IU")?.at(0)?.length).toEqual(17);
     expect(coursesMap.get("PE018IU")?.length).toEqual(1);
     expect(coursesMap.get("PE018IU")?.at(0)?.length).toEqual(17);
+  });
+});
+
+describe("toClassObject", function () {
+  it("should turn string array to class Object with fields", function () {
+    let classStrArray = [
+      "IT092IU ",
+      "IT092IU ",
+      " Principles of Programming Languages ",
+      "02",
+      "01",
+      "4",
+      "4",
+      "ITIT19CS2",
+      "35 ",
+      "5 ",
+      " *   ",
+      " Fri   Wed ",
+      " 1   7 ",
+      " 4   3 ",
+      " LA1.608   ONLINE ",
+      " N.Q.Phú   Q.T.Tho ",
+      " 07/03/2022--15/05/2022   07/02/2022--05/06/2022 ",
+    ];
+
+    let expectedObject: ClassObject = {
+      courseID: "IT092IU",
+      courseName: "Principles of Programming Languages",
+      hasLab: true,
+      date: ["Fri", "Wed"],
+      startPeriod: [1, 7],
+      periodsCount: [4, 3],
+    };
+
+    let classObject = toClassObject(classStrArray);
+    expect(classObject).toStrictEqual(expectedObject);
   });
 });
