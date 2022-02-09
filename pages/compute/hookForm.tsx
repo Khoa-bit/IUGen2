@@ -10,6 +10,39 @@ interface Inputs {
   count: string;
 }
 
+export interface ClassObject {
+  courseID: string;
+  courseName: string;
+  hasLab: boolean;
+  date: string[];
+  startPeriod: number[];
+  periodsCount: number[];
+}
+
+export function toClassObject(classStrArray: string[]) {
+  const courseID = classStrArray[0].trim();
+  const courseName = classStrArray[2].trim();
+  const hasLab = !!classStrArray[4];
+  const date = classStrArray[11].trim().split(/\s+/);
+  const startPeriod = classStrArray[12]
+    .trim()
+    .split(/\s+/)
+    .map((strValue) => parseInt(strValue));
+  const periodsCount = classStrArray[13]
+    .trim()
+    .split(/\s+/)
+    .map((strValue) => parseInt(strValue));
+
+  return {
+    courseID,
+    courseName,
+    hasLab,
+    date,
+    startPeriod,
+    periodsCount,
+  } as ClassObject;
+}
+
 export function mapCourses(rawData: string[]) {
   let coursesMap: Map<string, string[][]> = new Map();
 
