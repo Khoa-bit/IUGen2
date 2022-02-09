@@ -44,17 +44,17 @@ export function toClassObject(classStrArray: string[]) {
 }
 
 export function mapCourses(rawData: string[]) {
-  let coursesMap: Map<string, string[][]> = new Map();
+  let coursesMap: Map<string, ClassObject[]> = new Map();
 
   for (let i = 0; i < rawData.length; i += 17) {
-    let tempClass = rawData.slice(i, i + 17);
+    let classObject = toClassObject(rawData.slice(i, i + 17));
 
-    let classKey = tempClass[0].trim();
-    let classValue = coursesMap.get(classKey);
-    if (classValue) {
-      coursesMap.set(classKey, [...classValue, tempClass]);
+    let courseKey = classObject.courseID;
+    let courseValue = coursesMap.get(courseKey);
+    if (courseValue) {
+      coursesMap.set(courseKey, [...courseValue, classObject]);
     } else {
-      coursesMap.set(classKey, [tempClass]);
+      coursesMap.set(courseKey, [classObject]);
     }
   }
 
