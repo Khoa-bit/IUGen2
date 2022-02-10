@@ -6,6 +6,8 @@ export interface ClassObject {
   periodsCount: number[];
 }
 
+export type CoursesMap = Map<string, ClassObject[]>;
+
 export function _toClassObject(classStrArray: string[]) {
   const courseID = classStrArray[0].trim();
   const courseName = classStrArray[2].trim();
@@ -29,7 +31,7 @@ export function _toClassObject(classStrArray: string[]) {
 }
 
 export function _mapCourses(rawData: string[]) {
-  let coursesMap: Map<string, ClassObject[]> = new Map();
+  let coursesMap: CoursesMap = new Map();
 
   for (let i = 0; i < rawData.length; i += 17) {
     let classObject = _toClassObject(rawData.slice(i, i + 17));
@@ -46,6 +48,6 @@ export function _mapCourses(rawData: string[]) {
   return coursesMap;
 }
 
-export function parseClassInput(rawData: string) {
-  return _mapCourses(rawData.split("\t"));
+export function parseClassInput(rawInputString: string) {
+  return _mapCourses(rawInputString.split("\t"));
 }

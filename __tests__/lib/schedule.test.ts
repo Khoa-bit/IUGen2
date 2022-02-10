@@ -4,15 +4,15 @@ import {
   _serializeClassTime,
   _checkClassCollision,
 } from "../../lib/schedule";
-import { ClassObject } from "../../lib/classInput";
+import { CoursesMap, parseClassInput } from "../../lib/classInput";
 
 describe("Schedule Generator", () => {
-  const coursesMap: Map<string, ClassObject[]> = new Map();
+  const coursesMap: CoursesMap = new Map();
   beforeAll(() => {
     initializeCourseMap(coursesMap);
   });
 
-  it("should serialize class time with serializeClassTime()", function () {
+  it("should serialize class time with _serializeClassTime()", function () {
     const course1 = coursesMap.get("C1");
     const course2 = coursesMap.get("C2");
     if (!course1 || !course2) throw Error("Missing course in courseMap");
@@ -29,7 +29,7 @@ describe("Schedule Generator", () => {
     expect(_serializeClassTime(course2[1])).toEqual([[33, 36]]);
   });
 
-  it("should check for class collisions with checkClassCollision()", function () {
+  it("should check for class collisions with _checkClassCollision()", function () {
     const prefix: ClassID[] = [{ courseKey: "C1", classIndex: 0 }];
 
     expect(
@@ -88,7 +88,7 @@ describe("Schedule Generator", () => {
   });
 });
 
-function initializeCourseMap(courseMap: Map<string, ClassObject[]>) {
+function initializeCourseMap(courseMap: CoursesMap) {
   courseMap.set("C1", [
     {
       courseID: "C1",

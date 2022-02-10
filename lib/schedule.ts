@@ -1,4 +1,4 @@
-import { ClassObject } from "./classInput";
+import { ClassObject, CoursesMap } from "./classInput";
 
 export interface ClassID {
   courseKey: string;
@@ -6,13 +6,13 @@ export interface ClassID {
 }
 
 interface generateScheduleParams {
-  coursesMap: Map<string, ClassObject[]>;
+  coursesMap: CoursesMap;
   courseKeys: string[];
   prefix: ClassID[];
 }
 
 interface CheckClassCollisionParams {
-  coursesMap: Map<string, ClassObject[]>;
+  coursesMap: CoursesMap;
   prefix: ClassID[];
   classID: ClassID;
 }
