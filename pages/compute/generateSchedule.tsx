@@ -1,6 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import { ClassObject } from "./hookForm";
-import { func } from "prop-types";
+import { ClassObject } from "../../lib/classInput";
 
 const Home: NextPage = () => {
   return (
