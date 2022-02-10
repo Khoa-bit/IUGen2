@@ -1,4 +1,9 @@
-import { ClassObject, _toClassObject, _mapCourses } from "../../lib/classInput";
+import {
+  ClassObject,
+  _toClassObject,
+  _mapCourses,
+  parseClassInput,
+} from "../../lib/classInput";
 
 describe("_mapCourses", () => {
   it("should return courses Map with respective course ID (with labs)", function () {
@@ -98,5 +103,21 @@ describe("_toClassObject", function () {
 
     let classObject = _toClassObject(classStrArray);
     expect(classObject).toStrictEqual(expectedObject);
+  });
+});
+
+describe("parseClassInput", () => {
+  it("should parse raw class input string into CoursesMap Map", () => {
+    const rawInputString =
+      "IT134IU \tIT134IU \t Internet of Things \t01\t01\t4\t4\tITIT19CE\t30 \t6 \t *   \t Mon   Sat \t 7   4 \t 4   3 \t LA1.607   L201 \t L.D.Tân   L.D.Tân \t 07/03/2022--15/05/2022   07/02/2022--05/06/2022 \tPE018IU \tPE018IU \t History of Vietnamese Communist Party \t10\t\t2\t2\tITIT19CS1\t75 \t2 \t \t Wed \t 9 \t 2 \t ONLINE \t H.Y.Linh \t 07/02/2022--05/06/2022";
+
+    const resultCoursesMap = parseClassInput(rawInputString);
+    const resultJSON = JSON.stringify(
+      Object.fromEntries(resultCoursesMap.entries())
+    );
+
+    expect(resultJSON).toMatch(
+      '{"IT134IU":[{"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}],"PE018IU":[{"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}]}'
+    );
   });
 });
