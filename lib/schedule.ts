@@ -31,37 +31,6 @@ const SERIAL_DATE = new Map(
 
 const PERIODS_PER_DAY = 16;
 
-export function generateSchedule({
-  coursesMap,
-  courseKeys,
-  prefix,
-}: generateScheduleParams) {
-  if (courseKeys.length == 0) {
-    return [prefix];
-  } else {
-    const courseKey = courseKeys[0];
-    const classObjects = coursesMap.get(courseKey);
-    if (!classObjects) return [prefix];
-
-    let result: ClassID[][] = [];
-
-    for (let classIndex = 0; classIndex < classObjects.length; classIndex++) {
-      const classID: ClassID = { courseKey, classIndex };
-
-      if (_checkClassCollision({ coursesMap, prefix, classID })) {
-        let childResult = generateSchedule({
-          coursesMap,
-          courseKeys: courseKeys.slice(1),
-          prefix: [...prefix, classID],
-        });
-        result.push(...childResult);
-      }
-    }
-
-    return result;
-  }
-}
-
 export function _serializeClassTime(classObject: ClassObject) {
   const date0 = SERIAL_DATE.get(classObject.date[0]);
   const date1 =
@@ -121,4 +90,35 @@ export function _checkClassCollision({
   }
 
   return true;
+}
+
+export function generateSchedule({
+  coursesMap,
+  courseKeys,
+  prefix,
+}: generateScheduleParams) {
+  if (courseKeys.length == 0) {
+    return [prefix];
+  } else {
+    const courseKey = courseKeys[0];
+    const classObjects = coursesMap.get(courseKey);
+    if (!classObjects) return [prefix];
+
+    let result: ClassID[][] = [];
+
+    for (let classIndex = 0; classIndex < classObjects.length; classIndex++) {
+      const classID: ClassID = { courseKey, classIndex };
+
+      if (_checkClassCollision({ coursesMap, prefix, classID })) {
+        let childResult = generateSchedule({
+          coursesMap,
+          courseKeys: courseKeys.slice(1),
+          prefix: [...prefix, classID],
+        });
+        result.push(...childResult);
+      }
+    }
+
+    return result;
+  }
 }
