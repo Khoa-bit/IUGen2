@@ -1,13 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
-import { ClassObject } from "../../lib/classInput";
-
-const Home: NextPage = () => {
-  return (
-    <main>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-    </main>
-  );
-};
+import { ClassObject } from "./classInput";
 
 export interface ClassID {
   courseKey: string;
@@ -26,6 +17,20 @@ interface CheckClassCollisionParams {
   classID: ClassID;
 }
 
+const SERIAL_DATE = new Map(
+  Object.entries({
+    Mon: 0,
+    Tue: 1,
+    Wed: 2,
+    Thu: 3,
+    Fri: 4,
+    Sun: 5,
+    Sat: 6,
+  })
+);
+
+const PERIODS_PER_DAY = 16;
+
 export function generateSchedule({
   coursesMap,
   courseKeys,
@@ -43,7 +48,7 @@ export function generateSchedule({
     for (let classIndex = 0; classIndex < classObjects.length; classIndex++) {
       const classID: ClassID = { courseKey, classIndex };
 
-      if (checkClassCollision({ coursesMap, prefix, classID })) {
+      if (_checkClassCollision({ coursesMap, prefix, classID })) {
         let childResult = generateSchedule({
           coursesMap,
           courseKeys: courseKeys.slice(1),
@@ -57,24 +62,10 @@ export function generateSchedule({
   }
 }
 
-const serialDate = new Map(
-  Object.entries({
-    Mon: 0,
-    Tue: 1,
-    Wed: 2,
-    Thu: 3,
-    Fri: 4,
-    Sun: 5,
-    Sat: 6,
-  })
-);
-
-const PERIODS_PER_DAY = 16;
-
-export function serializeClassTime(classObject: ClassObject) {
-  const date0 = serialDate.get(classObject.date[0]);
+export function _serializeClassTime(classObject: ClassObject) {
+  const date0 = SERIAL_DATE.get(classObject.date[0]);
   const date1 =
-    classObject.date.length != 1 ? serialDate.get(classObject.date[1]) : null;
+    classObject.date.length != 1 ? SERIAL_DATE.get(classObject.date[1]) : null;
   const result: number[][] = [];
 
   if (date0) {
@@ -98,7 +89,7 @@ export function serializeClassTime(classObject: ClassObject) {
   return result;
 }
 
-export function checkClassCollision({
+export function _checkClassCollision({
   coursesMap,
   prefix,
   classID,
@@ -108,7 +99,7 @@ export function checkClassCollision({
 
   const serialTimeline: number[][] = [];
 
-  serialTimeline.push(...serializeClassTime(classObject));
+  serialTimeline.push(..._serializeClassTime(classObject));
 
   // Can be memoize in generateSchedule(), reduce prefix-serialized repetition
   for (let prefixClassID of prefix) {
@@ -118,7 +109,7 @@ export function checkClassCollision({
 
     if (!prefixClassObject) continue;
 
-    serialTimeline.push(...serializeClassTime(prefixClassObject));
+    serialTimeline.push(..._serializeClassTime(prefixClassObject));
   }
 
   serialTimeline.sort((a, b) => {
@@ -131,5 +122,3 @@ export function checkClassCollision({
 
   return true;
 }
-
-export default Home;
