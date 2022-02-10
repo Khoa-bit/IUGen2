@@ -1,10 +1,10 @@
 import {
   generateSchedule,
   ClassID,
-  serializeClassTime,
-  checkClassCollision,
-} from "../../pages/compute/generateSchedule";
-import { ClassObject } from "../../pages/compute/hookForm";
+  _serializeClassTime,
+  _checkClassCollision,
+} from "../../lib/schedule";
+import { ClassObject } from "../../lib/classInput";
 
 describe("Schedule Generator", () => {
   const coursesMap: Map<string, ClassObject[]> = new Map();
@@ -17,23 +17,23 @@ describe("Schedule Generator", () => {
     const course2 = coursesMap.get("C2");
     if (!course1 || !course2) throw Error("Missing course in courseMap");
 
-    expect(serializeClassTime(course1[0])).toEqual([
+    expect(_serializeClassTime(course1[0])).toEqual([
       [33, 36],
       [71, 75],
     ]);
-    expect(serializeClassTime(course1[1])).toEqual([
+    expect(_serializeClassTime(course1[1])).toEqual([
       [23, 26],
       [71, 75],
     ]);
-    expect(serializeClassTime(course2[0])).toEqual([[17, 20]]);
-    expect(serializeClassTime(course2[1])).toEqual([[33, 36]]);
+    expect(_serializeClassTime(course2[0])).toEqual([[17, 20]]);
+    expect(_serializeClassTime(course2[1])).toEqual([[33, 36]]);
   });
 
   it("should check for class collisions with checkClassCollision()", function () {
     const prefix: ClassID[] = [{ courseKey: "C1", classIndex: 0 }];
 
     expect(
-      checkClassCollision({
+      _checkClassCollision({
         coursesMap,
         prefix,
         classID: { courseKey: "C2", classIndex: 0 },
@@ -41,7 +41,7 @@ describe("Schedule Generator", () => {
     ).toBeTruthy();
 
     expect(
-      checkClassCollision({
+      _checkClassCollision({
         coursesMap,
         prefix,
         classID: { courseKey: "C2", classIndex: 1 },
@@ -49,7 +49,7 @@ describe("Schedule Generator", () => {
     ).toBeFalsy();
 
     expect(
-      checkClassCollision({
+      _checkClassCollision({
         coursesMap,
         prefix,
         classID: { courseKey: "C2", classIndex: 99 },
@@ -57,7 +57,7 @@ describe("Schedule Generator", () => {
     ).toBeFalsy();
 
     expect(
-      checkClassCollision({
+      _checkClassCollision({
         coursesMap,
         prefix,
         classID: { courseKey: "INVALID", classIndex: 0 },
@@ -93,7 +93,6 @@ function initializeCourseMap(courseMap: Map<string, ClassObject[]>) {
     {
       courseID: "C1",
       courseName: "Course1",
-      hasLab: true,
       date: ["Wed", "Fri"],
       startPeriod: [1, 7],
       periodsCount: [3, 4],
@@ -101,7 +100,6 @@ function initializeCourseMap(courseMap: Map<string, ClassObject[]>) {
     {
       courseID: "C1",
       courseName: "Course1",
-      hasLab: true,
       date: ["Tue", "Fri"],
       startPeriod: [7, 7],
       periodsCount: [3, 4],
@@ -112,7 +110,6 @@ function initializeCourseMap(courseMap: Map<string, ClassObject[]>) {
     {
       courseID: "C2",
       courseName: "Course2",
-      hasLab: false,
       date: ["Tue"],
       startPeriod: [1],
       periodsCount: [3],
@@ -120,7 +117,6 @@ function initializeCourseMap(courseMap: Map<string, ClassObject[]>) {
     {
       courseID: "C2",
       courseName: "Course2",
-      hasLab: false,
       date: ["Wed"],
       startPeriod: [1],
       periodsCount: [3],
