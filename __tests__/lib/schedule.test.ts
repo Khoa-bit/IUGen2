@@ -3,6 +3,7 @@ import {
   ClassID,
   _serializeClassTime,
   _checkClassCollision,
+  generateScheduleIter,
 } from "../../lib/schedule";
 import { CoursesMap, parseClassInput } from "../../lib/classInput";
 
@@ -66,6 +67,27 @@ describe("Schedule Generator", () => {
     const prefix: ClassID[] = [];
 
     const schedules = generateSchedule({ coursesMap, courseKeys, prefix });
+
+    expect(schedules).toStrictEqual([
+      [
+        { courseKey: "C1", classIndex: 0 },
+        { courseKey: "C2", classIndex: 0 },
+      ],
+      [
+        { courseKey: "C1", classIndex: 1 },
+        { courseKey: "C2", classIndex: 0 },
+      ],
+      [
+        { courseKey: "C1", classIndex: 1 },
+        { courseKey: "C2", classIndex: 1 },
+      ],
+    ] as ClassID[][]);
+  });
+
+  it("should generate schedule with generateScheduleIter()", function () {
+    const courseKeys: string[] = ["C1", "C2"];
+
+    const schedules = generateScheduleIter({ coursesMap, courseKeys });
 
     expect(schedules).toStrictEqual([
       [
