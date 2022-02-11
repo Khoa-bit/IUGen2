@@ -11,6 +11,11 @@ interface generateScheduleParams {
   prefix: ClassID[];
 }
 
+interface generateScheduleIterParams {
+  coursesMap: CoursesMap;
+  courseKeys: string[];
+}
+
 interface CheckClassCollisionParams {
   coursesMap: CoursesMap;
   schedule: ClassID[];
@@ -116,4 +121,28 @@ export function generateSchedule({
 
     return result;
   }
+}
+
+export function generateScheduleIter({
+  coursesMap,
+  courseKeys,
+}: generateScheduleIterParams) {
+  let interSchedules: ClassID[][] = [[]];
+  for (const courseKey of courseKeys) {
+    const nextIterSchedules: ClassID[][] = [];
+    const course = coursesMap.get(courseKey);
+    if (!course) continue;
+
+    for (let classIndex = 0; classIndex < course.length; classIndex++) {
+      for (const interSchedule of interSchedules) {
+        const schedule = [...interSchedule, { courseKey, classIndex }];
+        if (_checkClassCollision({ coursesMap, schedule })) {
+          nextIterSchedules.push(schedule);
+        }
+      }
+    }
+
+    interSchedules = [...nextIterSchedules];
+  }
+  return interSchedules;
 }
