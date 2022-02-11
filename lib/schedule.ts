@@ -8,12 +8,6 @@ export interface ClassID {
 interface generateScheduleParams {
   coursesMap: CoursesMap;
   courseKeys: string[];
-  prefix: ClassID[];
-}
-
-interface generateScheduleIterParams {
-  coursesMap: CoursesMap;
-  courseKeys: string[];
 }
 
 interface CheckClassCollisionParams {
@@ -94,7 +88,7 @@ export function _checkClassCollision({
 export function generateSchedule({
   coursesMap,
   courseKeys,
-}: generateScheduleIterParams) {
+}: generateScheduleParams) {
   let interSchedules: ClassID[][] = [[]];
   for (const courseKey of courseKeys) {
     const nextIterSchedules: ClassID[][] = [];
