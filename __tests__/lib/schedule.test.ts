@@ -97,8 +97,6 @@ describe("parseClassInput() and generateSchedule()", () => {
       courseKeys,
     });
 
-    console.log(schedules);
-
     expect(schedules).toStrictEqual([
       [
         { courseKey: "IT092IU", classIndex: 1 },

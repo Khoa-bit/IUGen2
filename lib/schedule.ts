@@ -62,16 +62,16 @@ export function _checkClassCollision({
 }: CheckClassCollisionParams) {
   const serialTimeline: number[][] = [];
 
-  // Can be memoize in generateSchedule(), reduce prefix-serialized repetition
-  for (let prefixClassID of schedule) {
-    const prefixClassObject = coursesMap
-      .get(prefixClassID.courseKey)
-      ?.at(prefixClassID.classIndex);
+  // Can be memoize in generateSchedule(), reduce schedule serialization
+  for (let classID of schedule) {
+    const classObject = coursesMap
+      .get(classID.courseKey)
+      ?.at(classID.classIndex);
 
-    if (!prefixClassObject)
-      throw ReferenceError(`Invalid ClassObject reference: ${prefixClassID}`);
+    if (!classObject)
+      throw ReferenceError(`Invalid ClassObject reference: ${classID}`);
 
-    serialTimeline.push(..._serializeClassTime(prefixClassObject));
+    serialTimeline.push(..._serializeClassTime(classObject));
   }
 
   serialTimeline.sort((a, b) => {
