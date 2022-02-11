@@ -13,8 +13,7 @@ interface generateScheduleParams {
 
 interface CheckClassCollisionParams {
   coursesMap: CoursesMap;
-  prefix: ClassID[];
-  classID: ClassID;
+  schedule: ClassID[];
 }
 
 const SERIAL_DATE = new Map(
@@ -60,23 +59,18 @@ export function _serializeClassTime(classObject: ClassObject) {
 
 export function _checkClassCollision({
   coursesMap,
-  prefix,
-  classID,
+  schedule,
 }: CheckClassCollisionParams) {
-  const classObject = coursesMap.get(classID.courseKey)?.at(classID.classIndex);
-  if (!classObject) return false;
-
   const serialTimeline: number[][] = [];
 
-  serialTimeline.push(..._serializeClassTime(classObject));
-
   // Can be memoize in generateSchedule(), reduce prefix-serialized repetition
-  for (let prefixClassID of prefix) {
+  for (let prefixClassID of schedule) {
     const prefixClassObject = coursesMap
       .get(prefixClassID.courseKey)
       ?.at(prefixClassID.classIndex);
 
-    if (!prefixClassObject) continue;
+    if (!prefixClassObject)
+      throw ReferenceError(`Invalid ClassObject reference: ${prefixClassID}`);
 
     serialTimeline.push(..._serializeClassTime(prefixClassObject));
   }
@@ -108,12 +102,13 @@ export function generateSchedule({
 
     for (let classIndex = 0; classIndex < classObjects.length; classIndex++) {
       const classID: ClassID = { courseKey, classIndex };
+      const schedule = [...prefix, classID];
 
-      if (_checkClassCollision({ coursesMap, prefix, classID })) {
+      if (_checkClassCollision({ coursesMap, schedule })) {
         let childResult = generateSchedule({
           coursesMap,
           courseKeys: courseKeys.slice(1),
-          prefix: [...prefix, classID],
+          prefix: schedule,
         });
         result.push(...childResult);
       }

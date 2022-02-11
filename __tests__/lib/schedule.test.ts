@@ -35,34 +35,30 @@ describe("Schedule Generator", () => {
     expect(
       _checkClassCollision({
         coursesMap,
-        prefix,
-        classID: { courseKey: "C2", classIndex: 0 },
+        schedule: [...prefix, { courseKey: "C2", classIndex: 0 }],
       })
     ).toBeTruthy();
 
     expect(
       _checkClassCollision({
         coursesMap,
-        prefix,
-        classID: { courseKey: "C2", classIndex: 1 },
+        schedule: [...prefix, { courseKey: "C2", classIndex: 1 }],
       })
     ).toBeFalsy();
 
-    expect(
+    expect(() => {
       _checkClassCollision({
         coursesMap,
-        prefix,
-        classID: { courseKey: "C2", classIndex: 99 },
-      })
-    ).toBeFalsy();
+        schedule: [...prefix, { courseKey: "C2", classIndex: 99 }],
+      });
+    }).toThrowError(/^Invalid ClassObject reference:/);
 
-    expect(
+    expect(() => {
       _checkClassCollision({
         coursesMap,
-        prefix,
-        classID: { courseKey: "INVALID", classIndex: 0 },
-      })
-    ).toBeFalsy();
+        schedule: [...prefix, { courseKey: "INVALID", classIndex: 0 }],
+      });
+    }).toThrowError(/^Invalid ClassObject reference:/);
   });
 
   it("should generate schedule with generateSchedule()", function () {
