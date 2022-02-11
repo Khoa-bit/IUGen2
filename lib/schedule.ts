@@ -94,38 +94,6 @@ export function _checkClassCollision({
 export function generateSchedule({
   coursesMap,
   courseKeys,
-  prefix,
-}: generateScheduleParams) {
-  if (courseKeys.length == 0) {
-    return [prefix];
-  } else {
-    const courseKey = courseKeys[0];
-    const classObjects = coursesMap.get(courseKey);
-    if (!classObjects) return [prefix];
-
-    let result: ClassID[][] = [];
-
-    for (let classIndex = 0; classIndex < classObjects.length; classIndex++) {
-      const classID: ClassID = { courseKey, classIndex };
-      const schedule = [...prefix, classID];
-
-      if (_checkClassCollision({ coursesMap, schedule })) {
-        let childResult = generateSchedule({
-          coursesMap,
-          courseKeys: courseKeys.slice(1),
-          prefix: schedule,
-        });
-        result.push(...childResult);
-      }
-    }
-
-    return result;
-  }
-}
-
-export function generateScheduleIter({
-  coursesMap,
-  courseKeys,
 }: generateScheduleIterParams) {
   let interSchedules: ClassID[][] = [[]];
   for (const courseKey of courseKeys) {
