@@ -3,7 +3,6 @@ import {
   ClassID,
   _serializeClassTime,
   _checkClassCollision,
-  generateScheduleIter,
 } from "../../lib/schedule";
 import { CoursesMap, parseClassInput } from "../../lib/classInput";
 
@@ -64,30 +63,8 @@ describe("Schedule Generator", () => {
 
   it("should generate schedule with generateSchedule()", function () {
     const courseKeys: string[] = ["C1", "C2"];
-    const prefix: ClassID[] = [];
 
-    const schedules = generateSchedule({ coursesMap, courseKeys, prefix });
-
-    expect(schedules).toStrictEqual([
-      [
-        { courseKey: "C1", classIndex: 0 },
-        { courseKey: "C2", classIndex: 0 },
-      ],
-      [
-        { courseKey: "C1", classIndex: 1 },
-        { courseKey: "C2", classIndex: 0 },
-      ],
-      [
-        { courseKey: "C1", classIndex: 1 },
-        { courseKey: "C2", classIndex: 1 },
-      ],
-    ] as ClassID[][]);
-  });
-
-  it("should generate schedule with generateScheduleIter()", function () {
-    const courseKeys: string[] = ["C1", "C2"];
-
-    const schedules = generateScheduleIter({ coursesMap, courseKeys });
+    const schedules = generateSchedule({ coursesMap, courseKeys });
 
     expect(schedules).toStrictEqual([
       [
@@ -115,31 +92,14 @@ describe("parseClassInput() and generateSchedule()", () => {
 
     const courseKeys: string[] = Array.from(resultCoursesMap.keys());
 
-    const prefix: ClassID[] = [];
-
     const schedules = generateSchedule({
       coursesMap: resultCoursesMap,
       courseKeys,
-      prefix,
     });
 
     console.log(schedules);
 
     expect(schedules).toStrictEqual([
-      [
-        { courseKey: "IT092IU", classIndex: 0 },
-        { courseKey: "IT093IU", classIndex: 1 },
-        { courseKey: "IT097IU", classIndex: 0 },
-        { courseKey: "PE018IU", classIndex: 0 },
-        { courseKey: "PE019IU", classIndex: 0 },
-      ],
-      [
-        { courseKey: "IT092IU", classIndex: 0 },
-        { courseKey: "IT093IU", classIndex: 2 },
-        { courseKey: "IT097IU", classIndex: 0 },
-        { courseKey: "PE018IU", classIndex: 0 },
-        { courseKey: "PE019IU", classIndex: 0 },
-      ],
       [
         { courseKey: "IT092IU", classIndex: 1 },
         { courseKey: "IT093IU", classIndex: 0 },
@@ -148,8 +108,22 @@ describe("parseClassInput() and generateSchedule()", () => {
         { courseKey: "PE019IU", classIndex: 0 },
       ],
       [
+        { courseKey: "IT092IU", classIndex: 0 },
+        { courseKey: "IT093IU", classIndex: 1 },
+        { courseKey: "IT097IU", classIndex: 0 },
+        { courseKey: "PE018IU", classIndex: 0 },
+        { courseKey: "PE019IU", classIndex: 0 },
+      ],
+      [
         { courseKey: "IT092IU", classIndex: 1 },
         { courseKey: "IT093IU", classIndex: 1 },
+        { courseKey: "IT097IU", classIndex: 0 },
+        { courseKey: "PE018IU", classIndex: 0 },
+        { courseKey: "PE019IU", classIndex: 0 },
+      ],
+      [
+        { courseKey: "IT092IU", classIndex: 0 },
+        { courseKey: "IT093IU", classIndex: 2 },
         { courseKey: "IT097IU", classIndex: 0 },
         { courseKey: "PE018IU", classIndex: 0 },
         { courseKey: "PE019IU", classIndex: 0 },
