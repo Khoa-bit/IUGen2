@@ -3,6 +3,7 @@ import {
   ClassID,
   _serializeClassTime,
   _checkClassCollision,
+  _extractDates,
 } from "../../lib/schedule";
 import { CoursesMap, parseClassInput } from "../../lib/classInput";
 
@@ -12,74 +13,118 @@ describe("Schedule Generator", () => {
     initializeCourseMap(coursesMap);
   });
 
-  it("should serialize class time with _serializeClassTime()", function () {
-    const course1 = coursesMap.get("C1");
-    const course2 = coursesMap.get("C2");
-    if (!course1 || !course2) throw Error("Missing course in courseMap");
+  describe("_extractDates()", () => {
+    it("should extract and serialize dates", function () {
+      const class1 = coursesMap.get("C1")?.at(0);
+      const class2 = coursesMap.get("C2")?.at(0);
+      if (!class1 || !class2) throw Error("Missing class in courseMap");
 
-    expect(_serializeClassTime(course1[0])).toEqual([
-      [33, 36],
-      [71, 75],
-    ]);
-    expect(_serializeClassTime(course1[1])).toEqual([
-      [23, 26],
-      [71, 75],
-    ]);
-    expect(_serializeClassTime(course2[0])).toEqual([[17, 20]]);
-    expect(_serializeClassTime(course2[1])).toEqual([[33, 36]]);
+      expect(_extractDates(class1)).toEqual([2, 4]);
+      expect(_extractDates(class2)).toEqual([1]);
+    });
+
+    it("should throw error with invalid classObject", function () {
+      expect(() => {
+        _extractDates({
+          courseID: "ERR",
+          courseName: "ErrorCourse",
+          // @ts-ignore
+          date: ["What?"], // Invalid WeekDate
+          startPeriod: [1],
+          periodsCount: [3],
+        });
+      }).toThrowError(/^Invalid week date:/);
+    });
   });
 
-  it("should check for class collisions with _checkClassCollision()", function () {
-    const prefix: ClassID[] = [{ courseKey: "C1", classIndex: 0 }];
+  describe("_serializeClassTime()", () => {
+    it("should serialize class time", function () {
+      const course1 = coursesMap.get("C1");
+      const course2 = coursesMap.get("C2");
+      if (!course1 || !course2) throw Error("Missing course in courseMap");
 
-    expect(
-      _checkClassCollision({
-        coursesMap,
-        schedule: [...prefix, { courseKey: "C2", classIndex: 0 }],
-      })
-    ).toBeTruthy();
+      expect(_serializeClassTime(course1[0])).toEqual([
+        [33, 36],
+        [71, 75],
+      ]);
+      expect(_serializeClassTime(course1[1])).toEqual([
+        [23, 26],
+        [71, 75],
+      ]);
+      expect(_serializeClassTime(course2[0])).toEqual([[17, 20]]);
+      expect(_serializeClassTime(course2[1])).toEqual([[33, 36]]);
+    });
 
-    expect(
-      _checkClassCollision({
-        coursesMap,
-        schedule: [...prefix, { courseKey: "C2", classIndex: 1 }],
-      })
-    ).toBeFalsy();
-
-    expect(() => {
-      _checkClassCollision({
-        coursesMap,
-        schedule: [...prefix, { courseKey: "C2", classIndex: 99 }],
-      });
-    }).toThrowError(/^Invalid ClassObject reference:/);
-
-    expect(() => {
-      _checkClassCollision({
-        coursesMap,
-        schedule: [...prefix, { courseKey: "INVALID", classIndex: 0 }],
-      });
-    }).toThrowError(/^Invalid ClassObject reference:/);
+    it("should throw an Error due to missing periods for dates", function () {
+      expect(() => {
+        _serializeClassTime({
+          courseID: "ERR",
+          courseName: "ErrorCourse",
+          date: ["Wed", "Fri"],
+          startPeriod: [1], // Missing startPeriod for "Fri" date
+          periodsCount: [3], // Missing periodsCount for "Fri" date
+        });
+      }).toThrowError(
+        /^Missing elements in array of date or startPeriod or periodsCount:/
+      );
+    });
   });
 
-  it("should generate schedule with generateSchedule()", function () {
-    const courseKeys: string[] = ["C1", "C2"];
+  describe("_checkClassCollision()", () => {
+    it("should check for class collisions with ", function () {
+      const prefix: ClassID[] = [{ courseKey: "C1", classIndex: 0 }];
 
-    const schedules = generateSchedule({ coursesMap, courseKeys });
+      expect(
+        _checkClassCollision({
+          coursesMap,
+          schedule: [...prefix, { courseKey: "C2", classIndex: 0 }],
+        })
+      ).toBeTruthy();
 
-    expect(schedules).toStrictEqual([
-      [
-        { courseKey: "C1", classIndex: 0 },
-        { courseKey: "C2", classIndex: 0 },
-      ],
-      [
-        { courseKey: "C1", classIndex: 1 },
-        { courseKey: "C2", classIndex: 0 },
-      ],
-      [
-        { courseKey: "C1", classIndex: 1 },
-        { courseKey: "C2", classIndex: 1 },
-      ],
-    ] as ClassID[][]);
+      expect(
+        _checkClassCollision({
+          coursesMap,
+          schedule: [...prefix, { courseKey: "C2", classIndex: 1 }],
+        })
+      ).toBeFalsy();
+
+      expect(() => {
+        _checkClassCollision({
+          coursesMap,
+          schedule: [...prefix, { courseKey: "C2", classIndex: 99 }],
+        });
+      }).toThrowError(/^Invalid ClassObject reference:/);
+
+      expect(() => {
+        _checkClassCollision({
+          coursesMap,
+          schedule: [...prefix, { courseKey: "INVALID", classIndex: 0 }],
+        });
+      }).toThrowError(/^Invalid ClassObject reference:/);
+    });
+  });
+
+  describe("generateSchedule()", () => {
+    it("should generate schedule with ", function () {
+      const courseKeys: string[] = ["C1", "C2"];
+
+      const schedules = generateSchedule({ coursesMap, courseKeys });
+
+      expect(schedules).toStrictEqual([
+        [
+          { courseKey: "C1", classIndex: 0 },
+          { courseKey: "C2", classIndex: 0 },
+        ],
+        [
+          { courseKey: "C1", classIndex: 1 },
+          { courseKey: "C2", classIndex: 0 },
+        ],
+        [
+          { courseKey: "C1", classIndex: 1 },
+          { courseKey: "C2", classIndex: 1 },
+        ],
+      ] as ClassID[][]);
+    });
   });
 });
 
