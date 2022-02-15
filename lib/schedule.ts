@@ -31,29 +31,32 @@ export const SERIAL_DATE = new Map(
 
 const PERIODS_PER_DAY = 16;
 
+export function _extractDates(classObject: ClassObject) {
+  const dates = classObject.date.map((dateStr) => {
+    const serialDate = SERIAL_DATE.get(dateStr);
+    if (serialDate === undefined) throw Error(`Invalid week date: ${dateStr}`);
+    return serialDate;
+  });
+
+  return dates;
+}
+
 export function _serializeClassTime(classObject: ClassObject) {
-  const date0 = SERIAL_DATE.get(classObject.date[0]);
-  const date1 =
-    classObject.date.length != 1 ? SERIAL_DATE.get(classObject.date[1]) : null;
-  const result: number[][] = [];
-
-  if (date0) {
-    result.push([
-      date0 * PERIODS_PER_DAY + classObject.startPeriod[0],
-      date0 * PERIODS_PER_DAY +
-        classObject.startPeriod[0] +
-        classObject.periodsCount[0],
-    ]);
+  if (
+    classObject.date.length !== classObject.startPeriod.length ||
+    classObject.startPeriod.length !== classObject.periodsCount.length
+  ) {
+    throw Error(
+      `Missing elements in array of date or startPeriod or periodsCount: ${classObject}`
+    );
   }
-
-  if (date1) {
-    result.push([
-      date1 * PERIODS_PER_DAY + classObject.startPeriod[1],
-      date1 * PERIODS_PER_DAY +
-        classObject.startPeriod[1] +
-        classObject.periodsCount[1],
-    ]);
-  }
+  const dates = _extractDates(classObject);
+  const result: number[][] = dates.map((date, index) => [
+    date * PERIODS_PER_DAY + classObject.startPeriod[index],
+    date * PERIODS_PER_DAY +
+      classObject.startPeriod[index] +
+      classObject.periodsCount[index],
+  ]);
 
   return result;
 }
