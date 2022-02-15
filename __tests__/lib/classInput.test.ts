@@ -104,6 +104,60 @@ describe("_toClassObject", function () {
     let classObject = _toClassObject(classStrArray);
     expect(classObject).toStrictEqual(expectedObject);
   });
+
+  it("should throw an Error due to missing periods for dates", function () {
+    let classStrArray = [
+      "IT092IU ",
+      "IT092IU ",
+      " Principles of Programming Languages ",
+      "02",
+      "01",
+      "4",
+      "4",
+      "ITIT19CS2",
+      "35 ",
+      "5 ",
+      " *   ",
+      " Fri   Wed ",
+      " 7 ", // Missing startPeriod for "Fri" date
+      " 4   3 ",
+      " LA1.608   ONLINE ",
+      " N.Q.Phú   Q.T.Tho ",
+      " 07/03/2022--15/05/2022   07/02/2022--05/06/2022 ",
+    ];
+
+    expect(() => {
+      _toClassObject(classStrArray);
+    }).toThrowError(
+      /^Missing elements in array of date or startPeriod or periodsCount:/
+    );
+  });
+
+  it("should throw an Error due to missing periods for dates", function () {
+    let classStrArray = [
+      "IT092IU ",
+      "IT092IU ",
+      " Principles of Programming Languages ",
+      "02",
+      "01",
+      "4",
+      "4",
+      "ITIT19CS2",
+      "35 ",
+      "5 ",
+      " *   ",
+      " Fri   What? ", // Invalid WeekDate
+      " 1   7 ",
+      " 4   3 ",
+      " LA1.608   ONLINE ",
+      " N.Q.Phú   Q.T.Tho ",
+      " 07/03/2022--15/05/2022   07/02/2022--05/06/2022 ",
+    ];
+
+    expect(() => {
+      _toClassObject(classStrArray);
+    }).toThrowError(/^Invalid week date/);
+  });
 });
 
 describe("parseClassInput", () => {
