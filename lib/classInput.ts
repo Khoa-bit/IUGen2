@@ -1,12 +1,43 @@
+import { WeekDate, SERIAL_DATE } from "./schedule";
+
 export interface ClassObject {
   courseID: string;
   courseName: string;
-  date: string[];
+  date: WeekDate[];
   startPeriod: number[];
   periodsCount: number[];
 }
 
 export type CoursesMap = Map<string, ClassObject[]>;
+
+interface validateClassObjectFields {
+  classStrArray: string[];
+  date: string[];
+  startPeriod: number[];
+  periodsCount: number[];
+}
+
+function _validateClassObject({
+  classStrArray,
+  date,
+  startPeriod,
+  periodsCount,
+}: validateClassObjectFields) {
+  date.forEach((dateStr) => {
+    if (SERIAL_DATE.get(dateStr) === undefined) {
+      throw Error(`Invalid week date "${dateStr}": ${classStrArray}`);
+    }
+  });
+
+  if (
+    date.length !== startPeriod.length ||
+    startPeriod.length !== periodsCount.length
+  ) {
+    throw Error(
+      `Missing elements in array of date or startPeriod or periodsCount: ${classStrArray}`
+    );
+  }
+}
 
 export function _toClassObject(classStrArray: string[]) {
   const courseID = classStrArray[0].trim();
@@ -20,6 +51,8 @@ export function _toClassObject(classStrArray: string[]) {
     .trim()
     .split(/\s+/)
     .map((strValue) => parseInt(strValue));
+
+  _validateClassObject({ classStrArray, date, periodsCount, startPeriod });
 
   return {
     courseID,

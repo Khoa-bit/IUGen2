@@ -15,7 +15,9 @@ interface CheckClassCollisionParams {
   schedule: ClassID[];
 }
 
-const SERIAL_DATE = new Map(
+export type WeekDate = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
+
+export const SERIAL_DATE = new Map(
   Object.entries({
     Mon: 0,
     Tue: 1,
