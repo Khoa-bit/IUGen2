@@ -38,3 +38,6 @@ yarn-error.log*
 
 # Intelij Idea
 /.idea/
+
+# VSCode
+/.vscode/
