@@ -15,7 +15,7 @@ const Table = ({ coursesMap, schedule }: TableProps) => {
   const DAY_PER_WEEK = 7;
   for (let period = 0; period < PERIODS_PER_DAY; period++) {
     const cellsProps: CellProps[] = [];
-    cellsProps.push({ content: `${period}` });
+    cellsProps.push({ content: `${period + 1}` });
     for (let day = 0; day < DAY_PER_WEEK; day++) {
       cellsProps.push({ content: "" });
     }

@@ -1,9 +1,10 @@
+import { nanoid } from "nanoid";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Table from "../../components/scheduleTable/Table";
-import { parseClassInput } from "../../lib/classInput";
-import { generateSchedule, _extractDates } from "../../lib/schedule";
+import { CoursesMap, parseClassInput } from "../../lib/classInput";
+import { generateSchedule } from "../../lib/schedule";
 
 interface Inputs {
   copiedStr: string;
@@ -14,6 +15,7 @@ const HookForm: NextPage = () => {
   const [scheduleTables, setScheduleTables] = useState<JSX.Element[]>([]);
   const [rawInputString, setRawInputString] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<JSX.Element>();
+  const [coursesList, setCoursesList] = useState<JSX.Element[]>([]);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     setRawInputString(data.copiedStr);
@@ -42,6 +44,28 @@ const HookForm: NextPage = () => {
           ></Table>
         ))
       );
+
+      const tempList: JSX.Element[] = [];
+      coursesMap.forEach((value, key) => {
+        const courseDetails = (
+          <li key={nanoid(5)}>
+            {key}:
+            <ol className="list-decimal ml-6">
+              {value.map((value) => (
+                <li key={nanoid(5)}>
+                  {value.date[0]} - {value.startPeriod[0]} -{" "}
+                  {value.periodsCount[0]}{" "}
+                  {value.date[1] &&
+                    `| ${value.date[1]} - ${value.startPeriod[1]} - ${value.periodsCount[1]}`}
+                </li>
+              ))}
+            </ol>
+          </li>
+        );
+        tempList.push(courseDetails);
+      });
+
+      setCoursesList(tempList);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(<h2>{error.message}</h2>);
@@ -65,6 +89,8 @@ const HookForm: NextPage = () => {
         />
         <input className="border-2 bg-fuchsia-400" type="submit" />
       </form>
+      <hr />
+      <ol className="list-disc ml-6">{coursesList}</ol>
       <hr />
       {errorMessage}
       {scheduleTables}
