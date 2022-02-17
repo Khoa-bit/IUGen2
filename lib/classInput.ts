@@ -40,15 +40,13 @@ function _validateClassObject({
 }
 
 export function _toClassObject(classStrArray: string[]) {
-  const courseID = classStrArray[0].trim();
-  const courseName = classStrArray[2].trim();
-  const date = classStrArray[11].trim().split(/\s+/);
+  const courseID = classStrArray[0];
+  const courseName = classStrArray[2];
+  const date = classStrArray[11].split(/\s+/);
   const startPeriod = classStrArray[12]
-    .trim()
     .split(/\s+/)
     .map((strValue) => parseInt(strValue));
   const periodsCount = classStrArray[13]
-    .trim()
     .split(/\s+/)
     .map((strValue) => parseInt(strValue));
 
@@ -63,11 +61,11 @@ export function _toClassObject(classStrArray: string[]) {
   } as ClassObject;
 }
 
-export function _mapCourses(rawData: string[]) {
+export function _mapCourses(parseData: string[]) {
   let coursesMap: CoursesMap = new Map();
 
-  for (let i = 0; i < rawData.length; i += 17) {
-    let classObject = _toClassObject(rawData.slice(i, i + 17));
+  for (let i = 0; i < parseData.length; i += 17) {
+    let classObject = _toClassObject(parseData.slice(i, i + 17));
 
     let courseKey = classObject.courseID;
     let courseValue = coursesMap.get(courseKey);
@@ -82,5 +80,6 @@ export function _mapCourses(rawData: string[]) {
 }
 
 export function parseClassInput(rawInputString: string) {
-  return _mapCourses(rawInputString.split("\t"));
+  const parseData = rawInputString.trim().split(/[ ]*\t[ ]*/);
+  return _mapCourses(parseData);
 }
