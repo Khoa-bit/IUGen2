@@ -62,6 +62,9 @@ export function _toClassObject(classStrArray: string[]) {
 }
 
 export function _mapCourses(parseData: string[]) {
+  if (parseData.length % 17 != 0)
+    throw Error("Failed to match: Missing columns");
+
   let coursesMap: CoursesMap = new Map();
 
   for (let i = 0; i < parseData.length; i += 17) {
