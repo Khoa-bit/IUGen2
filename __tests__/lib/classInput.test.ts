@@ -48,13 +48,23 @@ describe("_mapCourses()", () => {
     expect(coursesMap.size).toEqual(2);
     expect(coursesMap.has("IT134IU")).toBeTruthy();
     expect(coursesMap.has("PE018IU")).toBeTruthy();
-    expect(coursesMap.get("IT134IU")?.length).toEqual(1);
-    expect(JSON.stringify(coursesMap.get("IT134IU")?.at(0))).toMatch(
-      '{"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}'
+    expect(coursesMap.get("IT134IU")?.size).toEqual(1);
+    expect(coursesMap.get("PE018IU")?.size).toEqual(1);
+
+    // Due to ClassObject ID is random generated. nanoid can't guarantee seeding by nanoid.
+    const course0 = coursesMap.get("IT134IU");
+    if (!course0) throw Error("Missing Course");
+    const class0 = Array.from(course0.values())[0];
+
+    const course1 = coursesMap.get("PE018IU");
+    if (!course1) throw Error("Missing Course");
+    const class1 = Array.from(course1.values())[0];
+
+    expect(JSON.stringify(class0)).toContain(
+      '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}'
     );
-    expect(coursesMap.get("PE018IU")?.length).toEqual(1);
-    expect(JSON.stringify(coursesMap.get("PE018IU")?.at(0))).toMatch(
-      '{"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}'
+    expect(JSON.stringify(class1)).toContain(
+      '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}'
     );
   });
 });
@@ -81,15 +91,16 @@ describe("_toClassObject()", function () {
       "07/03/2022--15/05/2022   07/02/2022--05/06/2022",
     ];
 
+    const classObject = _toClassObject(classStrArray);
     const expectedObject: ClassObject = {
+      // Due to ClassObject ID is random generated. nanoid can't guarantee seeding by nanoid.
+      id: classObject.id,
       courseID: "IT092IU",
       courseName: "Principles of Programming Languages",
       date: ["Fri", "Wed"],
       startPeriod: [1, 7],
       periodsCount: [4, 3],
     };
-
-    const classObject = _toClassObject(classStrArray);
     expect(classObject).toStrictEqual(expectedObject);
   });
 
@@ -153,13 +164,22 @@ describe("parseClassInput()", () => {
     const rawInputString =
       "IT134IU 	IT134IU 	 Internet of Things 	01	01	4	4	ITIT19CE	30 	6 	 *   	 Mon   Sat 	 7   4 	 4   3 	 LA1.607   L201 	 L.D.Tân   L.D.Tân 	 07/03/2022--15/05/2022   07/02/2022--05/06/2022 	PE018IU 	PE018IU 	 History of Vietnamese Communist Party 	10		2	2	ITIT19CS1	75 	2 	 	 Wed 	 9 	 2 	 ONLINE 	 H.Y.Linh 	 07/02/2022--05/06/2022";
 
-    const resultCoursesMap = parseClassInput(rawInputString);
-    const resultJSON = JSON.stringify(
-      Object.fromEntries(resultCoursesMap.entries())
-    );
+    const coursesMap = parseClassInput(rawInputString);
 
-    expect(resultJSON).toMatch(
-      '{"IT134IU":[{"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}],"PE018IU":[{"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}]}'
+    // Due to ClassObject ID is random generated. nanoid can't guarantee seeding by nanoid.
+    const course0 = coursesMap.get("IT134IU");
+    if (!course0) throw Error("Missing Course");
+    const class0 = Array.from(course0.values())[0];
+
+    const course1 = coursesMap.get("PE018IU");
+    if (!course1) throw Error("Missing Course");
+    const class1 = Array.from(course1.values())[0];
+
+    expect(JSON.stringify(class0)).toContain(
+      '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}'
+    );
+    expect(JSON.stringify(class1)).toContain(
+      '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}'
     );
   });
 
