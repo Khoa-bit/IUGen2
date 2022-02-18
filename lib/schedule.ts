@@ -2,12 +2,7 @@ import { ClassObject, CoursesMap } from "./classInput";
 
 export interface ClassID {
   courseKey: string;
-  classIndex: number;
-}
-
-interface generateScheduleParams {
-  coursesMap: CoursesMap;
-  courseKeys: string[];
+  classKey: string;
 }
 
 interface CheckClassCollisionParams {
@@ -71,10 +66,12 @@ export function _checkClassCollision({
   for (let classID of schedule) {
     const classObject = coursesMap
       .get(classID.courseKey)
-      ?.at(classID.classIndex);
+      ?.get(classID.classKey);
 
     if (!classObject)
-      throw ReferenceError(`Invalid ClassObject reference: ${classID}`);
+      throw ReferenceError(
+        `Invalid ClassObject reference: ${classID.courseKey} - ${classID.classKey}`
+      );
 
     serialTimeline.push(..._serializeClassTime(classObject));
   }
@@ -90,26 +87,21 @@ export function _checkClassCollision({
   return true;
 }
 
-export function generateSchedule({
-  coursesMap,
-  courseKeys,
-}: generateScheduleParams) {
+export function generateSchedule(coursesMap: CoursesMap) {
   let interSchedules: ClassID[][] = [[]];
-  for (const courseKey of courseKeys) {
+  coursesMap.forEach((classesMap, courseKey) => {
     const nextIterSchedules: ClassID[][] = [];
-    const course = coursesMap.get(courseKey);
-    if (!course) continue;
 
-    for (let classIndex = 0; classIndex < course.length; classIndex++) {
+    classesMap.forEach((_, classKey) => {
       for (const interSchedule of interSchedules) {
-        const schedule = [...interSchedule, { courseKey, classIndex }];
+        const schedule: ClassID[] = [...interSchedule, { courseKey, classKey }];
         if (_checkClassCollision({ coursesMap, schedule })) {
           nextIterSchedules.push(schedule);
         }
       }
-    }
+    });
 
     interSchedules = [...nextIterSchedules];
-  }
+  });
   return interSchedules;
 }

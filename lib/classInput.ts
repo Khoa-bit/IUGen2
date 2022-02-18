@@ -1,6 +1,8 @@
+import { nanoid } from "nanoid";
 import { WeekDate, SERIAL_DATE } from "./schedule";
 
 export interface ClassObject {
+  id: string;
   courseID: string;
   courseName: string;
   date: WeekDate[];
@@ -8,7 +10,7 @@ export interface ClassObject {
   periodsCount: number[];
 }
 
-export type CoursesMap = Map<string, ClassObject[]>;
+export type CoursesMap = Map<string, Map<string, ClassObject>>;
 
 interface validateClassObjectFields {
   classStrArray: string[];
@@ -39,10 +41,11 @@ function _validateClassObject({
   }
 }
 
-export function _toClassObject(classStrArray: string[]) {
+export function _toClassObject(classStrArray: string[]): ClassObject {
+  const id = nanoid(10);
   const courseID = classStrArray[0];
   const courseName = classStrArray[2];
-  const date = classStrArray[11].split(/\s+/);
+  const date = classStrArray[11].split(/\s+/) as WeekDate[];
   const startPeriod = classStrArray[12]
     .split(/\s+/)
     .map((strValue) => parseInt(strValue));
@@ -53,12 +56,13 @@ export function _toClassObject(classStrArray: string[]) {
   _validateClassObject({ classStrArray, date, periodsCount, startPeriod });
 
   return {
+    id,
     courseID,
     courseName,
     date,
     startPeriod,
     periodsCount,
-  } as ClassObject;
+  };
 }
 
 export function _mapCourses(parseData: string[]) {
@@ -71,12 +75,13 @@ export function _mapCourses(parseData: string[]) {
     let classObject = _toClassObject(parseData.slice(i, i + 17));
 
     let courseKey = classObject.courseID;
-    let courseValue = coursesMap.get(courseKey);
-    if (courseValue) {
-      coursesMap.set(courseKey, [...courseValue, classObject]);
-    } else {
-      coursesMap.set(courseKey, [classObject]);
+
+    let classesMap = coursesMap.get(courseKey);
+    if (!classesMap) {
+      classesMap = new Map();
+      coursesMap.set(courseKey, classesMap);
     }
+    classesMap.set(classObject.id, classObject);
   }
 
   return coursesMap;
