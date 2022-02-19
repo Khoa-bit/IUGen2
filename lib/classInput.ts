@@ -8,9 +8,11 @@ export interface ClassObject {
   date: WeekDate[];
   startPeriod: number[];
   periodsCount: number[];
+  isActive: boolean;
 }
 
-export type CoursesMap = Map<string, Map<string, ClassObject>>;
+export type ClassesMap = Map<string, ClassObject>;
+export type CoursesMap = Map<string, ClassesMap>;
 
 interface validateClassObjectFields {
   classStrArray: string[];
@@ -64,6 +66,7 @@ export function _toClassObject(classStrArray: string[]): ClassObject {
     date,
     startPeriod,
     periodsCount,
+    isActive: true,
   };
 }
 

@@ -1,4 +1,4 @@
-import { ClassObject, CoursesMap } from "./classInput";
+import { ClassesMap, ClassObject, CoursesMap } from "./classInput";
 
 export interface ClassID {
   courseKey: string;
@@ -87,12 +87,23 @@ export function _checkClassCollision({
   return true;
 }
 
+export function _isClassesMapActive(classesMap: ClassesMap) {
+  for (const classObject of classesMap.values()) {
+    if (classObject.isActive) return true;
+  }
+  return false;
+}
+
 export function generateSchedule(coursesMap: CoursesMap) {
   let interSchedules: ClassID[][] = [[]];
   coursesMap.forEach((classesMap, courseKey) => {
+    if (!_isClassesMapActive(classesMap)) return;
+    console.log(classesMap);
+
     const nextIterSchedules: ClassID[][] = [];
 
-    classesMap.forEach((_, classKey) => {
+    classesMap.forEach((classObject, classKey) => {
+      if (!classObject.isActive) return;
       for (const interSchedule of interSchedules) {
         const schedule: ClassID[] = [...interSchedule, { courseKey, classKey }];
         if (_checkClassCollision({ coursesMap, schedule })) {
@@ -104,5 +115,9 @@ export function generateSchedule(coursesMap: CoursesMap) {
     interSchedules = [...nextIterSchedules];
   });
 
-  return interSchedules[0].length !== 0 ? interSchedules : [];
+  if (interSchedules.length == 0 || interSchedules[0].length == 0) {
+    return [];
+  } else {
+    return interSchedules;
+  }
 }
