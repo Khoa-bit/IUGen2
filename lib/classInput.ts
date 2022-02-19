@@ -42,9 +42,10 @@ function _validateClassObject({
 }
 
 export function _toClassObject(classStrArray: string[]): ClassObject {
-  const id = nanoid(10);
   const courseID = classStrArray[0];
   const courseName = classStrArray[2];
+  const group = classStrArray[3];
+  const practice = classStrArray[4];
   const date = classStrArray[11].split(/\s+/) as WeekDate[];
   const startPeriod = classStrArray[12]
     .split(/\s+/)
@@ -52,6 +53,7 @@ export function _toClassObject(classStrArray: string[]): ClassObject {
   const periodsCount = classStrArray[13]
     .split(/\s+/)
     .map((strValue) => parseInt(strValue));
+  const id = courseID + group + practice;
 
   _validateClassObject({ classStrArray, date, periodsCount, startPeriod });
 
