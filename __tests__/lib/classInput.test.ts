@@ -51,18 +51,12 @@ describe("_mapCourses()", () => {
     expect(coursesMap.get("IT134IU")?.size).toEqual(1);
     expect(coursesMap.get("PE018IU")?.size).toEqual(1);
 
-    // Due to ClassObject ID is random generated. nanoid can't guarantee seeding by nanoid.
-    const course0 = coursesMap.get("IT134IU");
-    if (!course0) throw Error("Missing Course");
-    const class0 = Array.from(course0.values())[0];
-
-    const course1 = coursesMap.get("PE018IU");
-    if (!course1) throw Error("Missing Course");
-    const class1 = Array.from(course1.values())[0];
-
+    const class0 = coursesMap.get("IT134IU")?.get("IT134IU0101");
     expect(JSON.stringify(class0)).toContain(
       '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}'
     );
+
+    const class1 = coursesMap.get("PE018IU")?.get("PE018IU10");
     expect(JSON.stringify(class1)).toContain(
       '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}'
     );
@@ -93,8 +87,7 @@ describe("_toClassObject()", function () {
 
     const classObject = _toClassObject(classStrArray);
     const expectedObject: ClassObject = {
-      // Due to ClassObject ID is random generated. nanoid can't guarantee seeding by nanoid.
-      id: classObject.id,
+      id: "IT092IU0201",
       courseID: "IT092IU",
       courseName: "Principles of Programming Languages",
       date: ["Fri", "Wed"],
@@ -166,18 +159,12 @@ describe("parseClassInput()", () => {
 
     const coursesMap = parseClassInput(rawInputString);
 
-    // Due to ClassObject ID is random generated. nanoid can't guarantee seeding by nanoid.
-    const course0 = coursesMap.get("IT134IU");
-    if (!course0) throw Error("Missing Course");
-    const class0 = Array.from(course0.values())[0];
-
-    const course1 = coursesMap.get("PE018IU");
-    if (!course1) throw Error("Missing Course");
-    const class1 = Array.from(course1.values())[0];
-
+    const class0 = coursesMap.get("IT134IU")?.get("IT134IU0101");
     expect(JSON.stringify(class0)).toContain(
       '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}'
     );
+
+    const class1 = coursesMap.get("PE018IU")?.get("PE018IU10");
     expect(JSON.stringify(class1)).toContain(
       '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}'
     );
