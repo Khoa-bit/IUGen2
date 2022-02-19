@@ -119,7 +119,7 @@ describe("Schedule Generator", () => {
   });
 
   describe("generateSchedule()", () => {
-    it("should generate schedule with ", function () {
+    it("should generate schedule", function () {
       const schedules = generateSchedule(coursesMap);
 
       expect(schedules).toStrictEqual([
@@ -137,6 +137,11 @@ describe("Schedule Generator", () => {
         ],
       ] as ClassID[][]);
     });
+  });
+
+  it("should return an empty array when there is no schedule generated.", () => {
+    const schedules = generateSchedule(new Map());
+    expect(schedules).toStrictEqual([]);
   });
 });
 
