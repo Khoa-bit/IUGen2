@@ -98,8 +98,6 @@ export function generateSchedule(coursesMap: CoursesMap) {
   let interSchedules: ClassID[][] = [[]];
   coursesMap.forEach((classesMap, courseKey) => {
     if (!_isClassesMapActive(classesMap)) return;
-    console.log(classesMap);
-
     const nextIterSchedules: ClassID[][] = [];
 
     classesMap.forEach((classObject, classKey) => {
