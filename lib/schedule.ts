@@ -103,5 +103,6 @@ export function generateSchedule(coursesMap: CoursesMap) {
 
     interSchedules = [...nextIterSchedules];
   });
-  return interSchedules;
+
+  return interSchedules[0].length !== 0 ? interSchedules : [];
 }
