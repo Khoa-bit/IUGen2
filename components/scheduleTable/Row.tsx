@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import Cell, { CellProps } from "./Cell";
 
 export interface RowProps {
@@ -6,13 +5,13 @@ export interface RowProps {
 }
 
 const Row = ({ cellsProps }: RowProps) => {
-  const cells = cellsProps.map((cellProps) => {
+  const cells = cellsProps.map((cellProps, index) => {
     return (
       <Cell
         content={cellProps.content}
         isHidden={cellProps.isHidden}
         rowSpan={cellProps.rowSpan}
-        key={nanoid(5)}
+        key={index}
       ></Cell>
     );
   });

@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { CoursesMap } from "../../lib/classInput";
 import { ClassID, PERIODS_PER_DAY, _extractDates } from "../../lib/schedule";
 import { CellProps } from "./Cell";
@@ -25,7 +24,7 @@ const Table = ({ coursesMap, schedule }: TableProps) => {
   for (const classID of schedule) {
     const classObject = coursesMap
       .get(classID.courseKey)
-      ?.at(classID.classIndex);
+      ?.get(classID.classKey);
 
     if (!classObject)
       throw ReferenceError(`Invalid ClassObject reference: ${classID}`);
@@ -53,8 +52,8 @@ const Table = ({ coursesMap, schedule }: TableProps) => {
     });
   }
 
-  const rows = rowsProps.map((cellsProps) => (
-    <Row cellsProps={cellsProps} key={nanoid(5)}></Row>
+  const rows = rowsProps.map((cellsProps, index) => (
+    <Row cellsProps={cellsProps} key={index}></Row>
   ));
 
   return (
