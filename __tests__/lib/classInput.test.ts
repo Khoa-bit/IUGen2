@@ -53,12 +53,12 @@ describe("_mapCourses()", () => {
 
     const class0 = coursesMap.get("IT134IU")?.get("IT134IU0101");
     expect(JSON.stringify(class0)).toContain(
-      '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}'
+      '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"isActive":true}'
     );
 
     const class1 = coursesMap.get("PE018IU")?.get("PE018IU10");
     expect(JSON.stringify(class1)).toContain(
-      '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}'
+      '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"isActive":true}'
     );
   });
 });
@@ -93,6 +93,7 @@ describe("_toClassObject()", function () {
       date: ["Fri", "Wed"],
       startPeriod: [1, 7],
       periodsCount: [4, 3],
+      isActive: true,
     };
     expect(classObject).toStrictEqual(expectedObject);
   });
@@ -161,12 +162,12 @@ describe("parseClassInput()", () => {
 
     const class0 = coursesMap.get("IT134IU")?.get("IT134IU0101");
     expect(JSON.stringify(class0)).toContain(
-      '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3]}'
+      '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"isActive":true}'
     );
 
     const class1 = coursesMap.get("PE018IU")?.get("PE018IU10");
     expect(JSON.stringify(class1)).toContain(
-      '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2]}'
+      '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"isActive":true}'
     );
   });
 
