@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { WeekDate, SERIAL_DATE } from "./schedule";
 
 export interface ClassObject {
@@ -11,8 +10,16 @@ export interface ClassObject {
   isActive: boolean;
 }
 
+export interface CourseObject {
+  id: string;
+  name: string;
+  color?: string;
+  activeClasses: number;
+  classesMap: ClassesMap;
+}
+
 export type ClassesMap = Map<string, ClassObject>;
-export type CoursesMap = Map<string, ClassesMap>;
+export type CoursesMap = Map<string, CourseObject>;
 
 interface validateClassObjectFields {
   classStrArray: string[];
@@ -81,12 +88,18 @@ export function _mapCourses(parseData: string[]) {
 
     let courseKey = classObject.courseID;
 
-    let classesMap = coursesMap.get(courseKey);
-    if (!classesMap) {
-      classesMap = new Map();
-      coursesMap.set(courseKey, classesMap);
+    let courseObject = coursesMap.get(courseKey);
+    if (!courseObject) {
+      courseObject = {
+        id: courseKey,
+        name: classObject.courseName,
+        activeClasses: 0,
+        classesMap: new Map(),
+      };
+      coursesMap.set(courseKey, courseObject);
     }
-    classesMap.set(classObject.id, classObject);
+    courseObject.activeClasses += 1;
+    courseObject.classesMap.set(classObject.id, classObject);
   }
 
   return coursesMap;

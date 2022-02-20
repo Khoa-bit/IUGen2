@@ -1,4 +1,4 @@
-import { ClassesMap, ClassObject, CoursesMap } from "./classInput";
+import { ClassObject, CoursesMap } from "./classInput";
 
 export interface ClassID {
   courseKey: string;
@@ -66,7 +66,7 @@ export function _checkClassCollision({
   for (let classID of schedule) {
     const classObject = coursesMap
       .get(classID.courseKey)
-      ?.get(classID.classKey);
+      ?.classesMap.get(classID.classKey);
 
     if (!classObject)
       throw ReferenceError(
@@ -87,20 +87,13 @@ export function _checkClassCollision({
   return true;
 }
 
-export function _isClassesMapActive(classesMap: ClassesMap) {
-  for (const classObject of classesMap.values()) {
-    if (classObject.isActive) return true;
-  }
-  return false;
-}
-
 export function generateSchedule(coursesMap: CoursesMap) {
   let interSchedules: ClassID[][] = [[]];
-  coursesMap.forEach((classesMap, courseKey) => {
-    if (!_isClassesMapActive(classesMap)) return;
+  coursesMap.forEach((courseObject, courseKey) => {
+    if (!courseObject.activeClasses) return;
     const nextIterSchedules: ClassID[][] = [];
 
-    classesMap.forEach((classObject, classKey) => {
+    courseObject.classesMap.forEach((classObject, classKey) => {
       if (!classObject.isActive) return;
       for (const interSchedule of interSchedules) {
         const schedule: ClassID[] = [...interSchedule, { courseKey, classKey }];
@@ -117,5 +110,41 @@ export function generateSchedule(coursesMap: CoursesMap) {
     return [];
   } else {
     return interSchedules;
+  }
+}
+
+export function toggleClassState(
+  coursesMap: CoursesMap,
+  classObject: ClassObject
+) {
+  classObject.isActive = !classObject.isActive;
+
+  const courseObject = coursesMap.get(classObject.courseID);
+  if (!courseObject) {
+    throw Error(
+      `Invalid ClassObject reference: ${classObject.courseID} - ${classObject.id}`
+    );
+  }
+
+  if (classObject.isActive) {
+    courseObject.activeClasses += 1;
+  } else {
+    courseObject.activeClasses -= 1;
+  }
+
+  return classObject.isActive;
+}
+
+export function deleteClass(coursesMap: CoursesMap, classObject: ClassObject) {
+  const courseObject = coursesMap.get(classObject.courseID);
+  if (!courseObject) {
+    throw Error(
+      `Invalid ClassObject reference: ${classObject.courseID} - ${classObject.id}`
+    );
+  }
+
+  courseObject.classesMap.delete(classObject.id);
+  if (classObject.isActive) {
+    courseObject.activeClasses -= 1;
   }
 }
