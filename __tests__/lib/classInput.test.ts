@@ -48,15 +48,15 @@ describe("_mapCourses()", () => {
     expect(coursesMap.size).toEqual(2);
     expect(coursesMap.has("IT134IU")).toBeTruthy();
     expect(coursesMap.has("PE018IU")).toBeTruthy();
-    expect(coursesMap.get("IT134IU")?.size).toEqual(1);
-    expect(coursesMap.get("PE018IU")?.size).toEqual(1);
+    expect(coursesMap.get("IT134IU")?.classesMap.size).toEqual(1);
+    expect(coursesMap.get("PE018IU")?.classesMap.size).toEqual(1);
 
-    const class0 = coursesMap.get("IT134IU")?.get("IT134IU0101");
+    const class0 = coursesMap.get("IT134IU")?.classesMap.get("IT134IU0101");
     expect(JSON.stringify(class0)).toContain(
       '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"isActive":true}'
     );
 
-    const class1 = coursesMap.get("PE018IU")?.get("PE018IU10");
+    const class1 = coursesMap.get("PE018IU")?.classesMap.get("PE018IU10");
     expect(JSON.stringify(class1)).toContain(
       '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"isActive":true}'
     );
@@ -160,12 +160,12 @@ describe("parseClassInput()", () => {
 
     const coursesMap = parseClassInput(rawInputString);
 
-    const class0 = coursesMap.get("IT134IU")?.get("IT134IU0101");
+    const class0 = coursesMap.get("IT134IU")?.classesMap.get("IT134IU0101");
     expect(JSON.stringify(class0)).toContain(
       '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"isActive":true}'
     );
 
-    const class1 = coursesMap.get("PE018IU")?.get("PE018IU10");
+    const class1 = coursesMap.get("PE018IU")?.classesMap.get("PE018IU10");
     expect(JSON.stringify(class1)).toContain(
       '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"isActive":true}'
     );
