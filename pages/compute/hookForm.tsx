@@ -2,12 +2,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Table from "../../components/scheduleTable/Table";
-import {
-  ClassesMap,
-  ClassObject,
-  CoursesMap,
-  parseClassInput,
-} from "../../lib/classInput";
+import { ClassesMap, CoursesMap, parseClassInput } from "../../lib/classInput";
 import { generateSchedule } from "../../lib/schedule";
 
 interface Inputs {
