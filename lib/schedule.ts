@@ -1,4 +1,4 @@
-import { ClassObject, CoursesMap } from "./classInput";
+import { ClassObject, CourseObject, CoursesMap } from "./classInput";
 
 export interface ClassID {
   courseKey: string;
@@ -115,8 +115,11 @@ export function generateSchedule(coursesMap: CoursesMap) {
 
 export function toggleClassState(
   coursesMap: CoursesMap,
-  classObject: ClassObject
+  classObject: ClassObject,
+  state?: boolean
 ) {
+  if (state === classObject.isActive) return classObject.isActive;
+
   classObject.isActive = !classObject.isActive;
 
   const courseObject = coursesMap.get(classObject.courseID);
@@ -137,14 +140,68 @@ export function toggleClassState(
 
 export function deleteClass(coursesMap: CoursesMap, classObject: ClassObject) {
   const courseObject = coursesMap.get(classObject.courseID);
-  if (!courseObject) {
+  const classesMap = courseObject?.classesMap;
+  if (!courseObject || !classesMap?.has(classObject.id)) {
     throw Error(
       `Invalid ClassObject reference: ${classObject.courseID} - ${classObject.id}`
     );
   }
 
-  courseObject.classesMap.delete(classObject.id);
+  classesMap.delete(classObject.id);
   if (classObject.isActive) {
     courseObject.activeClasses -= 1;
   }
+}
+
+export function getCourseState(courseObject: CourseObject) {
+  return courseObject.activeClasses == courseObject.classesMap.size;
+}
+
+export function toggleCourseState(
+  coursesMap: CoursesMap,
+  courseObject: CourseObject,
+  state?: boolean
+) {
+  const newState = !getCourseState(courseObject);
+  if (state === !newState) return state;
+
+  for (const classObject of courseObject.classesMap.values()) {
+    toggleClassState(coursesMap, classObject, newState);
+  }
+
+  return newState;
+}
+
+export function deleteCourse(
+  coursesMap: CoursesMap,
+  courseObject: CourseObject
+) {
+  if (!coursesMap.has(courseObject.id)) {
+    throw Error(`Invalid CourseObject reference: ${courseObject.id}`);
+  }
+
+  coursesMap.delete(courseObject.id);
+}
+
+export function getAllState(coursesMap: CoursesMap) {
+  for (const courseObject of coursesMap.values()) {
+    if (courseObject.activeClasses != courseObject.classesMap.size)
+      return false;
+  }
+  return true;
+}
+
+export function toggleAllState(coursesMap: CoursesMap, state?: boolean) {
+  const newState = !getAllState(coursesMap);
+  if (state === !newState) return state;
+
+  for (const courseObject of coursesMap.values()) {
+    toggleCourseState(coursesMap, courseObject, newState);
+  }
+
+  return newState;
+}
+
+export function deleteAll(coursesMap: CoursesMap) {
+  coursesMap.clear();
 }
