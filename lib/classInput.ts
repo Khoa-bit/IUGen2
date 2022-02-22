@@ -106,6 +106,6 @@ export function _mapCourses(parseData: string[]) {
 }
 
 export function parseClassInput(rawInputString: string) {
-  const parseData = rawInputString.trim().split(/[ ]*\t[ ]*/);
+  const parseData = rawInputString.trim().split(/[ "]*\t[ "]*/);
   return _mapCourses(parseData);
 }
