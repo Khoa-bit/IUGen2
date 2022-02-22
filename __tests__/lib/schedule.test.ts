@@ -293,6 +293,9 @@ describe("Schedule Generator", () => {
       deleteClass(coursesMap, C202);
       expect(courseObjectC2.activeClasses).toEqual(0);
       expect(courseObjectC2.classesMap.get("C202")).toBeUndefined();
+
+      // Delete CourseObject when there is no classes left
+      expect(coursesMap.get(courseObjectC2.id)).toBeUndefined;
     });
 
     it("should throw error with incorrect ClassObject", () => {
