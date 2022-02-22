@@ -1,33 +1,38 @@
-import { CoursesMap } from "../../lib/classInput";
-import { ClassID, PERIODS_PER_DAY, _extractDates } from "../../lib/schedule";
-import { CellProps } from "./Cell";
+import { CoursesMap } from "../lib/classInput";
+import { PERIODS_PER_DAY, Schedule, _extractDates } from "../lib/schedule";
+import Cell, { CellProps } from "./Cell";
 import Row from "./Row";
 
-interface TableProps {
+interface ScheduleTableProps {
   coursesMap: CoursesMap;
-  schedule: ClassID[];
+  schedule: Schedule;
 }
 
-const Table = ({ coursesMap, schedule }: TableProps) => {
+const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
   const rowsProps: CellProps[][] = [];
 
   const DAY_PER_WEEK = 7;
   for (let period = 0; period < PERIODS_PER_DAY; period++) {
     const cellsProps: CellProps[] = [];
-    cellsProps.push({ content: `${period + 1}` });
+    cellsProps.push({ children: `${period + 1}` });
     for (let day = 0; day < DAY_PER_WEEK; day++) {
-      cellsProps.push({ content: "" });
+      cellsProps.push({ children: "" });
     }
     rowsProps.push(cellsProps);
   }
 
+  // console.log(schedule);
   for (const classID of schedule) {
+    // console.log(classID);
+
     const classObject = coursesMap
       .get(classID.courseKey)
-      ?.get(classID.classKey);
+      ?.classesMap.get(classID.classKey);
 
     if (!classObject)
-      throw ReferenceError(`Invalid ClassObject reference: ${classID}`);
+      throw ReferenceError(
+        `Invalid ClassObject reference: ${JSON.stringify(classID)}`
+      );
 
     const { courseName, startPeriod, periodsCount } = classObject;
     const dates = _extractDates(classObject);
@@ -38,13 +43,13 @@ const Table = ({ coursesMap, schedule }: TableProps) => {
         let newCellProps: CellProps;
         if (row == 0) {
           newCellProps = {
-            content: courseName,
+            children: courseName,
             rowSpan: periodsCount[index],
           };
         } else {
           newCellProps = {
             ...oldCellProps,
-            isHidden: true,
+            hidden: true,
           };
         }
         rowsProps[startPeriod[index] - 1 + row][date + 1] = newCellProps;
@@ -60,30 +65,28 @@ const Table = ({ coursesMap, schedule }: TableProps) => {
     <table className="table-auto border-collapse border border-slate-500">
       <tbody>
         <tr>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
-            No.
-          </th>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}></Cell>
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
             Mon
-          </th>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
+          </Cell>
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
             Tue
-          </th>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
+          </Cell>
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
             Wed
-          </th>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
+          </Cell>
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
             Thu
-          </th>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
+          </Cell>
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
             Fri
-          </th>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
+          </Cell>
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
             Sat
-          </th>
-          <th className="border border-slate-600 bg-slate-400 px-10 py-1">
+          </Cell>
+          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
             Sun
-          </th>
+          </Cell>
         </tr>
         {rows}
       </tbody>
@@ -91,4 +94,4 @@ const Table = ({ coursesMap, schedule }: TableProps) => {
   );
 };
 
-export default Table;
+export default ScheduleTable;

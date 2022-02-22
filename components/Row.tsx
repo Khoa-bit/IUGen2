@@ -5,14 +5,11 @@ export interface RowProps {
 }
 
 const Row = ({ cellsProps }: RowProps) => {
-  const cells = cellsProps.map((cellProps, index) => {
+  const cells = cellsProps.map(({ children, ...cellProps }, index) => {
     return (
-      <Cell
-        content={cellProps.content}
-        isHidden={cellProps.isHidden}
-        rowSpan={cellProps.rowSpan}
-        key={index}
-      ></Cell>
+      <Cell key={index} {...cellProps}>
+        {children}
+      </Cell>
     );
   });
 
