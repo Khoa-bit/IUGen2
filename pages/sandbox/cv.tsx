@@ -4,8 +4,8 @@ import profilePic from "../../public/Edited.jpg";
 
 const Home: NextPage = () => {
   return (
-    <main className="flex items-center justify-center w-screen">
-      <div className="prose prose-blue prose-h2:font-serif prose-h2:text-sky-500 prose-h2:mb-1 prose-h3:my-0.5 prose-img:rounded-full prose-em:underline px-8 prose-hr:m-0">
+    <main className="flex w-screen items-center justify-center">
+      <div className="prose prose-blue px-8 prose-h2:mb-1 prose-h2:font-serif prose-h2:text-sky-500 prose-h3:my-0.5 prose-em:underline prose-img:rounded-full prose-hr:m-0">
         <h1>Nguyen Anh Khoa</h1>
         <hr />
         <p>
