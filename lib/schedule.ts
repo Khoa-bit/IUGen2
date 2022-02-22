@@ -10,6 +10,10 @@ interface CheckClassCollisionParams {
   schedule: ClassID[];
 }
 
+export type Schedule = ClassID[];
+
+export type Schedules = Schedule[];
+
 export type WeekDate = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
 
 export const SERIAL_DATE = new Map(
@@ -88,15 +92,15 @@ export function _checkClassCollision({
 }
 
 export function generateSchedule(coursesMap: CoursesMap) {
-  let interSchedules: ClassID[][] = [[]];
+  let interSchedules: Schedules = [[]];
   coursesMap.forEach((courseObject, courseKey) => {
     if (!courseObject.activeClasses) return;
-    const nextIterSchedules: ClassID[][] = [];
+    const nextIterSchedules: Schedules = [];
 
     courseObject.classesMap.forEach((classObject, classKey) => {
       if (!classObject.isActive) return;
       for (const interSchedule of interSchedules) {
-        const schedule: ClassID[] = [...interSchedule, { courseKey, classKey }];
+        const schedule: Schedule = [...interSchedule, { courseKey, classKey }];
         if (_checkClassCollision({ coursesMap, schedule })) {
           nextIterSchedules.push(schedule);
         }
@@ -150,6 +154,10 @@ export function deleteClass(coursesMap: CoursesMap, classObject: ClassObject) {
   classesMap.delete(classObject.id);
   if (classObject.isActive) {
     courseObject.activeClasses -= 1;
+  }
+
+  if (courseObject.classesMap.size == 0) {
+    coursesMap.delete(courseObject.id);
   }
 }
 
