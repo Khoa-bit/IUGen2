@@ -10,6 +10,8 @@
     "format": "prettier --write ./components/**/* ./lib/**/* ./pages/**/* ./__tests__/**/* ./styles/**/*"
   },
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
+    "@heroicons/react": "^1.0.5",
     "nanoid": "^3.3.1",
     "next": "^12.0.10",
     "react": "^17.0.2",

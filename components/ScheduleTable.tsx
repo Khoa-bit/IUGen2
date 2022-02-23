@@ -12,11 +12,30 @@ const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
   const rowsProps: CellProps[][] = [];
 
   const DAY_PER_WEEK = 7;
+  const last_period = PERIODS_PER_DAY - 1;
   for (let period = 0; period < PERIODS_PER_DAY; period++) {
     const cellsProps: CellProps[] = [];
-    cellsProps.push({ children: `${period + 1}` });
+
+    // borderStyle solves 2 problems:
+    // prevent borders from overlapping with classes card
+    // prevent borders from overflowing outside of table for rounded corners
+    let borderStyle = "border-slate-300";
+
+    if (period != last_period) {
+      borderStyle = "border-b " + borderStyle;
+    }
+    cellsProps.push({
+      children: `${period + 1}`,
+      className: `border-r ${borderStyle} text-center`,
+    });
     for (let day = 0; day < DAY_PER_WEEK; day++) {
-      cellsProps.push({ children: "" });
+      if (day != 6) {
+        borderStyle = "border-r " + borderStyle;
+      }
+      cellsProps.push({
+        children: "",
+        className: borderStyle,
+      });
     }
     rowsProps.push(cellsProps);
   }
@@ -42,6 +61,7 @@ const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
           newCellProps = {
             children: courseName,
             bgColor: courseObject.color,
+            className: "px-1.5",
             rowSpan: periodsCount[index],
           };
         } else {
@@ -60,34 +80,34 @@ const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
   ));
 
   return (
-    <table className="table-auto border-collapse border border-slate-500">
-      <tbody>
-        <tr>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}></Cell>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
+    <table className="table-fixed overflow-hidden rounded shadow shadow-slate-300">
+      <thead>
+        <tr className="text-white">
+          <Cell className="bg-indigo-400 py-1" useTH={true}></Cell>
+          <Cell className="w-[13.66%] bg-indigo-400 py-1" useTH={true}>
             Mon
           </Cell>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
+          <Cell className="w-[13.66%] bg-indigo-400 py-1" useTH={true}>
             Tue
           </Cell>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
+          <Cell className="w-[13.66%] bg-indigo-400 py-1" useTH={true}>
             Wed
           </Cell>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
+          <Cell className="w-[13.66%] bg-indigo-400 py-1" useTH={true}>
             Thu
           </Cell>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
+          <Cell className="w-[13.66%] bg-indigo-400 py-1" useTH={true}>
             Fri
           </Cell>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
+          <Cell className="w-[13.66%] bg-indigo-400 py-1" useTH={true}>
             Sat
           </Cell>
-          <Cell className="bg-indigo-400 px-10 py-1" useTH={true}>
+          <Cell className="w-[13.66%] bg-indigo-400 py-1" useTH={true}>
             Sun
           </Cell>
         </tr>
-        {rows}
-      </tbody>
+      </thead>
+      <tbody>{rows}</tbody>
     </table>
   );
 };

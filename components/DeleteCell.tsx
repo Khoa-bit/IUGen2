@@ -7,7 +7,15 @@ interface DeleteCellProps extends CellProps {
 const DeleteCell = ({ onClick, children, ...props }: DeleteCellProps) => {
   return (
     <Cell {...props}>
-      <button onClick={onClick}>{children}</button>
+      <div className="flex justify-center">
+        <button
+          className="rounded focus:border-sky-300 focus:outline-none focus:ring focus:ring-sky-200
+          focus:ring-offset-2"
+          onClick={onClick}
+        >
+          {children}
+        </button>
+      </div>
     </Cell>
   );
 };

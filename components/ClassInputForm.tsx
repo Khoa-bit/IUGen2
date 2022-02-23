@@ -1,3 +1,4 @@
+import { QuestionMarkCircleIcon, TableIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "./Button";
@@ -19,25 +20,44 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <label htmlFor="rawInputString">Copy classes here:</label>
-      <a className="text-indigo-700" href="#">
-        Help
-      </a>
-      <a
-        className="text-indigo-700"
-        href="https://docs.google.com/spreadsheets/create?usp=sheets_home&ths=true"
-        target="_blank"
-        rel="noreferrer"
-      >
-        New Sheet
-      </a>
+    <form
+      className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min-content] items-center"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <label className="mb-1 font-semibold" htmlFor="rawInputString">
+        Copy classes here:
+      </label>
+      <div className="flex space-x-5 justify-self-end">
+        <a
+          className="text-green-700 transition-colors hover:text-green-600"
+          href="https://docs.google.com/spreadsheets/create?usp=sheets_home&ths=true"
+          target="_blank"
+          rel="noreferrer"
+          title="New Google Sheet"
+        >
+          <TableIcon className="h-6 w-6"></TableIcon>
+        </a>
+        <a
+          className="text-indigo-700 transition-colors hover:text-indigo-600"
+          href="#"
+          title="Help"
+        >
+          <QuestionMarkCircleIcon className="h-6 w-6"></QuestionMarkCircleIcon>
+        </a>
+      </div>
       <input
+        className="col-span-2 rounded border border-slate-300
+        focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
         type="text"
         id="rawInputString"
         {...register("rawInputString", { required: true })}
       />
-      <Button text="Add" type="submit"></Button>
+      <Button
+        className="ml-6 h-full w-fit shadow shadow-slate-300"
+        type="submit"
+      >
+        Add
+      </Button>
     </form>
   );
 };

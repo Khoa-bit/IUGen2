@@ -23,9 +23,7 @@ const Cell = ({
   rowSpan,
   useTH,
 }: CellProps) => {
-  const applyClass =
-    className ??
-    `border-collapse border border-slate-200 ${bgColor ? bgColor : ""}`;
+  const applyClass = `py-2 ${bgColor ? bgColor : ""} ${className || ""}`;
   return (
     <>
       {useTH ? (

@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
 import { ClassObject } from "../lib/classInput";
 import Cell from "./Cell";
@@ -20,10 +21,10 @@ const ClassRow = ({
   for (let i = 0; i < classCount; i++) {
     classRows.push([
       <Fragment key={i}>
-        <Cell>{classObject.date[i]}</Cell>
-        <Cell>{classObject.startPeriod[i]}</Cell>
-        <Cell>{classObject.periodsCount[i]}</Cell>
-        <Cell>Dr.Cat :3</Cell>
+        <Cell className="text-center">{classObject.date[i]}</Cell>
+        <Cell className="text-center">{classObject.startPeriod[i]}</Cell>
+        <Cell className="text-center">{classObject.periodsCount[i]}</Cell>
+        <Cell className="text-center">Dr.Cat :3</Cell>
       </Fragment>,
     ]);
   }
@@ -32,6 +33,7 @@ const ClassRow = ({
     <>
       <tr>
         <CheckBoxCell
+          className="border-r border-slate-200"
           id={classObject.id}
           onClick={() => toggleClassStateHandler(classObject)}
           checked={classObject.isActive}
@@ -39,10 +41,11 @@ const ClassRow = ({
         ></CheckBoxCell>
         {classRows[0]}
         <DeleteCell
+          className="border-l border-slate-200"
           onClick={() => deleteClassHandler(classObject)}
           rowSpan={classCount}
         >
-          Remove
+          <TrashIcon className="h-6 w-6 transition-colors hover:text-slate-700"></TrashIcon>
         </DeleteCell>
       </tr>
       {classCount == 2 && (

@@ -91,15 +91,15 @@ const FilterTable = ({ coursesMap, setCoursesMap }: FilterTableProps) => {
   }
 
   return (
-    <table>
-      <tbody>
+    <table className="table-fixed overflow-hidden rounded shadow shadow-slate-300">
+      <thead>
         <FilterHeader
           getAllStateHandler={getAllStateHandler}
           toggleAllStateHandler={toggleAllStateHandler}
           deleteAllHandler={deleteAllHandler}
         ></FilterHeader>
-        {rows}
-      </tbody>
+      </thead>
+      <tbody className="divide-y divide-slate-200">{rows}</tbody>
     </table>
   );
 };

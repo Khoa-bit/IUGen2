@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/solid";
 import { CourseObject } from "../lib/classInput";
 import Cell from "./Cell";
 import CheckBoxCell from "./CheckBoxCell";
@@ -17,20 +18,20 @@ const CourseRow = ({
   toggleCourseStateHandler,
 }: CourseRowProps) => {
   return (
-    <tr>
+    <tr className="bg-sky-100">
       <CheckBoxCell
         id={courseObject.id}
         onClick={() => toggleCourseStateHandler(courseObject)}
         checked={getCourseStateHandler(courseObject)}
       ></CheckBoxCell>
-      <Cell className="border-collapse border border-slate-200" colSpan={4}>
-        <div className="flex">
-          <div className={"h-5 w-5 " + (courseObject.color || "")}></div>
-          <p>{courseObject.name}</p>
+      <Cell colSpan={4}>
+        <div className="inline-flex items-center space-x-2 px-3">
+          <div className={`h-5 w-5 rounded ${courseObject.color || ""}`}></div>
+          <p className="font-semibold">{courseObject.name}</p>
         </div>
       </Cell>
       <DeleteCell onClick={() => deleteCourseHandler(courseObject)}>
-        Remove
+        <TrashIcon className="h-6 w-6 transition-colors hover:text-slate-700"></TrashIcon>
       </DeleteCell>
     </tr>
   );

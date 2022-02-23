@@ -16,7 +16,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
       schedule={schedule}
     ></ScheduleTable>
   ));
-  return <section>{schedulesJSX}</section>;
+  return <section className="flex flex-col gap-8">{schedulesJSX}</section>;
 };
 
 export default ScheduleTables;
