@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { CoursesMap } from "../lib/classInput";
 import { generateSchedule } from "../lib/schedule";
 import ScheduleTable from "./ScheduleTable";
@@ -10,8 +11,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
   const schedules = generateSchedule(coursesMap);
   const schedulesJSX = schedules.map((schedule) => (
     <ScheduleTable
-      //! TODO: nanoid or JSON?
-      key={JSON.stringify(schedule)}
+      key={nanoid()}
       coursesMap={coursesMap}
       schedule={schedule}
     ></ScheduleTable>
