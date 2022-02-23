@@ -1,3 +1,4 @@
+import { BG_COLOR_PALETTE } from "../components/IUGen";
 import { WeekDate, SERIAL_DATE } from "./schedule";
 
 export interface ClassObject {
@@ -82,6 +83,7 @@ export function _mapCourses(parseData: string[]) {
     throw Error("Failed to match: Missing columns");
 
   let coursesMap: CoursesMap = new Map();
+  let colorCounter = 0;
 
   for (let i = 0; i < parseData.length; i += 17) {
     let classObject = _toClassObject(parseData.slice(i, i + 17));
@@ -93,10 +95,12 @@ export function _mapCourses(parseData: string[]) {
       courseObject = {
         id: courseKey,
         name: classObject.courseName,
+        color: BG_COLOR_PALETTE[colorCounter],
         activeClasses: 0,
         classesMap: new Map(),
       };
       coursesMap.set(courseKey, courseObject);
+      colorCounter = (colorCounter + 1) % BG_COLOR_PALETTE.length;
     }
     courseObject.activeClasses += 1;
     courseObject.classesMap.set(classObject.id, classObject);

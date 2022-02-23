@@ -21,17 +21,14 @@ const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
     rowsProps.push(cellsProps);
   }
 
-  // console.log(schedule);
   for (const classID of schedule) {
-    // console.log(classID);
+    const courseObject = coursesMap.get(classID.courseKey);
 
-    const classObject = coursesMap
-      .get(classID.courseKey)
-      ?.classesMap.get(classID.classKey);
+    const classObject = courseObject?.classesMap.get(classID.classKey);
 
-    if (!classObject)
+    if (!courseObject || !classObject)
       throw ReferenceError(
-        `Invalid ClassObject reference: ${JSON.stringify(classID)}`
+        `Invalid ClassObject reference: ${classID.courseKey} - ${classID.classKey}`
       );
 
     const { courseName, startPeriod, periodsCount } = classObject;
@@ -44,6 +41,7 @@ const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
         if (row == 0) {
           newCellProps = {
             children: courseName,
+            bgColor: courseObject.color,
             rowSpan: periodsCount[index],
           };
         } else {

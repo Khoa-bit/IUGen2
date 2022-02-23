@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
 import { CoursesMap, parseClassInput } from "../lib/classInput";
 import { mergeMaps } from "../lib/utils";
 import ClassInputForm from "./ClassInputForm";
@@ -8,27 +8,25 @@ import ScheduleTables from "./ScheduleTables";
 
 export type InputHandler = (rawInputString: string) => void;
 
-const colorPalette = {
-  rose: "bg-rose-200",
-  //   pink: "bg-pink-200",
-  fuchsia: "bg-fuchsia-200",
-  //   purple: "bg-purple-200",
-  //   violet: "bg-violet-200",
-  indigo: "bg-indigo-200",
-  //   blue: "bg-blue-200",
-  //   sky: "bg-sky-200",
-  cyan: "bg-cyan-200",
-  //   teal: "bg-teal-200",
-  emerald: "bg-emerald-200",
-  //   green: "bg-green-200",
-  lime: "bg-lime-200",
-  //   yellow: "bg-yellow-200",
-  amber: "bg-amber-200",
-  orange: "bg-orange-200",
-  //   red: "bg-red-200",
-};
-
-const ColorPaletteContext = createContext(colorPalette);
+export const BG_COLOR_PALETTE = [
+  "bg-rose-200",
+  // "bg-pink-200",
+  "bg-fuchsia-200",
+  // "bg-purple-200",
+  // "bg-violet-200",
+  "bg-indigo-200",
+  // "bg-blue-200",
+  // "bg-sky-200",
+  "bg-cyan-200",
+  // "bg-teal-200",
+  "bg-emerald-200",
+  // "bg-green-200",
+  "bg-lime-200",
+  // "bg-yellow-200",
+  "bg-amber-200",
+  "bg-orange-200",
+  // "bg-red-200",
+];
 
 const IUGen = () => {
   const [coursesMap, setCoursesMap] = useState<CoursesMap>(new Map());
@@ -51,7 +49,7 @@ const IUGen = () => {
   };
 
   return (
-    <ColorPaletteContext.Provider value={colorPalette}>
+    <>
       <ClassInputForm inputHandler={inputHandler}></ClassInputForm>
       {errorMessage && <ErrorAlert message={errorMessage}></ErrorAlert>}
       <FilterTable
@@ -59,7 +57,7 @@ const IUGen = () => {
         setCoursesMap={setCoursesMap}
       ></FilterTable>
       <ScheduleTables coursesMap={coursesMap}></ScheduleTables>
-    </ColorPaletteContext.Provider>
+    </>
   );
 };
 

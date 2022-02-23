@@ -23,8 +23,11 @@ const CourseRow = ({
         onClick={() => toggleCourseStateHandler(courseObject)}
         checked={getCourseStateHandler(courseObject)}
       ></CheckBoxCell>
-      <Cell colSpan={4}>
-        {courseObject.name} - {courseObject.color || ":3"}
+      <Cell className="border-collapse border border-slate-200" colSpan={4}>
+        <div className="flex">
+          <div className={"h-5 w-5 " + (courseObject.color || "")}></div>
+          <p>{courseObject.name}</p>
+        </div>
       </Cell>
       <DeleteCell onClick={() => deleteCourseHandler(courseObject)}>
         Remove
