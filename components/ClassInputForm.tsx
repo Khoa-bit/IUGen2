@@ -21,10 +21,11 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
 
   return (
     <form
-      className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min-content] items-center"
+      id="ClassInputForm"
+      className="grid scroll-mt-2 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min-content] items-center gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <label className="mb-1 font-semibold" htmlFor="rawInputString">
+      <label className="font-semibold" htmlFor="rawInputString">
         Copy classes here:
       </label>
       <div className="flex space-x-5 justify-self-end">
@@ -53,7 +54,7 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
         {...register("rawInputString", { required: true })}
       />
       <Button
-        className="ml-6 h-full w-fit shadow shadow-slate-300"
+        className="ml-5 h-full w-fit shadow shadow-slate-300"
         type="submit"
       >
         Add

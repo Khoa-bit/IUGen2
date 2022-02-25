@@ -6,12 +6,14 @@ import CheckBoxCell from "./CheckBoxCell";
 import DeleteCell from "./DeleteCell";
 
 interface ClassRowProps {
+  order: number;
   classObject: ClassObject;
   toggleClassStateHandler: (classObject: ClassObject) => void;
   deleteClassHandler: (classObject: ClassObject) => void;
 }
 
 const ClassRow = ({
+  order,
   classObject,
   deleteClassHandler,
   toggleClassStateHandler,
@@ -24,14 +26,15 @@ const ClassRow = ({
         <Cell className="text-center">{classObject.date[i]}</Cell>
         <Cell className="text-center">{classObject.startPeriod[i]}</Cell>
         <Cell className="text-center">{classObject.periodsCount[i]}</Cell>
-        <Cell className="text-center">Dr.Cat :3</Cell>
+        <Cell className="text-center">{classObject.lecturer[i]}</Cell>
+        <Cell className="text-center">{classObject.location[i]}</Cell>
       </Fragment>,
     ]);
   }
 
   return (
     <>
-      <tr>
+      <tr className="animate-in-out">
         <CheckBoxCell
           className="border-r border-slate-200"
           id={classObject.id}
@@ -49,12 +52,17 @@ const ClassRow = ({
         </DeleteCell>
       </tr>
       {classCount == 2 && (
-        <tr>
-          <Cell hidden={true}></Cell>
+        <tr className="animate-in-out">
+          <Cell className="hidden"></Cell>
           {classRows[1]}
-          <Cell hidden={true}></Cell>
+          <Cell className="hidden"></Cell>
         </tr>
       )}
+      <style jsx>{`
+        tr {
+          --order: ${order};
+        }
+      `}</style>
     </>
   );
 };

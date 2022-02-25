@@ -23,17 +23,20 @@ const FilterHeader = ({
         onClick={toggleAllStateHandler}
         useTH={true}
       ></CheckBoxCell>
-      <Cell className="w-1/5" useTH={true}>
+      <Cell className="w-1/6" useTH={true}>
         Date
       </Cell>
-      <Cell className="w-1/5" useTH={true}>
+      <Cell className="w-1/6" useTH={true}>
         Start Period
       </Cell>
-      <Cell className="w-1/5" useTH={true}>
+      <Cell className="w-1/6" useTH={true}>
         No. Periods
       </Cell>
-      <Cell className="w-1/5" useTH={true}>
+      <Cell className="w-1/6" useTH={true}>
         Lecturer
+      </Cell>
+      <Cell className="w-1/6" useTH={true}>
+        Location
       </Cell>
       <DeleteCell className="w-1/12" onClick={deleteAllHandler} useTH={true}>
         <TrashIcon className="h-6 w-6 transition-colors hover:text-sky-100"></TrashIcon>

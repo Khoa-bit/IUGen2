@@ -67,8 +67,10 @@ const FilterTable = ({ coursesMap, setCoursesMap }: FilterTableProps) => {
   const rows: JSX.Element[] = [];
 
   for (const [courseKey, courseObject] of coursesMap) {
+    let order = 0;
     const courseRow = (
       <CourseRow
+        order={order++}
         key={courseKey}
         courseObject={courseObject}
         getCourseStateHandler={getCourseStateHandler}
@@ -80,6 +82,7 @@ const FilterTable = ({ coursesMap, setCoursesMap }: FilterTableProps) => {
     for (const [classKey, classObject] of courseObject.classesMap) {
       const classRow = (
         <ClassRow
+          order={order++}
           key={classKey}
           classObject={classObject}
           toggleClassStateHandler={toggleClassStateHandler}
@@ -91,16 +94,18 @@ const FilterTable = ({ coursesMap, setCoursesMap }: FilterTableProps) => {
   }
 
   return (
-    <table className="table-fixed overflow-hidden rounded shadow shadow-slate-300">
-      <thead>
-        <FilterHeader
-          getAllStateHandler={getAllStateHandler}
-          toggleAllStateHandler={toggleAllStateHandler}
-          deleteAllHandler={deleteAllHandler}
-        ></FilterHeader>
-      </thead>
-      <tbody className="divide-y divide-slate-200">{rows}</tbody>
-    </table>
+    <div className="overflow-x-auto overflow-y-hidden rounded shadow shadow-slate-300">
+      <table className="w-full min-w-[50rem] table-fixed bg-white">
+        <thead>
+          <FilterHeader
+            getAllStateHandler={getAllStateHandler}
+            toggleAllStateHandler={toggleAllStateHandler}
+            deleteAllHandler={deleteAllHandler}
+          ></FilterHeader>
+        </thead>
+        <tbody className="divide-y divide-slate-200">{rows}</tbody>
+      </table>
+    </div>
   );
 };
 
