@@ -1,4 +1,4 @@
-# IUGen Community Guidelines
+# IUGen Community Conduct Guidelines
 
 The following community guidelines are based on [The Ruby Community Conduct Guidelines](https://www.ruby-lang.org/en/conduct/).
 
