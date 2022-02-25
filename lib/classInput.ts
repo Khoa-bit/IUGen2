@@ -8,6 +8,8 @@ export interface ClassObject {
   date: WeekDate[];
   startPeriod: number[];
   periodsCount: number[];
+  location: string[];
+  lecturer: string[];
   isActive: boolean;
 }
 
@@ -63,6 +65,8 @@ export function _toClassObject(classStrArray: string[]): ClassObject {
   const periodsCount = classStrArray[13]
     .split(/\s+/)
     .map((strValue) => parseInt(strValue));
+  const location = classStrArray[14].split(/\s+/);
+  const lecturer = classStrArray[15].split(/\s+/);
   const id = courseID + group + practice;
 
   _validateClassObject({ classStrArray, date, periodsCount, startPeriod });
@@ -74,6 +78,8 @@ export function _toClassObject(classStrArray: string[]): ClassObject {
     date,
     startPeriod,
     periodsCount,
+    location,
+    lecturer,
     isActive: true,
   };
 }
