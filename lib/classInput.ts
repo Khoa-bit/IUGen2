@@ -39,7 +39,7 @@ function _validateClassObject({
 }: validateClassObjectFields) {
   date.forEach((dateStr) => {
     if (SERIAL_DATE.get(dateStr) === undefined) {
-      throw Error(`Invalid week date "${dateStr}": ${classStrArray}`);
+      throw Error(`Invalid week date "${dateStr}": ${classStrArray[11]}`);
     }
   });
 
@@ -53,12 +53,35 @@ function _validateClassObject({
   }
 }
 
+const VNToEngDates = new Map<string, WeekDate>(
+  Object.entries({
+    Hai: "Mon",
+    Ba: "Tue",
+    Tư: "Wed",
+    Năm: "Thu",
+    Sáu: "Fri",
+    Bảy: "Sun",
+    Nhật: "Sat",
+    Mon: "Mon",
+    Tue: "Tue",
+    Wed: "Wed",
+    Thu: "Thu",
+    Fri: "Fri",
+    Sun: "Sun",
+    Sat: "Sat",
+  })
+);
+
 export function _toClassObject(classStrArray: string[]): ClassObject {
   const courseID = classStrArray[0];
   const courseName = classStrArray[2];
   const group = classStrArray[3];
   const practice = classStrArray[4];
-  const date = classStrArray[11].split(/\s+/) as WeekDate[];
+  const date = classStrArray[11].split(/\s+/).map((date) => {
+    const dateStr = VNToEngDates.get(date);
+    if (dateStr === undefined) throw Error(`Invalid date(s) format: ${date}`);
+    return dateStr;
+  });
   const startPeriod = classStrArray[12]
     .split(/\s+/)
     .map((strValue) => parseInt(strValue));
