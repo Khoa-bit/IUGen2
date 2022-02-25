@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/solid";
 import { Fragment } from "react";
 import { ClassObject } from "../lib/classInput";
 import Cell from "./Cell";
@@ -5,12 +6,14 @@ import CheckBoxCell from "./CheckBoxCell";
 import DeleteCell from "./DeleteCell";
 
 interface ClassRowProps {
+  order: number;
   classObject: ClassObject;
   toggleClassStateHandler: (classObject: ClassObject) => void;
   deleteClassHandler: (classObject: ClassObject) => void;
 }
 
 const ClassRow = ({
+  order,
   classObject,
   deleteClassHandler,
   toggleClassStateHandler,
@@ -20,18 +23,20 @@ const ClassRow = ({
   for (let i = 0; i < classCount; i++) {
     classRows.push([
       <Fragment key={i}>
-        <Cell>{classObject.date[i]}</Cell>
-        <Cell>{classObject.startPeriod[i]}</Cell>
-        <Cell>{classObject.periodsCount[i]}</Cell>
-        <Cell>Dr.Cat :3</Cell>
+        <Cell className="text-center">{classObject.date[i]}</Cell>
+        <Cell className="text-center">{classObject.startPeriod[i]}</Cell>
+        <Cell className="text-center">{classObject.periodsCount[i]}</Cell>
+        <Cell className="text-center">{classObject.lecturer[i]}</Cell>
+        <Cell className="text-center">{classObject.location[i]}</Cell>
       </Fragment>,
     ]);
   }
 
   return (
     <>
-      <tr>
+      <tr className="animate-in-out">
         <CheckBoxCell
+          className="border-r border-slate-200"
           id={classObject.id}
           onClick={() => toggleClassStateHandler(classObject)}
           checked={classObject.isActive}
@@ -39,19 +44,25 @@ const ClassRow = ({
         ></CheckBoxCell>
         {classRows[0]}
         <DeleteCell
+          className="border-l border-slate-200"
           onClick={() => deleteClassHandler(classObject)}
           rowSpan={classCount}
         >
-          Remove
+          <TrashIcon className="h-6 w-6 transition-colors hover:text-slate-700"></TrashIcon>
         </DeleteCell>
       </tr>
       {classCount == 2 && (
-        <tr>
-          <Cell hidden={true}></Cell>
+        <tr className="animate-in-out">
+          <Cell className="hidden"></Cell>
           {classRows[1]}
-          <Cell hidden={true}></Cell>
+          <Cell className="hidden"></Cell>
         </tr>
       )}
+      <style jsx>{`
+        tr {
+          --order: ${order};
+        }
+      `}</style>
     </>
   );
 };

@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  overflow-y: scroll;
+}
+
+.animate-in-out {
+  opacity: 0;
+  animation: inOut 0.3s ease-out calc(var(--order) * 0.15s + 0.2s) forwards;
+}
+
+@keyframes inOut {
+  0% {
+    transform: translateY(0.8rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -8,42 +8,20 @@ export interface CellProps {
     | number[];
   rowSpan?: number;
   colSpan?: number;
-  hidden?: boolean;
-  bgColor?: string;
   className?: string;
   useTH?: boolean;
 }
 
-const Cell = ({
-  children,
-  className,
-  colSpan,
-  bgColor,
-  hidden,
-  rowSpan,
-  useTH,
-}: CellProps) => {
-  const applyClass =
-    className ??
-    `border-collapse border border-slate-200 ${bgColor ? bgColor : ""}`;
+const Cell = ({ children, className, colSpan, rowSpan, useTH }: CellProps) => {
+  const applyClass = `py-2 ${className || ""}`;
   return (
     <>
       {useTH ? (
-        <th
-          className={applyClass}
-          rowSpan={rowSpan}
-          colSpan={colSpan}
-          hidden={hidden}
-        >
+        <th className={applyClass} rowSpan={rowSpan} colSpan={colSpan}>
           {children}
         </th>
       ) : (
-        <td
-          className={applyClass}
-          rowSpan={rowSpan}
-          colSpan={colSpan}
-          hidden={hidden}
-        >
+        <td className={applyClass} rowSpan={rowSpan} colSpan={colSpan}>
           {children}
         </td>
       )}

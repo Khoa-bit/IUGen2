@@ -15,13 +15,18 @@ const CheckBoxCell = ({
 }: CheckBoxCellProps) => {
   return (
     <Cell {...props}>
-      <input
-        type="checkbox"
-        name={id}
-        id={id}
-        onChange={onClick}
-        checked={checked}
-      />
+      <div className="flex justify-center">
+        <input
+          className="h-[18px] w-[18px] rounded 
+          border border-slate-300 text-sky-500 transition-colors hover:text-sky-300
+          focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
+          type="checkbox"
+          name={id}
+          id={id}
+          onChange={onClick}
+          checked={checked}
+        />
+      </div>
     </Cell>
   );
 };

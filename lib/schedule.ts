@@ -28,7 +28,7 @@ export const SERIAL_DATE = new Map(
   })
 );
 
-export const PERIODS_PER_DAY = 16;
+export const PERIODS_PER_DAY = 12;
 
 export function _extractDates(classObject: ClassObject) {
   const dates = classObject.date.map((dateStr) => {
