@@ -52,13 +52,13 @@ describe("_mapCourses()", () => {
     expect(coursesMap.get("PE018IU")?.classesMap.size).toEqual(1);
 
     const class0 = coursesMap.get("IT134IU")?.classesMap.get("IT134IU0101");
-    expect(JSON.stringify(class0)).toContain(
-      '"courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"isActive":true}'
+    expect(JSON.stringify(class0)).toMatch(
+      '{"id":"IT134IU0101","courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"location":["LA1.607","L201"],"lecturer":["L.D.Tân","L.D.Tân"],"isActive":true}'
     );
 
     const class1 = coursesMap.get("PE018IU")?.classesMap.get("PE018IU10");
-    expect(JSON.stringify(class1)).toContain(
-      '"courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"isActive":true}'
+    expect(JSON.stringify(class1)).toMatch(
+      '{"id":"PE018IU10","courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"location":["ONLINE"],"lecturer":["H.Y.Linh"],"isActive":true}'
     );
   });
 });
@@ -93,6 +93,8 @@ describe("_toClassObject()", function () {
       date: ["Fri", "Wed"],
       startPeriod: [1, 7],
       periodsCount: [4, 3],
+      location: ["LA1.608", "ONLINE"],
+      lecturer: ["N.Q.Phú", "Q.T.Tho"],
       isActive: true,
     };
     expect(classObject).toStrictEqual(expectedObject);
@@ -162,12 +164,12 @@ describe("parseClassInput()", () => {
 
     const class0 = coursesMap.get("IT134IU")?.classesMap.get("IT134IU0101");
     expect(JSON.stringify(class0)).toMatch(
-      '{"id":"IT134IU0101","courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"isActive":true}'
+      '{"id":"IT134IU0101","courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"location":["LA1.607","L201"],"lecturer":["L.D.Tân","L.D.Tân"],"isActive":true}'
     );
 
     const class1 = coursesMap.get("PE018IU")?.classesMap.get("PE018IU10");
     expect(JSON.stringify(class1)).toMatch(
-      '{"id":"PE018IU10","courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"isActive":true}'
+      '{"id":"PE018IU10","courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"location":["ONLINE"],"lecturer":["H.Y.Linh"],"isActive":true}'
     );
   });
 
@@ -178,12 +180,12 @@ describe("parseClassInput()", () => {
 
     const class0 = coursesMap.get("IT134IU")?.classesMap.get("IT134IU11");
     expect(JSON.stringify(class0)).toMatch(
-      '{"id":"IT134IU11","courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"isActive":true}'
+      '{"id":"IT134IU11","courseID":"IT134IU","courseName":"Internet of Things","date":["Mon","Sat"],"startPeriod":[7,4],"periodsCount":[4,3],"location":["LA1.607","L201"],"lecturer":["L.D.Tân","L.D.Tân"],"isActive":true}'
     );
 
     const class1 = coursesMap.get("PE018IU")?.classesMap.get("PE018IU10");
     expect(JSON.stringify(class1)).toMatch(
-      '{"id":"PE018IU10","courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"isActive":true}'
+      '{"id":"PE018IU10","courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"location":["ONLINE"],"lecturer":["H.Y.Linh"],"isActive":true}'
     );
   });
 
