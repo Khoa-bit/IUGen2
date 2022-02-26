@@ -13,8 +13,6 @@ const IUGenPage: NextPage = () => {
   const [showingScrollTop, setShowingScrollTop] = useState(false);
 
   useEffect(() => {
-    // Note that ref.current may be null. This is expected, because you may
-    // conditionally render the ref-ed element, or you may forgot to assign it
     const scrollAnchorEle = scrollAnchor.current;
     if (!scrollAnchorEle)
       throw Error("divRef or scrollAnchorEle is not assigned");
@@ -57,7 +55,8 @@ const IUGenPage: NextPage = () => {
       >
         <Transition
           show={showingScrollTop}
-          as={Fragment}
+          className="fixed right-8 bottom-16 z-10 md:right-14"
+          as="div"
           enter="transition duration-150"
           enterFrom="opacity-0 translate-y-2"
           enterTo="opacity-100 translate-y-0"
@@ -66,8 +65,8 @@ const IUGenPage: NextPage = () => {
           leaveTo="opacity-0 -translate-y-2"
         >
           <button
-            className="fixed right-8 bottom-16 z-10 rounded-full bg-slate-900 p-2 text-slate-200 
-            shadow-lg shadow-slate-500 transition-colors hover:bg-slate-800 md:right-14"
+            className="rounded-full bg-slate-900 p-2 text-slate-200 shadow-lg 
+            shadow-slate-500 transition-colors hover:bg-slate-800"
             aria-label="Scroll to Top"
             onClick={() => document.body.scrollIntoView({ behavior: "smooth" })}
           >
@@ -87,11 +86,11 @@ const IUGenPage: NextPage = () => {
         md:grid-cols-3 md:grid-rows-[minmax(0,1fr)_min-content]"
         >
           <article>
-            <h4 className="mb-3 font-black">Resources</h4>
+            <h4 className="mb-3 font-bold">Resources</h4>
             <p>Docs</p>
           </article>
           <article>
-            <h4 className="mb-3 font-black">More</h4>
+            <h4 className="mb-3 font-bold">More</h4>
             <a
               className="block text-sky-600 transition-colors hover:text-sky-400"
               href="https://github.com/Khoa-bit/IUGen2/blob/main/CODE_OF_CONDUCT.md"
@@ -102,7 +101,7 @@ const IUGenPage: NextPage = () => {
             </a>
           </article>
           <article>
-            <h4 className="mb-3 font-black">About me</h4>
+            <h4 className="mb-3 font-bold">About me</h4>
             <p>Khoa-bit</p>
             <a
               className="block text-sky-600 transition-colors hover:text-sky-400"

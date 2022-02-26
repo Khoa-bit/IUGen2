@@ -9,7 +9,7 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
   let [isOpen, setIsOpen] = useState(true);
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition show={isOpen} as={Fragment}>
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto"
@@ -55,10 +55,9 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
               >
                 Input Error
               </Dialog.Title>
-              <div className="mt-2">
+              <Dialog.Description className="mt-2">
                 <p className="text-sm text-stone-500">{message}</p>
-              </div>
-
+              </Dialog.Description>
               <div className="mt-4">
                 <button
                   type="button"

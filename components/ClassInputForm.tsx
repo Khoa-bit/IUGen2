@@ -1,8 +1,8 @@
-import { QuestionMarkCircleIcon, TableIcon } from "@heroicons/react/solid";
-import Link from "next/link";
+import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "./Button";
 import { InputHandler } from "./IUGen";
+import SheetFormPrompt from "./SheetFormPrompt";
 
 interface Inputs {
   rawInputString: string;
@@ -28,15 +28,7 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
         Copy classes here:
       </label>
       <div className="flex space-x-5 justify-self-end">
-        <a
-          className="text-green-700 transition-colors hover:text-green-600"
-          href="https://docs.google.com/spreadsheets/create?usp=sheets_home&ths=true"
-          target="_blank"
-          rel="noreferrer"
-          title="New Google Sheet"
-        >
-          <TableIcon className="h-6 w-6"></TableIcon>
-        </a>
+        <SheetFormPrompt></SheetFormPrompt>
         <a
           className="text-indigo-700 transition-colors hover:text-indigo-600"
           href="#"
