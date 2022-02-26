@@ -28,7 +28,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
             : "bg-stone-400 shadow-stone-300"
         }`}
       >
-        <CogIcon className="h-5 w-5"></CogIcon>
+        <CogIcon className="h-5 shrink-0"></CogIcon>
         {schedules.length ? (
           <p>
             Schedule(s) generated: <b>{schedules.length}</b>

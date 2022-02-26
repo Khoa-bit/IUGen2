@@ -21,7 +21,6 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
 
   return (
     <form
-      id="ClassInputForm"
       className="grid scroll-mt-2 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min-content] items-center gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -54,7 +53,7 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
         {...register("rawInputString", { required: true })}
       />
       <Button
-        className="ml-5 h-full w-fit shadow shadow-slate-300"
+        className="ml-2 h-full w-fit shadow shadow-slate-300 md:ml-5"
         type="submit"
       >
         Add
