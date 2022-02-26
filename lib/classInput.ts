@@ -112,11 +112,9 @@ export function _mapCourses(parseData: string[]) {
     throw Error("Failed to match: Missing columns");
 
   let coursesMap: CoursesMap = new Map();
-  let colorCounter = 0;
 
   for (let i = 0; i < parseData.length; i += 17) {
     let classObject = _toClassObject(parseData.slice(i, i + 17));
-
     let courseKey = classObject.courseID;
 
     let courseObject = coursesMap.get(courseKey);
@@ -124,12 +122,10 @@ export function _mapCourses(parseData: string[]) {
       courseObject = {
         id: courseKey,
         name: classObject.courseName,
-        color: BG_COLOR_PALETTE[colorCounter],
         activeClasses: 0,
         classesMap: new Map(),
       };
       coursesMap.set(courseKey, courseObject);
-      colorCounter = (colorCounter + 1) % BG_COLOR_PALETTE.length;
     }
     courseObject.activeClasses += 1;
     courseObject.classesMap.set(classObject.id, classObject);
@@ -141,4 +137,16 @@ export function _mapCourses(parseData: string[]) {
 export function parseClassInput(rawInputString: string) {
   const parseData = rawInputString.trim().split(/[ "]*\t[ "]*/);
   return _mapCourses(parseData);
+}
+
+export function mapColor(coursesMap: CoursesMap) {
+  let colorCounter = 0;
+  for (let courseObject of coursesMap.values()) {
+    courseObject = {
+      ...courseObject,
+      color: BG_COLOR_PALETTE[colorCounter],
+    };
+    colorCounter = (colorCounter + 1) % BG_COLOR_PALETTE.length;
+  }
+  return coursesMap;
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CoursesMap, parseClassInput } from "../lib/classInput";
+import { CoursesMap, mapColor, parseClassInput } from "../lib/classInput";
 import { mergeMaps } from "../lib/utils";
 import ClassInputForm from "./ClassInputForm";
 import ErrorAlert from "./ErrorAlert";
@@ -39,7 +39,7 @@ const IUGen = () => {
     try {
       const newCoursesMap = parseClassInput(rawInputString);
       setCoursesMap((prevCoursesMap) =>
-        mergeMaps(prevCoursesMap, newCoursesMap)
+        mapColor(mergeMaps(prevCoursesMap, newCoursesMap))
       );
     } catch (error) {
       if (error instanceof Error) {
