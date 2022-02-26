@@ -6,20 +6,11 @@ const HeaderCell = ({
   children,
   className,
   colSpan,
-  bgColor,
-  hidden,
   rowSpan,
 }: HeaderCellProps) => {
-  const applyClass =
-    className ??
-    `border-collapse border border-slate-200 ${bgColor ? bgColor : ""}`;
+  const applyClass = `py-2 ${className || ""}`;
   return (
-    <th
-      className={applyClass}
-      rowSpan={rowSpan}
-      colSpan={colSpan}
-      hidden={hidden}
-    >
+    <th className={applyClass} rowSpan={rowSpan} colSpan={colSpan}>
       {children}
     </th>
   );
