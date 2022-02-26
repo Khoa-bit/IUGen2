@@ -100,6 +100,42 @@ describe("_toClassObject()", function () {
     expect(classObject).toStrictEqual(expectedObject);
   });
 
+  it("should turn string array to class Object with Vietnamese fields", function () {
+    const classStrArray = [
+      "IT092IU",
+      "IT092IU",
+      "Principles of Programming Languages",
+      "02",
+      "01",
+      "4",
+      "4",
+      "ITIT19CS2",
+      "35",
+      "5",
+      "*",
+      "Sáu   Tư",
+      "1   7",
+      "4   3",
+      "LA1.608   ONLINE",
+      "N.Q.Phú   Q.T.Tho",
+      "07/03/2022--15/05/2022   07/02/2022--05/06/2022",
+    ];
+
+    const classObject = _toClassObject(classStrArray);
+    const expectedObject: ClassObject = {
+      id: "IT092IU0201",
+      courseID: "IT092IU",
+      courseName: "Principles of Programming Languages",
+      date: ["Fri", "Wed"],
+      startPeriod: [1, 7],
+      periodsCount: [4, 3],
+      location: ["LA1.608", "ONLINE"],
+      lecturer: ["N.Q.Phú", "Q.T.Tho"],
+      isActive: true,
+    };
+    expect(classObject).toStrictEqual(expectedObject);
+  });
+
   it("should throw an Error due to missing periods for dates", function () {
     const classStrArray = [
       "IT092IU",
@@ -151,7 +187,7 @@ describe("_toClassObject()", function () {
 
     expect(() => {
       _toClassObject(classStrArray);
-    }).toThrowError(/^Invalid week date/);
+    }).toThrowError("Invalid date(s) format: What?");
   });
 });
 

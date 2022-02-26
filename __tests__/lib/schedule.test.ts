@@ -11,6 +11,7 @@ import {
   getAllState,
   toggleAllState,
   getCourseState,
+  PERIODS_PER_DAY,
 } from "../../lib/schedule";
 import {
   ClassesMap,
@@ -60,25 +61,29 @@ describe("Schedule Generator", () => {
       const classObjectC10 = courseObjectC1.classesMap.get("C10101");
       if (!classObjectC10) throw Error("Missing Class C10101");
       expect(_serializeClassTime(classObjectC10)).toEqual([
-        [33, 36],
-        [71, 75],
+        [2 * PERIODS_PER_DAY + 1, 2 * PERIODS_PER_DAY + 4],
+        [4 * PERIODS_PER_DAY + 7, 4 * PERIODS_PER_DAY + 11],
       ]);
 
       const classObjectC11 = courseObjectC1.classesMap.get("C10102");
       if (!classObjectC11) throw Error("Missing Class C10102");
       expect(_serializeClassTime(classObjectC11)).toEqual([
-        [23, 26],
-        [71, 75],
+        [1 * PERIODS_PER_DAY + 7, 1 * PERIODS_PER_DAY + 10],
+        [4 * PERIODS_PER_DAY + 7, 4 * PERIODS_PER_DAY + 11],
       ]);
 
       // Check C2 classes
       const classObjectC20 = courseObjectC2.classesMap.get("C201");
       if (!classObjectC20) throw Error("Missing Class C201");
-      expect(_serializeClassTime(classObjectC20)).toEqual([[17, 20]]);
+      expect(_serializeClassTime(classObjectC20)).toEqual([
+        [1 * PERIODS_PER_DAY + 1, 1 * PERIODS_PER_DAY + 4],
+      ]);
 
       const classObjectC21 = courseObjectC2.classesMap.get("C202");
       if (!classObjectC21) throw Error("Missing Class C202");
-      expect(_serializeClassTime(classObjectC21)).toEqual([[33, 36]]);
+      expect(_serializeClassTime(classObjectC21)).toEqual([
+        [2 * PERIODS_PER_DAY + 1, 2 * PERIODS_PER_DAY + 4],
+      ]);
     });
 
     it("should throw an Error due to missing periods for dates", function () {
@@ -90,6 +95,8 @@ describe("Schedule Generator", () => {
           date: ["Wed", "Fri"],
           startPeriod: [1], // Missing startPeriod for "Fri" date
           periodsCount: [3], // Missing periodsCount for "Fri" date
+          location: ["AC11", "AC12"],
+          lecturer: ["LC11", "LC12"],
           isActive: true,
         });
       }).toThrowError(
@@ -590,6 +597,8 @@ function initializeCourseMap(courseMap: CoursesMap) {
     date: ["Wed", "Fri"],
     startPeriod: [1, 7],
     periodsCount: [3, 4],
+    location: ["AC11", "AC12"],
+    lecturer: ["LC11", "LC12"],
     isActive: true,
   });
 
@@ -600,6 +609,8 @@ function initializeCourseMap(courseMap: CoursesMap) {
     date: ["Tue", "Fri"],
     startPeriod: [7, 7],
     periodsCount: [3, 4],
+    location: ["AC11", "AC12"],
+    lecturer: ["LC11", "LC12"],
     isActive: true,
   });
 
@@ -618,6 +629,8 @@ function initializeCourseMap(courseMap: CoursesMap) {
     date: ["Tue"],
     startPeriod: [1],
     periodsCount: [3],
+    location: ["AC21"],
+    lecturer: ["LC21"],
     isActive: true,
   });
 
@@ -628,6 +641,8 @@ function initializeCourseMap(courseMap: CoursesMap) {
     date: ["Wed"],
     startPeriod: [1],
     periodsCount: [3],
+    location: ["AC21"],
+    lecturer: ["LC21"],
     isActive: true,
   });
 
