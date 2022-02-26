@@ -141,11 +141,11 @@ export function parseClassInput(rawInputString: string) {
 
 export function mapColor(coursesMap: CoursesMap) {
   let colorCounter = 0;
-  for (let courseObject of coursesMap.values()) {
-    courseObject = {
+  for (const [courseKey, courseObject] of coursesMap) {
+    coursesMap.set(courseKey, {
       ...courseObject,
       color: BG_COLOR_PALETTE[colorCounter],
-    };
+    });
     colorCounter = (colorCounter + 1) % BG_COLOR_PALETTE.length;
   }
   return coursesMap;
