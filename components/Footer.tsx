@@ -77,7 +77,7 @@ const Footer = () => {
           </a>
         </section>
         <section>
-          <Link href="/compute/IUGenPage">
+          <Link href="/">
             <a className="block w-fit">
               <IUGenIcon className="h-12"></IUGenIcon>
             </a>

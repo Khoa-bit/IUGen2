@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <header className="border-b border-slate-300 bg-white p-5">
       <nav className="mx-auto flex max-w-screen-lg flex-col items-center gap-3 sm:flex-row">
-        <Link href="/compute/IUGenPage">
+        <Link href="/">
           <a className="">
             <IUGenTextIcon className="h-14"></IUGenTextIcon>
           </a>
