@@ -1,59 +1,65 @@
-import { Transition } from "@headlessui/react";
-import { ChevronDoubleUpIcon } from "@heroicons/react/solid";
-import type { NextPage } from "next";
-import { useEffect, useRef, useState } from "react";
-import IUGen from "../../components/IUGen";
+import { useState } from "react";
+import { CoursesMap, parseClassInput } from "../../lib/classInput";
+import { mapColor } from "../../lib/schedule";
+import { mergeMaps } from "../../lib/utils";
+import ClassInputForm from "../../components/ClassInputForm";
+import ErrorAlert from "../../components/ErrorAlert";
+import FilterTable from "../../components/FilterTable";
+import ScheduleTables from "../../components/ScheduleTables";
 
-const IUGenPage: NextPage = () => {
-  const scrollAnchor = useRef<HTMLDivElement>(null);
-  const [showingScrollTop, setShowingScrollTop] = useState(false);
+export type InputHandler = (rawInputString: string) => void;
 
-  useEffect(() => {
-    const scrollAnchorEle = scrollAnchor.current;
-    if (!scrollAnchorEle)
-      throw Error("divRef or scrollAnchorEle is not assigned");
+export const BG_COLOR_PALETTE = [
+  "bg-rose-200 shadow shadow-rose-500/50",
+  // "bg-pink-200 shadow shadow-pink-500/50",
+  "bg-fuchsia-200 shadow shadow-fuchsia-500/50",
+  // "bg-purple-200 shadow shadow-purple-500/50",
+  // "bg-violet-200 shadow shadow-violet-500/50",
+  "bg-indigo-200 shadow shadow-indigo-500/50",
+  // "bg-blue-200 shadow shadow-blue-500/50",
+  // "bg-sky-200 shadow shadow-sky-500/50",
+  // "bg-cyan-200 shadow shadow-cyan-500/50",
+  // "bg-teal-200 shadow shadow-teal-500/50",
+  "bg-emerald-200 shadow shadow-emerald-500/50",
+  // "bg-green-200 shadow shadow-green-500/50",
+  "bg-lime-200 shadow shadow-lime-500/50",
+  // "bg-yellow-200 shadow shadow-yellow-500/50",
+  "bg-amber-200 shadow shadow-amber-500/50",
+  "bg-orange-200 shadow shadow-orange-500/50",
+  // "bg-red-200 shadow shadow-red-500/50",
+];
 
-    let observer = new IntersectionObserver((entries) => {
-      if (entries[0].boundingClientRect.top < 0) {
-        setShowingScrollTop(true);
-      } else {
-        setShowingScrollTop(false);
+const IUGen = () => {
+  const [coursesMap, setCoursesMap] = useState<CoursesMap>(new Map());
+  const [errorMessage, setErrorMessage] = useState<string>();
+
+  const inputHandler: InputHandler = (rawInputString: string) => {
+    if (!rawInputString) return;
+    setErrorMessage(undefined);
+
+    try {
+      const newCoursesMap = parseClassInput(rawInputString);
+      setCoursesMap((prevCoursesMap) =>
+        mapColor(mergeMaps(prevCoursesMap, newCoursesMap))
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
       }
-    });
-
-    observer.observe(scrollAnchorEle);
-  }, []);
+    }
+  };
 
   return (
     <>
-      <Transition
-        show={showingScrollTop}
-        className="fixed right-8 bottom-16 z-10 md:right-14"
-        as="div"
-        enter="transition duration-150"
-        enterFrom="opacity-0 translate-y-2"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition duration-150"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 -translate-y-2"
-      >
-        <button
-          className="rounded-full bg-slate-900 p-2 text-slate-200 shadow-lg 
-            shadow-slate-500 transition-colors hover:bg-slate-800"
-          aria-label="Scroll to Top"
-          onClick={() => document.body.scrollIntoView({ behavior: "smooth" })}
-        >
-          <ChevronDoubleUpIcon className="h-7 w-7"></ChevronDoubleUpIcon>
-        </button>
-      </Transition>
-      <IUGen></IUGen>
-      <div
-        ref={scrollAnchor}
-        id="scrollAnchor"
-        className="absolute top-[40rem] h-0 w-0"
-      ></div>
+      <ClassInputForm inputHandler={inputHandler}></ClassInputForm>
+      {errorMessage && <ErrorAlert message={errorMessage}></ErrorAlert>}
+      <FilterTable
+        coursesMap={coursesMap}
+        setCoursesMap={setCoursesMap}
+      ></FilterTable>
+      <ScheduleTables coursesMap={coursesMap}></ScheduleTables>
     </>
   );
 };
 
-export default IUGenPage;
+export default IUGen;

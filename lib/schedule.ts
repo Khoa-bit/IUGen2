@@ -1,4 +1,4 @@
-import { BG_COLOR_PALETTE } from "../components/IUGen";
+import { BG_COLOR_PALETTE } from "../pages/compute/IUGenPage";
 import { ClassObject, CourseObject, CoursesMap } from "./classInput";
 
 export interface ClassID {
