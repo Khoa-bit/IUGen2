@@ -1,4 +1,3 @@
-import { BG_COLOR_PALETTE } from "../components/IUGen";
 import { WeekDate, SERIAL_DATE } from "./schedule";
 
 export interface ClassObject {
@@ -137,16 +136,4 @@ export function _mapCourses(parseData: string[]) {
 export function parseClassInput(rawInputString: string) {
   const parseData = rawInputString.trim().split(/[ "]*\t[ "]*/);
   return _mapCourses(parseData);
-}
-
-export function mapColor(coursesMap: CoursesMap) {
-  let colorCounter = 0;
-  for (const [courseKey, courseObject] of coursesMap) {
-    coursesMap.set(courseKey, {
-      ...courseObject,
-      color: BG_COLOR_PALETTE[colorCounter],
-    });
-    colorCounter = (colorCounter + 1) % BG_COLOR_PALETTE.length;
-  }
-  return coursesMap;
 }
