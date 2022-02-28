@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "./Button";
 import HelpPrompt from "./HelpPrompt";
-import { InputHandler } from "../pages/compute/IUGenPage";
+import { InputHandler } from "../pages/index";
 import SheetFormPrompt from "./SheetFormPrompt";
 
 interface Inputs {
