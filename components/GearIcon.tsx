@@ -1,9 +1,9 @@
-const GearIcon = (props: React.ComponentProps<"svg">) => {
+const GearIcon = (props: React.HTMLAttributes<SVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
-      aria-hidden="true"
+      aria-label="Gear Icon"
       fill="currentColor"
       {...props}
     >

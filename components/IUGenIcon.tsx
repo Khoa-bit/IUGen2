@@ -1,8 +1,8 @@
-const IUGenIcon = (props: React.ComponentProps<"svg">) => {
+const IUGenIcon = (props: React.HTMLAttributes<SVGElement>) => {
   return (
     <svg
       viewBox="0 0 94 80"
-      aria-hidden="true"
+      aria-label="IUGen Logo"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}

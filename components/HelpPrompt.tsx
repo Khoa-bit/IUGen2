@@ -66,7 +66,7 @@ const HelpPrompt = () => {
                 <Dialog.Description className="mt-2">
                   <ul>
                     <li>
-                      <b className="text-orange-500">FireFox</b> users can copy
+                      <b className="text-orange-500">Firefox</b> users can copy
                       and paste directly into the input.
                     </li>
                     <li>
