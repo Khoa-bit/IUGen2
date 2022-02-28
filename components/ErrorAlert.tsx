@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import Button from "./Button";
 
 interface ErrorAlertProps {
   message: string;
@@ -12,7 +13,8 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
     <Transition show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-10 overflow-y-auto"
+        className="fixed inset-0 z-10 overflow-y-auto
+        selection:bg-sky-300 selection:text-sky-900"
         onClose={() => setIsOpen(false)}
       >
         <div className="min-h-screen px-4 text-center">
@@ -59,17 +61,13 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
                 <p className="text-sm text-stone-500">{message}</p>
               </Dialog.Description>
               <div className="mt-4">
-                <button
+                <Button
+                  variant="roseInvert"
                   type="button"
-                  className="inline-flex justify-center rounded-md border 
-                  border-transparent bg-rose-100 px-4 py-2 text-sm font-medium 
-                  text-rose-900 hover:bg-rose-200 focus:outline-none 
-                  focus-visible:ring-2 focus-visible:ring-rose-500 
-                  focus-visible:ring-offset-2"
                   onClick={() => setIsOpen(false)}
                 >
                   Got it, thanks!
-                </button>
+                </Button>
               </div>
             </div>
           </Transition.Child>

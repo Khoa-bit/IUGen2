@@ -1,8 +1,8 @@
-const GithubIcon = (props: React.ComponentProps<"svg">) => {
+const GithubIcon = (props: React.HTMLAttributes<SVGElement>) => {
   return (
     <svg
       viewBox="0 0 50 50"
-      aria-hidden="true"
+      aria-label="Github Logo"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       {...props}

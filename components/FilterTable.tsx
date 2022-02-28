@@ -94,7 +94,7 @@ const FilterTable = ({ coursesMap, setCoursesMap }: FilterTableProps) => {
   }
 
   return (
-    <div className="overflow-x-auto overflow-y-hidden rounded shadow shadow-slate-300">
+    <div className="w-full max-w-screen-lg overflow-x-auto overflow-y-hidden rounded shadow shadow-slate-300">
       <table className="w-full min-w-[50rem] table-fixed bg-white">
         <thead>
           <FilterHeader

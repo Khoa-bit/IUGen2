@@ -1,3 +1,4 @@
+import { BG_COLOR_PALETTE } from "../pages/index";
 import { ClassObject, CourseObject, CoursesMap } from "./classInput";
 
 export interface ClassID {
@@ -212,4 +213,17 @@ export function toggleAllState(coursesMap: CoursesMap, state?: boolean) {
 
 export function deleteAll(coursesMap: CoursesMap) {
   coursesMap.clear();
+}
+
+export function mapColor(coursesMap: CoursesMap) {
+  let colorCounter = 0;
+  const newMap: CoursesMap = new Map();
+  for (const [courseKey, courseObject] of coursesMap) {
+    newMap.set(courseKey, {
+      ...courseObject,
+      color: BG_COLOR_PALETTE[colorCounter],
+    });
+    colorCounter = (colorCounter + 1) % BG_COLOR_PALETTE.length;
+  }
+  return newMap;
 }

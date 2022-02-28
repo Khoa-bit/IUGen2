@@ -12,6 +12,7 @@ import {
   toggleAllState,
   getCourseState,
   PERIODS_PER_DAY,
+  mapColor,
 } from "../../lib/schedule";
 import {
   ClassesMap,
@@ -503,6 +504,29 @@ describe("Schedule Generator", () => {
       expect(toggleAllState(coursesMap)).toBe(true);
       expect(courseObjectC1.activeClasses).toEqual(2);
       expect(courseObjectC2.activeClasses).toEqual(2);
+    });
+  });
+
+  describe("mapColor()", () => {
+    it("should toggle all state", () => {
+      let originalColorSet: Set<string> = new Set();
+      for (const courseObject of coursesMap.values()) {
+        originalColorSet.add(courseObject.color || "");
+      }
+
+      expect(originalColorSet.size).toEqual(1);
+
+      const coloredMap = mapColor(coursesMap);
+
+      let colorSet: Set<string> = new Set();
+      for (const courseObject of coloredMap.values()) {
+        colorSet.add(courseObject.color || "");
+      }
+
+      expect(colorSet.size).toEqual(coursesMap.size);
+      expect(colorSet.size).toEqual(coloredMap.size);
+      expect(coursesMap.get("C1")?.color).toBeUndefined();
+      expect(coloredMap.get("C1")?.color).toBeTruthy();
     });
   });
 });
