@@ -1,6 +1,6 @@
-import { QuestionMarkCircleIcon } from "@heroicons/react/solid";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "./Button";
+import HelpPrompt from "./HelpPrompt";
 import { InputHandler } from "./IUGen";
 import SheetFormPrompt from "./SheetFormPrompt";
 
@@ -21,21 +21,15 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
 
   return (
     <form
-      className="grid scroll-mt-2 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min-content] items-center gap-2"
+      className="grid w-full max-w-screen-lg grid-cols-[minmax(0,1fr)_minmax(0,1fr)_min-content] items-center gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
       <label className="font-semibold" htmlFor="rawInputString">
-        Copy classes here:
+        Copy class table here:
       </label>
       <div className="flex space-x-5 justify-self-end">
         <SheetFormPrompt></SheetFormPrompt>
-        <a
-          className="text-indigo-700 transition-colors hover:text-indigo-600"
-          href="#"
-          title="Help"
-        >
-          <QuestionMarkCircleIcon className="h-6 w-6"></QuestionMarkCircleIcon>
-        </a>
+        <HelpPrompt></HelpPrompt>
       </div>
       <input
         className="col-span-2 rounded border border-slate-300
