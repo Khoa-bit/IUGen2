@@ -17,8 +17,8 @@ import savedSheetLink from "../../public/savedSheetLink.png";
 const DocsIndex: NextPage = () => {
   return (
     <article
-      className="prose prose-a:text-sky-600 hover:prose-a:text-sky-400 prose-code:text-indigo-500
-      prose-slate w-full max-w-screen-lg rounded border border-slate-100 p-8 shadow"
+      className="prose prose-slate w-full max-w-screen-lg
+      rounded border border-slate-100 p-8 shadow prose-a:text-sky-600 hover:prose-a:text-sky-400 prose-code:text-indigo-500"
     >
       <h1>Documentation</h1>
       <p>Welcome to IUGen documentation!</p>
