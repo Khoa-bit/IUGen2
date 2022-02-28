@@ -7,14 +7,14 @@ import profilePic from "../public/Edited.jpg";
 const Header = () => {
   return (
     <header className="border-b border-slate-300 bg-white p-5">
-      <nav className="mx-auto flex max-w-screen-lg items-center gap-3">
+      <nav className="mx-auto flex max-w-screen-lg flex-col items-center gap-3 sm:flex-row">
         <Link href="/compute/IUGenPage">
           <a className="">
             <IUGenTextIcon className="h-14"></IUGenTextIcon>
           </a>
         </Link>
         <Link href="/docs">
-          <a className="ml-12 mr-auto block text-lg font-semibold text-sky-500 transition-colors hover:text-sky-400 hover:underline">
+          <a className="block text-lg font-semibold text-sky-500 transition-colors hover:text-sky-400 hover:underline sm:ml-12 sm:mr-auto">
             Docs
           </a>
         </Link>

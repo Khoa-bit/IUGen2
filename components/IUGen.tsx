@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { CoursesMap, mapColor, parseClassInput } from "../lib/classInput";
+import { CoursesMap, parseClassInput } from "../lib/classInput";
+import { mapColor } from "../lib/schedule";
 import { mergeMaps } from "../lib/utils";
 import ClassInputForm from "./ClassInputForm";
 import ErrorAlert from "./ErrorAlert";

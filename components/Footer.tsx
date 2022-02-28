@@ -9,7 +9,7 @@ const Footer = () => {
     md:grid-cols-3 md:grid-rows-[minmax(0,1fr)_min-content]"
       >
         <section>
-          <h4 className="mb-3 font-bold">Resources</h4>
+          <h4 className="font-bold md:mb-3">Resources</h4>
           <Link href="/docs">
             <a className="block text-sky-600 transition-colors hover:text-sky-400 hover:underline">
               Docs
@@ -17,7 +17,7 @@ const Footer = () => {
           </Link>
         </section>
         <section>
-          <h4 className="mb-3 font-bold">More</h4>
+          <h4 className="font-bold md:mb-3">More</h4>
           <a
             className="block text-sky-600 transition-colors hover:text-sky-400 hover:underline"
             href="https://github.com/Khoa-bit/IUGen2/blob/main/CODE_OF_CONDUCT.md"
@@ -28,7 +28,7 @@ const Footer = () => {
           </a>
         </section>
         <section>
-          <h4 className="mb-3 font-bold">About me</h4>
+          <h4 className="font-bold md:mb-3">About me</h4>
           <p>Khoa Bit</p>
           <p>
             🥺 Please <b>no war</b> in{" "}
