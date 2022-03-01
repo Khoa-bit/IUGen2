@@ -65,7 +65,7 @@ const IUGen = () => {
         <meta name="twitter:card" content={Description} />
       </Head>
       <ClassInputForm inputHandler={inputHandler}></ClassInputForm>
-      {errorMessage && <ErrorAlert message={errorMessage}></ErrorAlert>}
+      <ErrorAlert message={errorMessage}></ErrorAlert>
       <FilterTable
         coursesMap={coursesMap}
         setCoursesMap={setCoursesMap}

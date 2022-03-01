@@ -78,7 +78,8 @@ export function _toClassObject(classStrArray: string[]): ClassObject {
   const practice = classStrArray[4];
   const date = classStrArray[11].split(/\s+/).map((date) => {
     const dateStr = VNToEngDates.get(date);
-    if (dateStr === undefined) throw Error(`Invalid date(s) format: ${date}`);
+    if (dateStr === undefined)
+      throw Error(`Invalid date format: ${date} in ${classStrArray}`);
     return dateStr;
   });
   const startPeriod = classStrArray[12]

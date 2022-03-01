@@ -1,13 +1,17 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "./Button";
+import Link from "next/link";
 
 interface ErrorAlertProps {
-  message: string;
+  message?: string;
 }
 
 const ErrorAlert = ({ message }: ErrorAlertProps) => {
-  let [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    setIsOpen(message != undefined);
+  }, [message]);
 
   return (
     <Transition show={isOpen} as={Fragment}>
@@ -46,8 +50,8 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div
-              className="my-8 inline-block w-full max-w-md transform 
+            <article
+              className="prose my-8 inline-block w-full max-w-md transform 
             overflow-hidden rounded-2xl bg-white p-6 text-left align-middle 
             shadow-xl transition-all"
             >
@@ -57,8 +61,18 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
               >
                 Input Error
               </Dialog.Title>
-              <Dialog.Description className="mt-2">
-                <p className="text-sm text-stone-500">{message}</p>
+              <Dialog.Description className="mt-2" as="ul">
+                <li className="text-sm text-stone-500">{message}</li>
+                <li>
+                  Still having trouble? Take a look at IUGen step-by-step guide
+                  in{" "}
+                  <Link href="/docs">
+                    <a className="text-sky-600 transition-colors hover:text-sky-400">
+                      docs here
+                    </a>
+                  </Link>
+                  .
+                </li>
               </Dialog.Description>
               <div className="mt-4">
                 <Button
@@ -69,7 +83,7 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
                   Got it, thanks!
                 </Button>
               </div>
-            </div>
+            </article>
           </Transition.Child>
         </div>
       </Dialog>

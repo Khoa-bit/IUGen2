@@ -187,7 +187,7 @@ describe("_toClassObject()", function () {
 
     expect(() => {
       _toClassObject(classStrArray);
-    }).toThrowError("Invalid date(s) format: What?");
+    }).toThrowError(/^Invalid date format: What\? in/);
   });
 });
 
