@@ -18,7 +18,9 @@ So, IUGen was built to be a fast and clean schedule generator for IUers.
 
 The [first version of IUGen](https://github.com/Khoa-bit/IUGen) was built on
 01/08/2021 as Python Script. Because It served me so well, I wanted to share and build
-a more user-friendly interface of IUGen. So my goal with IUGen 2 was:
+a more user-friendly interface of IUGen.
+
+**So my goal with IUGen 2 was:**
 
 - A fast and user-friendly web app.
 - An opportunity to learn about Javascript and Typescript.
@@ -26,23 +28,23 @@ a more user-friendly interface of IUGen. So my goal with IUGen 2 was:
 - To learn about UI/UX design fundamentals.
 - To learn about vector graphic basics.
 
-Here are some of IUGen designs in Figma:
+**Here are some IUGen designs in Figma:**
 
-<figure align="center">
+<p align="center">
     <img style="width: 70%" src="public/Figma1.png" alt="IUGen in Figma design">
-    <figcaption>IUGen in Figma design</figcaption>
-</figure>
-<figure align="center">
+    <br/>IUGen in Figma design
+</p>
+<p align="center">
     <img style="width: 70%" src="public/Figma2.png" alt="IUGen Components in Figma design">
-    <figcaption>IUGen Components in Figma design</figcaption>
-</figure>
+    <br/>IUGen Components in Figma design
+</p>
 
-Here is IUGen webapp:
+**Here is IUGen web app:**
 
-<figure align="center">
+<p align="center">
     <img style="width: 70%" src="public/IUGenProduction.png" alt="IUGen in Production early 2022">
-    <figcaption>IUGen in Production early 2022</figcaption>
-</figure>
+    <br/>IUGen in Production early 2022
+</p>
 
 ## Run it yourself
 
