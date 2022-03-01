@@ -12,8 +12,8 @@ const AnchorButton = ({ variant, className, ...props }: AnchorButtonProps) => {
     <a
       {...props}
       className={`whitespace-nowrap rounded px-4 py-1.5
-                  transition-colors focus:outline-none focus:ring
-                  focus:ring-offset-2 ${colorCSS} ${className}`}
+                  no-underline transition-colors focus:outline-none
+                  focus:ring focus:ring-offset-2 ${colorCSS} ${className}`}
     ></a>
   );
 };

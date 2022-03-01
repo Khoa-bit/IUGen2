@@ -52,7 +52,7 @@ const HelpPrompt = () => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div
+              <article
                 className="prose my-8 inline-block w-full max-w-md 
             transform overflow-hidden rounded-2xl bg-white p-6 text-left 
             align-middle shadow-xl transition-all"
@@ -63,29 +63,28 @@ const HelpPrompt = () => {
                 >
                   Help
                 </Dialog.Title>
-                <Dialog.Description className="mt-2">
-                  <ul>
-                    <li>
-                      <b className="text-orange-500">Firefox</b> users can copy
-                      and paste directly into the input.
-                    </li>
-                    <li>
-                      <b className="text-yellow-500">Chrome</b>/
-                      <b className="text-blue-500">Edge</b> users need to copy
-                      into <span className="text-green-500">Google Sheet</span>{" "}
-                      first then paste the Sheet table into the input.
-                    </li>
+                <Dialog.Description className="mt-2" as="ul">
+                  <li>
+                    <b className="text-orange-500">Firefox</b> users can copy
+                    and paste Edusoftweb&apos;s table directly into the input.
+                  </li>
+                  <li>
+                    <b className="text-yellow-500">Chrome</b>/
+                    <b className="text-blue-500">Edge</b> users need to copy
+                    Edusoftweb&apos;s table into{" "}
+                    <span className="text-green-500">Google Sheet</span> first
+                    then paste the Sheet table into the input.
+                  </li>
 
-                    <li>
-                      Step-by-step guide in{" "}
-                      <Link href="/docs">
-                        <a className="text-sky-600 transition-colors hover:text-sky-400">
-                          docs here
-                        </a>
-                      </Link>
-                      .
-                    </li>
-                  </ul>
+                  <li>
+                    Step-by-step guide in{" "}
+                    <Link href="/docs">
+                      <a className="text-sky-600 transition-colors hover:text-sky-400">
+                        docs here
+                      </a>
+                    </Link>
+                    .
+                  </li>
                 </Dialog.Description>
                 <div className="mt-4">
                   <Button
@@ -96,7 +95,7 @@ const HelpPrompt = () => {
                     Close
                   </Button>
                 </div>
-              </div>
+              </article>
             </Transition.Child>
           </div>
         </Dialog>

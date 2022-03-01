@@ -31,8 +31,8 @@ const DocsIndex: NextPage = () => {
         <meta name="twitter:card" content={Description} />
       </Head>
       <article
-        className="prose prose-slate w-full max-w-screen-lg
-      rounded border border-slate-100 p-8 shadow prose-a:text-sky-600 hover:prose-a:text-sky-400 prose-code:text-indigo-500"
+        className="prose prose-slate prose-a:text-sky-600 hover:prose-a:text-sky-400
+      prose-code:text-indigo-500 w-full max-w-screen-lg rounded border border-slate-100 p-8 shadow"
       >
         <h1>Documentation</h1>
         <p>Welcome to IUGen documentation!</p>
@@ -97,7 +97,7 @@ const DocsIndex: NextPage = () => {
         <blockquote>
           First of all, IUGen is currently cumbersome on Chrome/Edge because of
           how Edusoftweb displays your registration table and how Chromium-based
-          browsers copy Edusoftweb&apos;s table under the hood. Better solution
+          browsers copy Edusoftweb&apos;s table under the hood. Better support
           is coming soon.
         </blockquote>
         <p>

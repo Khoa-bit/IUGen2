@@ -70,9 +70,9 @@ const SheetFormPrompt = () => {
               leaveTo="opacity-0 scale-95"
             >
               <form
-                className="my-8 inline-block w-full max-w-md transform 
-                overflow-hidden rounded-2xl bg-white p-6 text-left align-middle 
-                shadow-xl transition-all"
+                className="prose my-8 inline-block w-full max-w-md 
+                transform overflow-hidden rounded-2xl bg-white p-6 text-left 
+                align-middle shadow-xl transition-all"
               >
                 <Dialog.Title
                   as="label"
