@@ -63,6 +63,7 @@ const IUGen = () => {
         <meta property="og:url" content={CanonicalURL} />
         <meta property="og:description" content={Description} />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="/OGPImageIUGEN.png" />
         <meta name="twitter:card" content={Description} />
       </Head>
       <ClassInputForm inputHandler={inputHandler}></ClassInputForm>

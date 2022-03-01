@@ -28,6 +28,7 @@ const DocsIndex: NextPage = () => {
         <meta property="og:url" content={CanonicalURL + "/docs"} />
         <meta property="og:description" content={Description} />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="/OGPImageDocs.png" />
         <meta name="twitter:card" content={Description} />
       </Head>
       <article
