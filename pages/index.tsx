@@ -7,6 +7,7 @@ import ErrorAlert from "../components/ErrorAlert";
 import FilterTable from "../components/FilterTable";
 import ScheduleTables from "../components/ScheduleTables";
 import Head from "next/head";
+import NewUserPrompt from "../components/NewUserPrompt";
 
 export type InputHandler = (rawInputString: string) => void;
 
@@ -71,6 +72,7 @@ const IUGen = () => {
         setCoursesMap={setCoursesMap}
       ></FilterTable>
       <ScheduleTables coursesMap={coursesMap}></ScheduleTables>
+      <NewUserPrompt></NewUserPrompt>
     </>
   );
 };
