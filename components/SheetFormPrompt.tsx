@@ -135,7 +135,7 @@ const SheetFormPrompt = () => {
                   </Button>
                   <AnchorButton
                     variant="emerald"
-                    href="https://docs.google.com/spreadsheets/create?usp=sheets_home&ths=true"
+                    href="https://sheets.new"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

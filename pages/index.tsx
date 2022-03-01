@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { CoursesMap, parseClassInput } from "../lib/classInput";
 import { mapColor } from "../lib/schedule";
-import { mergeMaps } from "../lib/utils";
+import { CanonicalURL, mergeMaps } from "../lib/utils";
 import ClassInputForm from "../components/ClassInputForm";
 import ErrorAlert from "../components/ErrorAlert";
 import FilterTable from "../components/FilterTable";
 import ScheduleTables from "../components/ScheduleTables";
+import Head from "next/head";
 
 export type InputHandler = (rawInputString: string) => void;
 
@@ -27,7 +28,10 @@ export const BG_COLOR_PALETTE = [
   "bg-amber-200 shadow shadow-amber-500/50",
   "bg-orange-200 shadow shadow-orange-500/50",
   // "bg-red-200 shadow shadow-red-500/50",
+  "bg-slate-100 shadow shadow-slate-500/50",
 ];
+
+const Description = "Fast and clean scheduling helper for perfectionists.";
 
 const IUGen = () => {
   const [coursesMap, setCoursesMap] = useState<CoursesMap>(new Map());
@@ -51,6 +55,15 @@ const IUGen = () => {
 
   return (
     <>
+      <Head>
+        <title>IUGen</title>
+        <meta name="description" content={Description} />
+        <meta property="og:title" content="IUGen" />
+        <meta property="og:url" content={CanonicalURL} />
+        <meta property="og:description" content={Description} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content={Description} />
+      </Head>
       <ClassInputForm inputHandler={inputHandler}></ClassInputForm>
       {errorMessage && <ErrorAlert message={errorMessage}></ErrorAlert>}
       <FilterTable

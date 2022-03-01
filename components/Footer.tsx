@@ -5,8 +5,8 @@ const Footer = () => {
   return (
     <footer className="border-t border-slate-300 bg-slate-100 px-5 py-10">
       <div
-        className="mx-auto grid max-w-screen-lg grid-cols-1 gap-5 
-    md:grid-cols-3 md:grid-rows-[minmax(0,1fr)_min-content]"
+        className="mx-auto grid max-w-screen-lg grid-cols-1 
+        gap-5 md:grid-cols-[repeat(3,minmax(min-content,1fr))] md:grid-rows-[minmax(0,1fr)_min-content]"
       >
         <section>
           <h4 className="font-bold md:mb-3">Resources</h4>

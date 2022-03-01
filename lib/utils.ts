@@ -1,3 +1,5 @@
+export const CanonicalURL = "https://iugen.vercel.app";
+
 export function mergeMaps(...iterables: Map<any, any>[]) {
   const map = new Map();
   for (const iterable of iterables) {
