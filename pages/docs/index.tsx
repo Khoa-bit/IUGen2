@@ -50,6 +50,20 @@ const DocsIndex: NextPage = () => {
           <span>Firefox</span>
           <FirefoxIcon className="h-8"></FirefoxIcon>
         </h2>
+
+        <h3>Video Guide</h3>
+        <iframe
+          className="mx-auto"
+          width="560"
+          height="315"
+          src="https://www.youtube-nocookie.com/embed/S0HC4vGi-kc"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+
+        <h3>Document Guide</h3>
         <p>
           Highlight your class table from{" "}
           <a
@@ -101,6 +115,21 @@ const DocsIndex: NextPage = () => {
           browsers copy Edusoftweb&apos;s table under the hood. Better support
           is coming soon.
         </blockquote>
+
+        <h3>Video Guide</h3>
+        <iframe
+          className="mx-auto"
+          width="560"
+          height="315"
+          src="https://www.youtube-nocookie.com/embed/pNSRJgLHSK4"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+
+        <h3>Document Guide</h3>
+
         <p>
           Highlight your class table from{" "}
           <a
