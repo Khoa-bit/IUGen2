@@ -47,6 +47,7 @@ const ClassRow = ({
           className="border-l border-slate-200"
           onClick={() => deleteClassHandler(classObject)}
           rowSpan={classCount}
+          label="Delete this class"
         >
           <TrashIcon className="h-6 w-6 transition-colors hover:text-slate-700"></TrashIcon>
         </DeleteCell>

@@ -32,7 +32,10 @@ const CourseRow = ({
           <p className="font-semibold">{courseObject.name}</p>
         </div>
       </Cell>
-      <DeleteCell onClick={() => deleteCourseHandler(courseObject)}>
+      <DeleteCell
+        onClick={() => deleteCourseHandler(courseObject)}
+        label="Delete this course"
+      >
         <TrashIcon className="h-6 w-6 transition-colors hover:text-slate-700"></TrashIcon>
       </DeleteCell>
       <style jsx>{`

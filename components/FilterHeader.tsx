@@ -38,7 +38,12 @@ const FilterHeader = ({
       <Cell className="w-1/6" useTH={true}>
         Location
       </Cell>
-      <DeleteCell className="w-1/12" onClick={deleteAllHandler} useTH={true}>
+      <DeleteCell
+        className="w-1/12"
+        onClick={deleteAllHandler}
+        useTH={true}
+        label="Delete All Classes"
+      >
         <TrashIcon className="h-6 w-6 transition-colors hover:text-sky-100"></TrashIcon>
       </DeleteCell>
     </tr>
