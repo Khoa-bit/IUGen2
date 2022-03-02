@@ -52,16 +52,16 @@ const DocsIndex: NextPage = () => {
         </h2>
 
         <h3>Video Guide</h3>
-        <iframe
-          className="mx-auto"
-          width="560"
-          height="315"
-          src="https://www.youtube-nocookie.com/embed/S0HC4vGi-kc"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <div className="overflow-clip rounded-lg border">
+          <iframe
+            className="aspect-video w-full"
+            src="https://www.youtube-nocookie.com/embed/S0HC4vGi-kc"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
 
         <h3>Document Guide</h3>
         <p>
@@ -117,16 +117,16 @@ const DocsIndex: NextPage = () => {
         </blockquote>
 
         <h3>Video Guide</h3>
-        <iframe
-          className="mx-auto"
-          width="560"
-          height="315"
-          src="https://www.youtube-nocookie.com/embed/pNSRJgLHSK4"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <div className="overflow-clip rounded-lg border">
+          <iframe
+            className="aspect-video w-full"
+            src="https://www.youtube-nocookie.com/embed/pNSRJgLHSK4"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
 
         <h3>Document Guide</h3>
 
