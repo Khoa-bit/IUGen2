@@ -64,7 +64,7 @@ const ClassRow = ({
     );
   }
 
-  return renderRows;
+  return <>{renderRows}</>;
 };
 
 export default ClassRow;

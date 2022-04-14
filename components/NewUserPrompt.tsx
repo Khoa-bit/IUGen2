@@ -78,7 +78,10 @@ const NewUserPrompt = () => {
                 <Button
                   variant="slateInvert"
                   type="button"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    setUserOld();
+                  }}
                 >
                   Close
                 </Button>

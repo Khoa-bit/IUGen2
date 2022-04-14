@@ -18,7 +18,7 @@ const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
   ));
 
   return (
-    <div className="overflow-x-auto rounded shadow shadow-slate-300">
+    <div className="overflow-x-auto rounded shadow shadow-slate-300 last:even:xl:col-span-2 last:even:xl:mx-auto last:even:xl:max-w-screen-lg">
       <table className="w-full min-w-[50rem] table-fixed bg-white">
         <thead>
           <tr className="text-white">

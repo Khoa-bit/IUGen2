@@ -1,4 +1,3 @@
-import { CogIcon } from "@heroicons/react/solid";
 import { nanoid } from "nanoid";
 import { CoursesMap } from "../lib/classInput";
 import { generateSchedule } from "../lib/schedule";
