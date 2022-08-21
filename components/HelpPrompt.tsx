@@ -70,10 +70,8 @@ const HelpPrompt = () => {
                   </li>
                   <li>
                     <b className="text-yellow-500">Chrome</b>/
-                    <b className="text-blue-500">Edge</b> users need to copy
-                    Edusoftweb&apos;s table into{" "}
-                    <span className="text-green-500">Google Sheet</span> first
-                    then paste the Sheet table into the input.
+                    <b className="text-blue-500">Edge</b> users can now 🎉 copy
+                    and paste Edusoftweb&apos;s table directly into the input.
                   </li>
 
                   <li>

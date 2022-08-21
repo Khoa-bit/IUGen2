@@ -2,7 +2,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Button from "./Button";
 import HelpPrompt from "./HelpPrompt";
 import { InputHandler } from "../pages/index";
-import SheetFormPrompt from "./SheetFormPrompt";
 
 interface Inputs {
   rawInputString: string;
@@ -28,7 +27,6 @@ const ClassInputForm = ({ inputHandler }: ClassInputFormProps) => {
         Copy class table here:
       </label>
       <div className="flex space-x-5 justify-self-end">
-        <SheetFormPrompt></SheetFormPrompt>
         <HelpPrompt></HelpPrompt>
       </div>
       <input

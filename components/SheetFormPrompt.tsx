@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { TableIcon } from "@heroicons/react/solid";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import Button from "./Button";
 import AnchorButton from "./AnchorButton";
@@ -10,6 +10,7 @@ interface Inputs {
   sheetURL: string;
 }
 
+// !DEPRECATED
 const SheetFormPrompt = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {
