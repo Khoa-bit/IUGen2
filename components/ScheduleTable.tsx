@@ -69,17 +69,18 @@ function populateSchedule(
 
     const { courseName, startPeriod, periodsCount, location, lecturer } =
       classObject;
-    const dates = _extractDates(classObject);
+    const dates = _extractDates(classObject); // use dates array to know if we need 1 or 2 rows.
 
     dates.forEach((date, index) => {
       for (let row = 0; row < periodsCount[index]; row++) {
         const oldCellProps = rowsProps[startPeriod[index] - 1 + row][date + 1];
         let newCellProps: CellProps;
         if (row == 0) {
+          // Edit top cell and set rowSpan
           const cellContent = (
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-bold">{courseName}</p>
-              <p className="text-xs">
+              <p className="text-sm font-bold break-words">{courseName}</p>
+              <p className="text-xs break-words">
                 {lecturer[index]}
                 <br />
                 {location[index]}
@@ -92,6 +93,7 @@ function populateSchedule(
             rowSpan: periodsCount[index],
           };
         } else {
+          // Hide all bottom cells to top cell to span downwards
           newCellProps = {
             ...oldCellProps,
             className: "hidden",
@@ -149,12 +151,9 @@ function initTable() {
 
     // Empty 7 empty columns
     for (let day = 0; day < DAY_PER_WEEK; day++) {
-      if (day != 6) {
-        borderStyle = "border-r " + borderStyle;
-      }
       cellsProps.push({
         children: "",
-        className: borderStyle,
+        className: (day != 6 ? "border-r " : "") + borderStyle,
       });
     }
     rowsProps.push(cellsProps);
