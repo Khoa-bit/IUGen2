@@ -50,7 +50,7 @@ const IUGen = () => {
     setErrorMessage(undefined);
 
     try {
-      const newCoursesMap = parseClassInput(rawInputString);
+      const newCoursesMap = parseClassInput(rawInputString, browser);
       setCoursesMap((prevCoursesMap) =>
         mapColor(mergeMaps(prevCoursesMap, newCoursesMap))
       );
