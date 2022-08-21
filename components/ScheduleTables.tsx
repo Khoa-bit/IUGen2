@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { CoursesMap } from "../lib/classInput";
 import { generateSchedule } from "../lib/schedule";
-import GearIcon from "./GearIcon";
+import GearIcon from "./icons/GearIcon";
 import ScheduleTable from "./ScheduleTable";
 
 interface ScheduleTablesProps {

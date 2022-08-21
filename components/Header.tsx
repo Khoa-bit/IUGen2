@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import GithubIcon from "./GithubIcon";
+import GithubIcon from "./icons/GithubIcon";
 import IUGenTextIcon from "./IUGenTextIcon";
 import profilePic from "../public/Edited.jpg";
 

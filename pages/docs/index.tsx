@@ -1,9 +1,9 @@
 import { TableIcon } from "@heroicons/react/solid";
 import type { NextPage } from "next";
 import Image from "next/image";
-import ChromeIcon from "../../components/ChromeIcon";
-import EdgeIcon from "../../components/EdgeIcon";
-import FirefoxIcon from "../../components/FirefoxIcon";
+import ChromeIcon from "../../components/icons/ChromeIcon";
+import EdgeIcon from "../../components/icons/EdgeIcon";
+import FirefoxIcon from "../../components/icons/FirefoxIcon";
 import highlightClasses from "../../public/highlightClasses.png";
 import highlightClassesChrome from "../../public/highlightClassesChrome.png";
 import pasteClassInput from "../../public/pasteClassInput.png";
@@ -32,8 +32,8 @@ const DocsIndex: NextPage = () => {
         <meta name="twitter:card" content={Description} />
       </Head>
       <article
-        className="prose prose-slate w-full max-w-screen-lg
-      rounded border border-slate-100 p-8 shadow prose-a:text-sky-600 hover:prose-a:text-sky-400 prose-code:text-indigo-500"
+        className="prose prose-slate prose-a:text-sky-600 hover:prose-a:text-sky-400
+      prose-code:text-indigo-500 w-full max-w-screen-lg rounded border border-slate-100 p-8 shadow"
       >
         <h1>Documentation</h1>
         <p>Welcome to IUGen documentation!</p>

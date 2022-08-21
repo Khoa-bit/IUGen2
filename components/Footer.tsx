@@ -1,5 +1,5 @@
 import Link from "next/link";
-import IUGenIcon from "./IUGenIcon";
+import IUGenIcon from "./icons/IUGenIcon";
 
 const Footer = () => {
   return (
