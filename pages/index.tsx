@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { CoursesMap, parseClassInput } from "../lib/classInput";
 import { mapColor } from "../lib/schedule";
-import { CanonicalURL, mergeMaps } from "../lib/utils";
+import { Browser, CanonicalURL, mergeMaps } from "../lib/utils";
 import ClassInputForm from "../components/ClassInputForm";
 import ErrorAlert from "../components/ErrorAlert";
 import FilterTable from "../components/FilterTable";
 import ScheduleTables from "../components/ScheduleTables";
 import Head from "next/head";
 import NewUserPrompt from "../components/NewUserPrompt";
+import { useEffect } from "react";
+import { browserDetection } from "lib/utils";
 
 export type InputHandler = (rawInputString: string) => void;
 
@@ -37,6 +39,11 @@ const Description = "Fast and clean scheduling helper for perfectionists.";
 const IUGen = () => {
   const [coursesMap, setCoursesMap] = useState<CoursesMap>(new Map());
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [browser, setBrowser] = useState<Browser>("chromium");
+
+  useEffect(() => {
+    setBrowser(browserDetection());
+  }, []);
 
   const inputHandler: InputHandler = (rawInputString: string) => {
     if (!rawInputString) return;
@@ -66,6 +73,7 @@ const IUGen = () => {
         <meta property="og:image" content="/OGPImageIUGEN.png" />
         <meta name="twitter:card" content={Description} />
       </Head>
+      {browser}
       <ClassInputForm inputHandler={inputHandler}></ClassInputForm>
       <ErrorAlert message={errorMessage}></ErrorAlert>
       <FilterTable
