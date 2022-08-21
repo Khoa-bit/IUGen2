@@ -30,17 +30,6 @@ const Footer = () => {
         <section>
           <h4 className="font-bold md:mb-3">About me</h4>
           <p>Khoa Bit</p>
-          <p>
-            🥺 Please <b>no war</b> in{" "}
-            <a
-              className="text-sky-600 transition-colors hover:text-sky-400 hover:underline"
-              href="https://duckduckgo.com/?q=ukraine"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Ukraine 🇺🇦
-            </a>
-          </p>
           <a
             className="block text-sky-600 transition-colors hover:text-sky-400 hover:underline"
             href="mailto:nguyenanhkhoablue@protonmail.com"
