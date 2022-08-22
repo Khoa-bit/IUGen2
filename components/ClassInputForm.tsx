@@ -4,7 +4,7 @@ import HelpPrompt from "./HelpPrompt";
 import { InputHandler } from "../pages/index";
 import BrowserRadioGroup from "./BrowserRadioGroup";
 import { Browser } from "lib/utils";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface Inputs {
   rawInputString: string;
@@ -22,6 +22,7 @@ const ClassInputForm = ({
   setBrowser,
 }: ClassInputFormProps) => {
   const { register, handleSubmit } = useForm<Inputs>();
+  const [isInputFocus, setIsInputFocus] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     inputHandler(data.rawInputString);
@@ -52,7 +53,19 @@ const ClassInputForm = ({
         focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
         type="text"
         id="rawInputString"
-        {...register("rawInputString", { required: true })}
+        onFocus={(event) => {
+          const focusedElement = event.currentTarget;
+
+          if (isInputFocus) return; //already focused, return so user can now place cursor at specific point in input.
+          setIsInputFocus(true);
+          setTimeout(function () {
+            focusedElement.select();
+          }, 100); //select all text in any field on focus for easy re-entry. Delay sightly to allow focus to "stick" before selecting.
+        }}
+        {...register("rawInputString", {
+          required: true,
+          onBlur: () => setIsInputFocus(false),
+        })}
       />
       <Button
         className="ml-2 h-full w-fit shadow shadow-slate-300 md:ml-5"
