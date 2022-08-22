@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CoursesMap, parseClassInput } from "../lib/classInput";
-import { mapColor } from "../lib/schedule";
+import { mapColor, toggleAllState } from "../lib/schedule";
 import { Browser, CanonicalURL, mergeMaps } from "../lib/utils";
 import ClassInputForm from "../components/ClassInputForm";
 import ErrorAlert from "../components/ErrorAlert";
@@ -51,6 +51,7 @@ const IUGen = () => {
 
     try {
       const newCoursesMap = parseClassInput(rawInputString, browser);
+      toggleAllState(newCoursesMap, false); // Default to unchecked
       setCoursesMap((prevCoursesMap) =>
         mapColor(mergeMaps(prevCoursesMap, newCoursesMap))
       );
@@ -73,8 +74,11 @@ const IUGen = () => {
         <meta property="og:image" content="/OGPImageIUGEN.png" />
         <meta name="twitter:card" content={Description} />
       </Head>
-      {browser}
-      <ClassInputForm inputHandler={inputHandler}></ClassInputForm>
+      <ClassInputForm
+        inputHandler={inputHandler}
+        browser={browser}
+        setBrowser={setBrowser}
+      ></ClassInputForm>
       <ErrorAlert message={errorMessage}></ErrorAlert>
       <FilterTable
         coursesMap={coursesMap}
