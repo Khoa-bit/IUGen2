@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { useEffect } from "react";
 import { CoursesMap } from "../lib/classInput";
 import { generateSchedule } from "../lib/schedule";
 import GearIcon from "./icons/GearIcon";

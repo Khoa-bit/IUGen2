@@ -1,4 +1,4 @@
-import { WeekDate, SERIAL_DATE } from "./schedule";
+import { WeekDate } from "./schedule";
 import { Browser } from "./utils";
 
 export interface ClassObject {
@@ -17,7 +17,6 @@ export interface CourseObject {
   id: string;
   name: string;
   color?: string;
-  activeClasses: number;
   classesMap: ClassesMap;
 }
 
@@ -42,6 +41,12 @@ const VNToEngDates = new Map<string, WeekDate>(
     Sat: "Sat",
   })
 );
+
+export function getActiveClasses(courseObject: CourseObject) {
+  return new Map(
+    Array.from(courseObject.classesMap).filter(([_, v]) => v.isActive)
+  );
+}
 
 export function _toClassObject(classStrArray: string[]): ClassObject {
   const courseID = classStrArray[0];
@@ -104,12 +109,10 @@ export function _mapCoursesFirefox(parseData: string[]) {
       courseObject = {
         id: courseKey,
         name: classObject.courseName,
-        activeClasses: 0,
         classesMap: new Map(),
       };
       coursesMap.set(courseKey, courseObject);
     }
-    courseObject.activeClasses += 1;
     courseObject.classesMap.set(classObject.id, classObject);
   }
 
@@ -136,12 +139,10 @@ export function _mapCoursesChromium(parseData: string[]) {
       courseObject = {
         id: courseKey,
         name: classObject.courseName,
-        activeClasses: 0,
         classesMap: new Map(),
       };
       coursesMap.set(courseKey, courseObject);
     }
-    courseObject.activeClasses += 1;
     courseObject.classesMap.set(classObject.id, classObject);
   }
 

@@ -1,5 +1,10 @@
 import { BG_COLOR_PALETTE } from "../pages/index";
-import { ClassObject, CourseObject, CoursesMap } from "./classInput";
+import {
+  ClassObject,
+  CourseObject,
+  CoursesMap,
+  getActiveClasses,
+} from "./classInput";
 
 export interface ClassID {
   courseKey: string;
@@ -95,11 +100,11 @@ export function _checkClassCollision({
 export function generateSchedule(coursesMap: CoursesMap) {
   let interSchedules: Schedules = [[]];
   coursesMap.forEach((courseObject, courseKey) => {
-    if (!courseObject.activeClasses) return;
+    const activeClassesMap = getActiveClasses(courseObject);
+    if (!activeClassesMap.size) return;
     const nextIterSchedules: Schedules = [];
 
-    courseObject.classesMap.forEach((classObject, classKey) => {
-      if (!classObject.isActive) return;
+    activeClassesMap.forEach((_, classKey) => {
       for (const interSchedule of interSchedules) {
         const schedule: Schedule = [...interSchedule, { courseKey, classKey }];
         if (_checkClassCollision({ coursesMap, schedule })) {
@@ -134,12 +139,6 @@ export function toggleClassState(
     );
   }
 
-  if (classObject.isActive) {
-    courseObject.activeClasses += 1;
-  } else {
-    courseObject.activeClasses -= 1;
-  }
-
   return classObject.isActive;
 }
 
@@ -153,9 +152,6 @@ export function deleteClass(coursesMap: CoursesMap, classObject: ClassObject) {
   }
 
   classesMap.delete(classObject.id);
-  if (classObject.isActive) {
-    courseObject.activeClasses -= 1;
-  }
 
   if (courseObject.classesMap.size == 0) {
     coursesMap.delete(courseObject.id);
@@ -163,7 +159,7 @@ export function deleteClass(coursesMap: CoursesMap, classObject: ClassObject) {
 }
 
 export function getCourseState(courseObject: CourseObject) {
-  return courseObject.activeClasses == courseObject.classesMap.size;
+  return getActiveClasses(courseObject).size == courseObject.classesMap.size;
 }
 
 export function toggleCourseState(
@@ -193,8 +189,9 @@ export function deleteCourse(
 }
 
 export function getAllState(coursesMap: CoursesMap) {
+  if (coursesMap.size == 0) return false;
   for (const courseObject of coursesMap.values()) {
-    if (courseObject.activeClasses != courseObject.classesMap.size)
+    if (getActiveClasses(courseObject).size != courseObject.classesMap.size)
       return false;
   }
   return true;
