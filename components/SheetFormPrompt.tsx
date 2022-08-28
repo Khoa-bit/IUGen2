@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { TableIcon } from "@heroicons/react/24/solid";
+import { TableCellsIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import Button from "./Button";
@@ -33,7 +33,7 @@ const SheetFormPrompt = () => {
         title="Google Sheet Helper"
         onClick={() => setIsOpen(true)}
       >
-        <TableIcon className="h-6 w-6"></TableIcon>
+        <TableCellsIcon className="h-6 w-6"></TableCellsIcon>
       </button>
       <Transition show={isOpen} as={Fragment}>
         <Dialog
