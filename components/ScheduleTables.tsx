@@ -5,7 +5,8 @@ import {
   generateSchedule,
   mapToCompleteSchedule,
 } from "lib/schedule";
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
+import CopyClipboard from "./CopyClipboard";
 import GearIcon from "./icons/GearIcon";
 import Pagination from "./Pagination";
 import ScheduleTable from "./ScheduleTable";
@@ -16,6 +17,7 @@ interface ScheduleTablesProps {
 
 const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
   const deferredCoursesMap = useDeferredValue(coursesMap);
+  const [href, setHref] = useState<string>("");
   const [noAdjacent, setNoAdjacent] = useState<boolean>(true);
   const [minFreeDays, setMinFreeDays] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(10);
@@ -24,6 +26,10 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
   const [completeSchedules, setCompleteSchedules] = useState<
     CompleteSchedule[]
   >([]);
+
+  useEffect(() => {
+    setHref(window.location.href);
+  }, [deferredCoursesMap]);
 
   useEffect(() => {
     const schedules = generateSchedule(
@@ -131,6 +137,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
             setPerPage(Number(event.currentTarget.value));
           }}
         />
+        <CopyClipboard className="ml-auto" text={href}></CopyClipboard>
       </form>
       <header
         className={`flex w-full items-center gap-2 rounded 

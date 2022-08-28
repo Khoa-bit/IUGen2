@@ -1,16 +1,19 @@
-import { useState } from "react";
-import { CoursesMap, parseClassInput } from "../lib/classInput";
-import { mapColor } from "../lib/schedule";
-import { toggleAllState } from "../lib/courseAndClassUtils";
-import { Browser, CanonicalURL, mergeMaps } from "../lib/utils";
+import { Browser, browserDetection, CanonicalURL, mergeMaps } from "lib/utils";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 import ClassInputForm from "../components/ClassInputForm";
 import ErrorAlert from "../components/ErrorAlert";
 import FilterTable from "../components/FilterTable";
-import ScheduleTables from "../components/ScheduleTables";
-import Head from "next/head";
 import NewUserPrompt from "../components/NewUserPrompt";
-import { useEffect } from "react";
-import { browserDetection } from "lib/utils";
+import ScheduleTables from "../components/ScheduleTables";
+import {
+  compressCoursesMap,
+  CoursesMap,
+  decompressCoursesStr,
+  parseClassInput,
+} from "../lib/classInput";
+import { toggleAllState } from "../lib/courseAndClassUtils";
+import { mapColor } from "../lib/schedule";
 
 export type InputHandler = (rawInputString: string) => void;
 
@@ -44,7 +47,36 @@ const IUGen = () => {
 
   useEffect(() => {
     setBrowser(browserDetection());
+
+    // Decode Share params
+    try {
+      const queryParams = new URLSearchParams(window.location.search);
+      const compressedAndEncoded = queryParams.get("share");
+      if (!compressedAndEncoded) return;
+      const compressed = decodeURIComponent(compressedAndEncoded);
+      setCoursesMap(mapColor(decompressCoursesStr(compressed)));
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    // Encode Share params
+    const compressedAndEncoded = encodeURIComponent(
+      compressCoursesMap(coursesMap)
+    );
+    const searchParam = "?share=" + compressedAndEncoded;
+    const fullHref = window.location.origin + "/" + searchParam;
+    if (fullHref.length > 2048) return; // Recommended max URL length
+
+    window.history.pushState(
+      null,
+      "",
+      compressedAndEncoded ? searchParam : "/"
+    );
+  }, [coursesMap]);
 
   const inputHandler: InputHandler = (rawInputString: string) => {
     if (!rawInputString) return;

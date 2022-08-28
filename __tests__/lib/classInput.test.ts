@@ -1,11 +1,15 @@
 import {
   ClassObject,
-  _toClassObject,
-  _mapCoursesFirefox,
+  compressCoursesMap,
+  CoursesMap,
+  decompressCoursesStr,
   parseClassInput,
-  _mapCoursesChromium,
   _fillOptionalFields,
+  _mapCoursesChromium,
+  _mapCoursesFirefox,
+  _toClassObject,
 } from "lib/classInput";
+import { _initializeCourseMap } from "__tests__/utilities/initializeCourseMap.setup";
 
 describe("_mapCoursesFirefox()", () => {
   it("should return courses Map with respective course ID", function () {
@@ -477,5 +481,37 @@ describe("parseClassInput() - Chromium", () => {
     expect(() => {
       parseClassInput(errorInput, "chromium");
     }).toThrowError("Failed to match: Missing columns");
+  });
+});
+
+describe("compressCoursesMap() and decompressCoursesStr()", () => {
+  const coursesMap: CoursesMap = new Map();
+  const expectStr =
+    "C1*Course1*0101)Wed_Fri)1_7)3_4)AC11_AC12)LC11_LC12(0102)Tue_Fri)7_7)3_4)AC11_AC12)LC11_LC12!C2*Course2*01)Tue)1)3)AC21)LC21(02)Wed)1)3)AC21)LC21";
+
+  beforeEach(() => {
+    _initializeCourseMap(coursesMap);
+  });
+
+  describe("compressCoursesMap()", () => {
+    it("should convert and compress a CoursesMap Map into a string", () => {
+      const actualStr = compressCoursesMap(coursesMap);
+      expect(actualStr).toBeTruthy();
+      expect(actualStr).toMatch(expectStr);
+    });
+  });
+
+  describe("decompressCoursesStr()", () => {
+    it("should convert and decompress a string into a CoursesMap Map", () => {
+      const actualCoursesMap = decompressCoursesStr(expectStr, true);
+      expect(actualCoursesMap.size).toEqual(2);
+      expect(actualCoursesMap).toStrictEqual(coursesMap);
+    });
+
+    it("should throw if given an invalid string", () => {
+      expect(() => decompressCoursesStr("Hello :3", true)).toThrowError(
+        "Failed to parse: The given URL is invalid."
+      );
+    });
   });
 });
