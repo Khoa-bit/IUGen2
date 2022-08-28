@@ -1,13 +1,14 @@
-import { Fragment, useEffect, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "./Button";
 import Link from "next/link";
 
 interface ErrorAlertProps {
   message?: string;
+  setMessage: Dispatch<SetStateAction<string | undefined>>;
 }
 
-const ErrorAlert = ({ message }: ErrorAlertProps) => {
+const ErrorAlert = ({ message, setMessage }: ErrorAlertProps) => {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setIsOpen(message != undefined);
@@ -19,7 +20,10 @@ const ErrorAlert = ({ message }: ErrorAlertProps) => {
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto
         selection:bg-sky-300 selection:text-sky-900"
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+          setIsOpen(false);
+          setMessage(undefined);
+        }}
       >
         <div className="min-h-screen px-4 text-center">
           <Transition.Child

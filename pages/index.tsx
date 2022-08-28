@@ -79,7 +79,10 @@ const IUGen = () => {
         browser={browser}
         setBrowser={setBrowser}
       ></ClassInputForm>
-      <ErrorAlert message={errorMessage}></ErrorAlert>
+      <ErrorAlert
+        message={errorMessage}
+        setMessage={setErrorMessage}
+      ></ErrorAlert>
       <FilterTable
         coursesMap={coursesMap}
         setCoursesMap={setCoursesMap}
