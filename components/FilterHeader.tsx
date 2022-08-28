@@ -1,4 +1,4 @@
-import { TrashIcon } from "@heroicons/react/solid";
+import { TrashIcon } from "@heroicons/react/24/solid";
 import Cell from "./Cell";
 import CheckBoxCell from "./CheckBoxCell";
 import DeleteCell from "./DeleteCell";
