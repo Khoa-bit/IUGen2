@@ -42,12 +42,6 @@ const VNToEngDates = new Map<string, WeekDate>(
   })
 );
 
-export function getActiveClasses(courseObject: CourseObject) {
-  return new Map(
-    Array.from(courseObject.classesMap).filter(([_, v]) => v.isActive)
-  );
-}
-
 export function _toClassObject(classStrArray: string[]): ClassObject {
   const courseID = classStrArray[0];
   const courseName = classStrArray[2];
@@ -100,7 +94,6 @@ export function _mapCoursesFirefox(parseData: string[]) {
 
   for (let i = 0; i < parseData.length; i += step) {
     let classData = parseData.slice(i, i + step);
-    classData = _fillOptionalFields(classData);
     let classObject = _toClassObject(classData);
     let courseKey = classObject.courseID;
 
@@ -217,6 +210,7 @@ export function parseClassInput(rawInputString: string, browser: Browser) {
   const parseData = rawInputString
     .trim()
     .replaceAll(/[ "]{3,}/g, "___")
+    .replaceAll(/\t \t/g, "\t-___-\t") // add - for blank fields (Firefox)
     .split(/[ "]*\t[ "]*/);
   if (browser == "firefox") {
     return _mapCoursesFirefox(parseData);

@@ -1,30 +1,26 @@
+import { CoursesMap, parseClassInput } from "lib/classInput";
+import { toggleClassState } from "lib/courseAndClassUtils";
+import { BG_COLOR_PALETTE } from "pages/index";
 import {
-  generateSchedule,
-  toggleClassState,
-  deleteClass,
   ClassID,
-  _serializeClassTime,
+  generateSchedule,
+  mapColor,
+  mapToCompleteSchedule,
+  PERIODS_PER_DAY,
   _checkClassCollision,
   _extractDates,
-  toggleCourseState,
-  deleteCourse,
-  getAllState,
-  toggleAllState,
-  getCourseState,
-  PERIODS_PER_DAY,
-  mapColor,
-} from "../../lib/schedule";
+  _serializeClassTime,
+} from "lib/schedule";
 import {
-  ClassesMap,
-  CourseObject,
-  CoursesMap,
-  parseClassInput,
-} from "../../lib/classInput";
+  addAdjacentCourses,
+  _initializeCourseMap,
+} from "__tests__/utilities/initializeCourseMap.setup";
 
 describe("Schedule Generator", () => {
   const coursesMap: CoursesMap = new Map();
   beforeEach(() => {
-    initializeCourseMap(coursesMap);
+    coursesMap.clear();
+    _initializeCourseMap(coursesMap);
   });
 
   describe("_extractDates()", () => {
@@ -62,28 +58,28 @@ describe("Schedule Generator", () => {
       const classObjectC10 = courseObjectC1.classesMap.get("C10101");
       if (!classObjectC10) throw Error("Missing Class C10101");
       expect(_serializeClassTime(classObjectC10)).toEqual([
-        [2 * PERIODS_PER_DAY + 1, 2 * PERIODS_PER_DAY + 4],
-        [4 * PERIODS_PER_DAY + 7, 4 * PERIODS_PER_DAY + 11],
+        [2 * PERIODS_PER_DAY + 0, 2 * PERIODS_PER_DAY + 3],
+        [4 * PERIODS_PER_DAY + 6, 4 * PERIODS_PER_DAY + 10],
       ]);
 
       const classObjectC11 = courseObjectC1.classesMap.get("C10102");
       if (!classObjectC11) throw Error("Missing Class C10102");
       expect(_serializeClassTime(classObjectC11)).toEqual([
-        [1 * PERIODS_PER_DAY + 7, 1 * PERIODS_PER_DAY + 10],
-        [4 * PERIODS_PER_DAY + 7, 4 * PERIODS_PER_DAY + 11],
+        [1 * PERIODS_PER_DAY + 6, 1 * PERIODS_PER_DAY + 9],
+        [4 * PERIODS_PER_DAY + 6, 4 * PERIODS_PER_DAY + 10],
       ]);
 
       // Check C2 classes
       const classObjectC20 = courseObjectC2.classesMap.get("C201");
       if (!classObjectC20) throw Error("Missing Class C201");
       expect(_serializeClassTime(classObjectC20)).toEqual([
-        [1 * PERIODS_PER_DAY + 1, 1 * PERIODS_PER_DAY + 4],
+        [1 * PERIODS_PER_DAY + 0, 1 * PERIODS_PER_DAY + 3],
       ]);
 
       const classObjectC21 = courseObjectC2.classesMap.get("C202");
       if (!classObjectC21) throw Error("Missing Class C202");
       expect(_serializeClassTime(classObjectC21)).toEqual([
-        [2 * PERIODS_PER_DAY + 1, 2 * PERIODS_PER_DAY + 4],
+        [2 * PERIODS_PER_DAY + 0, 2 * PERIODS_PER_DAY + 3],
       ]);
     });
 
@@ -114,6 +110,8 @@ describe("Schedule Generator", () => {
         _checkClassCollision({
           coursesMap,
           schedule: [...prefix, { courseKey: "C2", classKey: "C201" }],
+          noAdjacent: false,
+          minFreeDays: 0,
         })
       ).toBe(true);
 
@@ -121,6 +119,8 @@ describe("Schedule Generator", () => {
         _checkClassCollision({
           coursesMap,
           schedule: [...prefix, { courseKey: "C2", classKey: "C202" }],
+          noAdjacent: false,
+          minFreeDays: 0,
         })
       ).toBe(false);
 
@@ -128,6 +128,8 @@ describe("Schedule Generator", () => {
         _checkClassCollision({
           coursesMap,
           schedule: [...prefix, { courseKey: "C2", classKey: "errorBad" }],
+          noAdjacent: false,
+          minFreeDays: 0,
         });
       }).toThrowError(/^Invalid ClassObject reference:/);
 
@@ -135,6 +137,8 @@ describe("Schedule Generator", () => {
         _checkClassCollision({
           coursesMap,
           schedule: [...prefix, { courseKey: "INVALID", classKey: "errorBad" }],
+          noAdjacent: false,
+          minFreeDays: 0,
         });
       }).toThrowError(/^Invalid ClassObject reference:/);
     });
@@ -142,7 +146,7 @@ describe("Schedule Generator", () => {
 
   describe("generateSchedule()", () => {
     it("should generate schedules when all classes are active", function () {
-      const schedules = generateSchedule(coursesMap);
+      const schedules = generateSchedule(coursesMap, false, 0);
 
       expect(schedules).toStrictEqual([
         [
@@ -167,7 +171,7 @@ describe("Schedule Generator", () => {
 
       // Disable C202 Class
       toggleClassState(coursesMap, C202);
-      const schedulesC202 = generateSchedule(coursesMap);
+      const schedulesC202 = generateSchedule(coursesMap, false, 0);
       toggleClassState(coursesMap, C202);
 
       expect(schedulesC202).toStrictEqual([
@@ -183,7 +187,7 @@ describe("Schedule Generator", () => {
 
       // Disable C201 Class
       toggleClassState(coursesMap, C201);
-      const schedulesC201 = generateSchedule(coursesMap);
+      const schedulesC201 = generateSchedule(coursesMap, false, 0);
       toggleClassState(coursesMap, C201);
 
       expect(schedulesC201).toStrictEqual([
@@ -205,7 +209,7 @@ describe("Schedule Generator", () => {
       // Disable both C201 and C202 Classes
       toggleClassState(coursesMap, C201);
       toggleClassState(coursesMap, C202);
-      const schedulesC201C202 = generateSchedule(coursesMap);
+      const schedulesC201C202 = generateSchedule(coursesMap, false, 0);
       toggleClassState(coursesMap, C201);
       toggleClassState(coursesMap, C202);
 
@@ -216,317 +220,95 @@ describe("Schedule Generator", () => {
     });
 
     it("should return an empty array when there is no schedule generated.", () => {
-      const schedules = generateSchedule(new Map());
+      const schedules = generateSchedule(new Map(), false, 0);
       expect(schedules).toStrictEqual([]);
     });
-  });
 
-  describe("toggleClassState()", () => {
-    it("should toggle class state", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
+    it("should generate schedules with free days conditions", function () {
+      const schedules = generateSchedule(coursesMap, false, 4);
 
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
-
-      // Disable and enable both C201 and C202 Classes
-      expect(courseObjectC2.activeClasses).toEqual(2);
-
-      expect(toggleClassState(coursesMap, C201)).toBe(false);
-      expect(C201.isActive).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(1);
-
-      expect(toggleClassState(coursesMap, C202)).toBe(false);
-      expect(C202.isActive).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(0);
-
-      expect(toggleClassState(coursesMap, C201)).toBe(true);
-      expect(C201.isActive).toBe(true);
-      expect(courseObjectC2.activeClasses).toEqual(1);
-
-      expect(toggleClassState(coursesMap, C202)).toBe(true);
-      expect(C202.isActive).toBe(true);
-      expect(courseObjectC2.activeClasses).toEqual(2);
+      expect(schedules).toStrictEqual([
+        [
+          { courseKey: "C1", classKey: "C10102" },
+          { courseKey: "C2", classKey: "C201" },
+        ],
+      ] as ClassID[][]);
     });
 
-    it("should set class state", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
+    it("should generate schedules with free days conditions", function () {
+      addAdjacentCourses(coursesMap);
+      const adjacentSchedules = generateSchedule(coursesMap, false, 0);
+      const noAdjacentSchedules = generateSchedule(coursesMap, true, 0);
 
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
+      expect(adjacentSchedules.length).toBe(9);
+      expect(noAdjacentSchedules.length).toBe(5);
 
-      // Disable both C201 and C202 Classes
-      expect(courseObjectC2.activeClasses).toEqual(2);
-
-      expect(toggleClassState(coursesMap, C201)).toBe(false);
-      expect(C201.isActive).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(1);
-
-      expect(toggleClassState(coursesMap, C201, false)).toBe(false);
-      expect(C201.isActive).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(1);
-
-      expect(toggleClassState(coursesMap, C201, true)).toBe(true);
-      expect(C201.isActive).toBe(true);
-      expect(courseObjectC2.activeClasses).toEqual(2);
-
-      expect(toggleClassState(coursesMap, C202)).toBe(false);
-      expect(C202.isActive).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(1);
+      expect(noAdjacentSchedules).toStrictEqual([
+        [
+          { courseKey: "C1", classKey: "C10102" },
+          { courseKey: "C2", classKey: "C202" },
+          { courseKey: "C3", classKey: "C301" },
+        ],
+        [
+          { courseKey: "C1", classKey: "C10102" },
+          { courseKey: "C2", classKey: "C201" },
+          { courseKey: "C3", classKey: "C302" },
+        ],
+        [
+          { courseKey: "C1", classKey: "C10101" },
+          { courseKey: "C2", classKey: "C201" },
+          { courseKey: "C3", classKey: "C303" },
+        ],
+        [
+          { courseKey: "C1", classKey: "C10102" },
+          { courseKey: "C2", classKey: "C201" },
+          { courseKey: "C3", classKey: "C303" },
+        ],
+        [
+          { courseKey: "C1", classKey: "C10102" },
+          { courseKey: "C2", classKey: "C202" },
+          { courseKey: "C3", classKey: "C303" },
+        ],
+      ] as ClassID[][]);
     });
   });
 
-  describe("deleteClass()", () => {
-    it("should delete class with correct ClassObject", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
+  describe("mapToCompleteSchedule()", () => {
+    it("should map from Schedule to CompleteSchedule", () => {
+      const C10101 = coursesMap.get("C1")?.classesMap.get("C10101");
+      const C201 = coursesMap.get("C2")?.classesMap.get("C201");
+      if (!C201 || !C10101) throw Error("Missing class in courseMap");
 
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
+      const completeSchedule = mapToCompleteSchedule(coursesMap, [
+        { courseKey: "C1", classKey: "C10101" },
+        { courseKey: "C2", classKey: "C201" },
+      ]);
 
-      expect(courseObjectC2.activeClasses).toEqual(2);
-
-      toggleClassState(coursesMap, C201);
-      expect(C201.isActive).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(1);
-
-      deleteClass(coursesMap, C201);
-      expect(courseObjectC2.activeClasses).toEqual(1);
-      expect(courseObjectC2.classesMap.get("C201")).toBeUndefined();
-
-      deleteClass(coursesMap, C202);
-      expect(courseObjectC2.activeClasses).toEqual(0);
-      expect(courseObjectC2.classesMap.get("C202")).toBeUndefined();
-
-      // Delete CourseObject when there is no classes left
-      expect(coursesMap.get(courseObjectC2.id)).toBeUndefined;
-    });
-
-    it("should throw error with incorrect ClassObject", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
-
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
-      C201.courseID = "Error";
-      C202.id = "Error";
-
-      expect(() => deleteClass(coursesMap, C201)).toThrowError(
-        /^Invalid ClassObject reference:/
-      );
-      expect(() => deleteClass(coursesMap, C202)).toThrowError(
-        /^Invalid ClassObject reference:/
-      );
-    });
-  });
-
-  describe("getCourseState()", () => {
-    it("should return boolean for the state of the course", () => {
-      const courseObjectC1 = coursesMap.get("C1");
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC1 || !courseObjectC2) {
-        throw Error("Missing course in courseMap");
-      }
-
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
-
-      expect(getCourseState(courseObjectC2)).toBe(true);
-
-      toggleClassState(coursesMap, C202, false);
-      expect(getCourseState(courseObjectC2)).toBe(false);
-
-      toggleClassState(coursesMap, C201, false);
-      expect(getCourseState(courseObjectC2)).toBe(false);
-
-      toggleClassState(coursesMap, C201, true);
-      toggleClassState(coursesMap, C202, true);
-      expect(getCourseState(courseObjectC2)).toBe(true);
-    });
-  });
-
-  describe("toggleCourseState()", () => {
-    it("should toggle course state", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
-
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
-
-      expect(courseObjectC2.activeClasses).toEqual(2);
-      expect(C201.isActive).toBe(true);
-      expect(C202.isActive).toBe(true);
-
-      // All classes are active
-      expect(toggleCourseState(coursesMap, courseObjectC2)).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(0);
-      expect(C201.isActive).toBe(false);
-      expect(C202.isActive).toBe(false);
-
-      // All classes are inactive
-      expect(toggleCourseState(coursesMap, courseObjectC2)).toBe(true);
-      expect(courseObjectC2.activeClasses).toEqual(2);
-      expect(C201.isActive).toBe(true);
-      expect(C202.isActive).toBe(true);
-
-      // Only 1 class is inactive
-      toggleClassState(coursesMap, C201, false);
-      expect(toggleCourseState(coursesMap, courseObjectC2)).toBe(true);
-      expect(courseObjectC2.activeClasses).toEqual(2);
-      expect(C201.isActive).toBe(true);
-      expect(C202.isActive).toBe(true);
-    });
-
-    it("should set course state", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
-
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
-
-      expect(courseObjectC2.activeClasses).toEqual(2);
-      expect(C201.isActive).toBe(true);
-      expect(C202.isActive).toBe(true);
-
-      expect(toggleCourseState(coursesMap, courseObjectC2, true)).toBe(true);
-      expect(courseObjectC2.activeClasses).toEqual(2);
-      expect(C201.isActive).toBe(true);
-      expect(C202.isActive).toBe(true);
-
-      expect(toggleCourseState(coursesMap, courseObjectC2, false)).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(0);
-      expect(C201.isActive).toBe(false);
-      expect(C202.isActive).toBe(false);
-
-      expect(toggleCourseState(coursesMap, courseObjectC2)).toBe(true);
-      expect(courseObjectC2.activeClasses).toEqual(2);
-      expect(C201.isActive).toBe(true);
-      expect(C202.isActive).toBe(true);
-    });
-  });
-
-  describe("deleteCourse()", () => {
-    it("should delete course with correct CourseObject", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
-
-      expect(coursesMap.has(courseObjectC2.id)).toBe(true);
-
-      deleteCourse(coursesMap, courseObjectC2);
-
-      expect(coursesMap.has(courseObjectC2.id)).toBe(false);
-    });
-
-    it("should throw error with incorrect CourseObject", () => {
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC2) throw Error("Missing course in courseMap");
-      courseObjectC2.id = "Error";
-
-      expect(coursesMap.has(courseObjectC2.id)).toBe(false);
-
-      expect(() => deleteCourse(coursesMap, courseObjectC2)).toThrowError(
-        /^Invalid CourseObject reference:/
-      );
-    });
-  });
-
-  describe("getAllState()", () => {
-    it("should return boolean for the state of All classes and courses", () => {
-      const courseObjectC1 = coursesMap.get("C1");
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC1 || !courseObjectC2) {
-        throw Error("Missing course in courseMap");
-      }
-
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
-
-      expect(getAllState(coursesMap)).toBe(true);
-
-      // Only 1 class is inactive
-      toggleClassState(coursesMap, C202);
-      expect(getAllState(coursesMap)).toBe(false);
-
-      // All classes is active again
-      toggleClassState(coursesMap, C202);
-      expect(getAllState(coursesMap)).toBe(true);
-
-      // Only 1 course is inactive
-      toggleCourseState(coursesMap, courseObjectC1);
-      expect(getAllState(coursesMap)).toBe(false);
-
-      // All courses is active again
-      toggleCourseState(coursesMap, courseObjectC1);
-      expect(getAllState(coursesMap)).toBe(true);
-    });
-  });
-
-  describe("toggleAllState()", () => {
-    it("should toggle all state", () => {
-      const courseObjectC1 = coursesMap.get("C1");
-      const courseObjectC2 = coursesMap.get("C2");
-      if (!courseObjectC1 || !courseObjectC2)
-        throw Error("Missing course in courseMap");
-
-      const C202 = courseObjectC2.classesMap.get("C202");
-      const C201 = courseObjectC2.classesMap.get("C201");
-      if (!C202 || !C201) throw Error("Missing class in courseMap");
-
-      expect(courseObjectC2.activeClasses).toEqual(2);
-      expect(C201.isActive).toBe(true);
-      expect(C202.isActive).toBe(true);
-
-      // All are active
-      expect(toggleAllState(coursesMap)).toBe(false);
-      expect(courseObjectC2.activeClasses).toEqual(0);
-      expect(C201.isActive).toBe(false);
-      expect(C202.isActive).toBe(false);
-
-      // Only 1 class is active
-      toggleClassState(coursesMap, C201, true);
-      expect(C202.isActive).toBe(false);
-      expect(toggleAllState(coursesMap)).toBe(true);
-      expect(C201.isActive).toBe(true);
-
-      // Only 1 course is inactive
-      toggleCourseState(coursesMap, courseObjectC2, false);
-      expect(courseObjectC1.activeClasses).toEqual(2);
-      expect(courseObjectC2.activeClasses).toEqual(0);
-      expect(toggleAllState(coursesMap)).toBe(true);
-      expect(courseObjectC1.activeClasses).toEqual(2);
-      expect(courseObjectC2.activeClasses).toEqual(2);
+      expect(completeSchedule.length).toBe(2);
+      expect(completeSchedule[0].color).toMatch(BG_COLOR_PALETTE[0]); // Default color
+      expect(completeSchedule[1].color).toMatch(BG_COLOR_PALETTE[0]); // Default color
+      expect(completeSchedule[0].classObject).toBe(C10101);
+      expect(completeSchedule[1].classObject).toBe(C201);
     });
   });
 
   describe("mapColor()", () => {
-    it("should toggle all state", () => {
-      let originalColorSet: Set<string> = new Set();
+    it("should set color for all courses", () => {
+      let originalColorArray: string[] = [];
       for (const courseObject of coursesMap.values()) {
-        originalColorSet.add(courseObject.color || "");
+        if (courseObject.color) originalColorArray.push(courseObject.color);
       }
-
-      expect(originalColorSet.size).toEqual(1);
+      expect(originalColorArray.length).toEqual(0);
 
       const coloredMap = mapColor(coursesMap);
 
-      let colorSet: Set<string> = new Set();
+      let colorArray: string[] = [];
       for (const courseObject of coloredMap.values()) {
-        colorSet.add(courseObject.color || "");
+        if (courseObject.color) colorArray.push(courseObject.color);
       }
-
-      expect(colorSet.size).toEqual(coursesMap.size);
-      expect(colorSet.size).toEqual(coloredMap.size);
-      expect(coursesMap.get("C1")?.color).toBeUndefined();
-      expect(coloredMap.get("C1")?.color).toBeTruthy();
+      expect(colorArray.length).toEqual(2);
+      expect(colorArray[0]).toMatch(BG_COLOR_PALETTE[0]);
+      expect(colorArray[1]).toMatch(BG_COLOR_PALETTE[1]);
     });
   });
 });
@@ -541,7 +323,7 @@ describe("parseClassInput() and generateSchedule()", () => {
   });
 
   it("should generate all schedules from raw input string", function () {
-    const schedules = generateSchedule(coursesMap);
+    const schedules = generateSchedule(coursesMap, false, 0);
 
     expect(schedules).toStrictEqual([
       [
@@ -611,72 +393,3 @@ describe("parseClassInput() and generateSchedule()", () => {
     ] as ClassID[][]);
   });
 });
-
-function initializeCourseMap(courseMap: CoursesMap) {
-  const classMapC1: ClassesMap = new Map();
-  classMapC1.set("C10101", {
-    id: "C10101",
-    courseID: "C1",
-    courseName: "Course1",
-    date: ["Wed", "Fri"],
-    startPeriod: [1, 7],
-    periodsCount: [3, 4],
-    location: ["AC11", "AC12"],
-    lecturer: ["LC11", "LC12"],
-    isActive: true,
-  });
-
-  classMapC1.set("C10102", {
-    id: "C10102",
-    courseID: "C1",
-    courseName: "Course1",
-    date: ["Tue", "Fri"],
-    startPeriod: [7, 7],
-    periodsCount: [3, 4],
-    location: ["AC11", "AC12"],
-    lecturer: ["LC11", "LC12"],
-    isActive: true,
-  });
-
-  const courseObjectC1: CourseObject = {
-    id: "C1",
-    name: "Course1",
-    activeClasses: 2,
-    classesMap: classMapC1,
-  };
-
-  const classMapC2: ClassesMap = new Map();
-  classMapC2.set("C201", {
-    id: "C201",
-    courseID: "C2",
-    courseName: "Course2",
-    date: ["Tue"],
-    startPeriod: [1],
-    periodsCount: [3],
-    location: ["AC21"],
-    lecturer: ["LC21"],
-    isActive: true,
-  });
-
-  classMapC2.set("C202", {
-    id: "C202",
-    courseID: "C2",
-    courseName: "Course2",
-    date: ["Wed"],
-    startPeriod: [1],
-    periodsCount: [3],
-    location: ["AC21"],
-    lecturer: ["LC21"],
-    isActive: true,
-  });
-
-  const courseObjectC2: CourseObject = {
-    id: "C2",
-    name: "Course2",
-    activeClasses: 2,
-    classesMap: classMapC2,
-  };
-
-  courseMap.set("C1", courseObjectC1);
-  courseMap.set("C2", courseObjectC2);
-}

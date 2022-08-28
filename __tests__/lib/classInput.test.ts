@@ -416,7 +416,7 @@ describe("parseClassInput() - Firefox", () => {
     );
   });
 
-  it.skip("should parse raw Google Sheet class input string into CoursesMap Map", () => {
+  it("should parse raw Google Sheet class input string into CoursesMap Map", () => {
     // !DEPRECATED Google Sheet Parsing.
     const rawInputString = `IT134IU	IT134IU	Internet of Things	1	1	4	4	ITIT19CE	30	9	*	"Mon   Sat"	"7   4"	"4   3"	"LA1.607   L201"	"L.D.Tân   L.D.Tân"	"07/03/2022--15/05/2022   07/02/2022--05/06/2022"	 PE018IU	PE018IU	History of Vietnamese Communist Party	10		2	2	ITIT19CS1	75	3		Wed	9	2	ONLINE	H.Y.Linh	07/02/2022--05/06/2022	`;
 
