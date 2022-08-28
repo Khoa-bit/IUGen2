@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { TableIcon } from "@heroicons/react/solid";
+import { TableIcon } from "@heroicons/react/24/solid";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import Button from "./Button";

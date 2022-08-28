@@ -1,5 +1,5 @@
 import { Transition } from "@headlessui/react";
-import { ChevronDoubleUpIcon } from "@heroicons/react/solid";
+import { ChevronDoubleUpIcon } from "@heroicons/react/24/solid";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import Footer from "./Footer";
 import Header from "./Header";

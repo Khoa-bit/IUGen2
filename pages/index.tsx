@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CoursesMap, parseClassInput } from "../lib/classInput";
-import { mapColor, toggleAllState } from "../lib/schedule";
+import { mapColor } from "../lib/schedule";
+import { toggleAllState } from "../lib/courseAndClassUtils";
 import { Browser, CanonicalURL, mergeMaps } from "../lib/utils";
 import ClassInputForm from "../components/ClassInputForm";
 import ErrorAlert from "../components/ErrorAlert";
@@ -79,7 +80,10 @@ const IUGen = () => {
         browser={browser}
         setBrowser={setBrowser}
       ></ClassInputForm>
-      <ErrorAlert message={errorMessage}></ErrorAlert>
+      <ErrorAlert
+        message={errorMessage}
+        setMessage={setErrorMessage}
+      ></ErrorAlert>
       <FilterTable
         coursesMap={coursesMap}
         setCoursesMap={setCoursesMap}

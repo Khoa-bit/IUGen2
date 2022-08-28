@@ -1,4 +1,4 @@
-import { WeekDate, SERIAL_DATE } from "./schedule";
+import { WeekDate } from "./schedule";
 import { Browser } from "./utils";
 
 export interface ClassObject {
@@ -17,7 +17,6 @@ export interface CourseObject {
   id: string;
   name: string;
   color?: string;
-  activeClasses: number;
   classesMap: ClassesMap;
 }
 
@@ -95,7 +94,6 @@ export function _mapCoursesFirefox(parseData: string[]) {
 
   for (let i = 0; i < parseData.length; i += step) {
     let classData = parseData.slice(i, i + step);
-    classData = _fillOptionalFields(classData);
     let classObject = _toClassObject(classData);
     let courseKey = classObject.courseID;
 
@@ -104,12 +102,10 @@ export function _mapCoursesFirefox(parseData: string[]) {
       courseObject = {
         id: courseKey,
         name: classObject.courseName,
-        activeClasses: 0,
         classesMap: new Map(),
       };
       coursesMap.set(courseKey, courseObject);
     }
-    courseObject.activeClasses += 1;
     courseObject.classesMap.set(classObject.id, classObject);
   }
 
@@ -136,12 +132,10 @@ export function _mapCoursesChromium(parseData: string[]) {
       courseObject = {
         id: courseKey,
         name: classObject.courseName,
-        activeClasses: 0,
         classesMap: new Map(),
       };
       coursesMap.set(courseKey, courseObject);
     }
-    courseObject.activeClasses += 1;
     courseObject.classesMap.set(classObject.id, classObject);
   }
 
@@ -216,6 +210,7 @@ export function parseClassInput(rawInputString: string, browser: Browser) {
   const parseData = rawInputString
     .trim()
     .replaceAll(/[ "]{3,}/g, "___")
+    .replaceAll(/\t \t/g, "\t-___-\t") // add - for blank fields (Firefox)
     .split(/[ "]*\t[ "]*/);
   if (browser == "firefox") {
     return _mapCoursesFirefox(parseData);

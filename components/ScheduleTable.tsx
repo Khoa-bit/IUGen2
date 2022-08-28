@@ -1,24 +1,29 @@
-import { CoursesMap } from "../lib/classInput";
-import { PERIODS_PER_DAY, Schedule, _extractDates } from "../lib/schedule";
+import {
+  CompleteSchedule,
+  DISPLAY_PERIODS,
+  _extractDates,
+} from "../lib/schedule";
 import Cell, { CellProps } from "./Cell";
 import Row from "./Row";
 
 interface ScheduleTableProps {
-  coursesMap: CoursesMap;
-  schedule: Schedule;
+  completeSchedule: CompleteSchedule;
+  center: boolean;
 }
 
-const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
-  const rowsProps: CellProps[][] = initTable();
-
-  populateSchedule(schedule, coursesMap, rowsProps);
+const ScheduleTable = ({ completeSchedule, center }: ScheduleTableProps) => {
+  const rowsProps: CellProps[][] = populateSchedule(completeSchedule);
 
   const rows = rowsProps.map((cellsProps, index) => (
     <Row cellsProps={cellsProps} key={index}></Row>
   ));
 
   return (
-    <div className="overflow-x-auto rounded shadow shadow-slate-300 last:even:xl:col-span-2 last:even:xl:mx-auto last:even:xl:max-w-screen-lg">
+    <div
+      className={`overflow-x-auto rounded shadow shadow-slate-300 ${
+        center ? `xl:col-span-2 xl:mx-auto xl:max-w-screen-lg` : ""
+      }`}
+    >
       <table className="w-full min-w-[50rem] table-fixed bg-white">
         <thead>
           <tr className="text-white">
@@ -52,21 +57,10 @@ const ScheduleTable = ({ coursesMap, schedule }: ScheduleTableProps) => {
   );
 };
 
-function populateSchedule(
-  schedule: Schedule,
-  coursesMap: CoursesMap,
-  rowsProps: CellProps[][]
-) {
-  for (const classID of schedule) {
-    const courseObject = coursesMap.get(classID.courseKey);
+function populateSchedule(completeSchedule: CompleteSchedule) {
+  const rowsProps: CellProps[][] = initTable();
 
-    const classObject = courseObject?.classesMap.get(classID.classKey);
-
-    if (!courseObject || !classObject)
-      throw ReferenceError(
-        `Invalid ClassObject reference: ${classID.courseKey} - ${classID.classKey}`
-      );
-
+  for (const { classObject, color } of completeSchedule) {
     const { courseName, startPeriod, periodsCount, location, lecturer } =
       classObject;
     const dates = _extractDates(classObject); // use dates array to know if we need 1 or 2 rows.
@@ -79,8 +73,8 @@ function populateSchedule(
           // Edit top cell and set rowSpan
           const cellContent = (
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-bold break-words">{courseName}</p>
-              <p className="text-xs break-words">
+              <p className="break-words text-sm font-bold">{courseName}</p>
+              <p className="break-words text-xs">
                 {lecturer[index]}
                 <br />
                 {location[index]}
@@ -89,7 +83,7 @@ function populateSchedule(
           );
           newCellProps = {
             children: cellContent,
-            className: `px-1.5 ${courseObject.color}`,
+            className: `px-1.5 ${color}`,
             rowSpan: periodsCount[index],
           };
         } else {
@@ -103,14 +97,16 @@ function populateSchedule(
       }
     });
   }
+
+  return rowsProps;
 }
 
 function initTable() {
   const rowsProps: CellProps[][] = [];
 
   const DAY_PER_WEEK = 7;
-  const last_period = PERIODS_PER_DAY - 1;
-  for (let period = 0; period < PERIODS_PER_DAY; period++) {
+  const last_period = DISPLAY_PERIODS - 1;
+  for (let period = 0; period < DISPLAY_PERIODS; period++) {
     const cellsProps: CellProps[] = [];
 
     // borderStyle solves 2 problems:

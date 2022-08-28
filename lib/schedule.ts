@@ -1,5 +1,6 @@
 import { BG_COLOR_PALETTE } from "../pages/index";
-import { ClassObject, CourseObject, CoursesMap } from "./classInput";
+import { ClassObject, CoursesMap } from "./classInput";
+import { getActiveClasses } from "./courseAndClassUtils";
 
 export interface ClassID {
   courseKey: string;
@@ -8,12 +9,21 @@ export interface ClassID {
 
 interface CheckClassCollisionParams {
   coursesMap: CoursesMap;
-  schedule: ClassID[];
+  schedule: Schedule;
+  noAdjacent: boolean;
+  minFreeDays: number;
 }
 
 export type Schedule = ClassID[];
 
 export type Schedules = Schedule[];
+
+interface CompleteClass {
+  classObject: ClassObject;
+  color: string;
+}
+
+export type CompleteSchedule = CompleteClass[];
 
 export type WeekDate = "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | "Sun";
 
@@ -29,7 +39,8 @@ export const SERIAL_DATE = new Map(
   })
 );
 
-export const PERIODS_PER_DAY = 12;
+export const PERIODS_PER_DAY = 17; // Edusoftweb shows 16, we +1 to indicate new day.
+export const DISPLAY_PERIODS = 12;
 
 export function _extractDates(classObject: ClassObject) {
   const dates = classObject.date.map((dateStr) => {
@@ -52,9 +63,9 @@ export function _serializeClassTime(classObject: ClassObject) {
   }
   const dates = _extractDates(classObject);
   const result: number[][] = dates.map((date, index) => [
-    date * PERIODS_PER_DAY + classObject.startPeriod[index],
+    date * PERIODS_PER_DAY + (classObject.startPeriod[index] - 1),
     date * PERIODS_PER_DAY +
-      classObject.startPeriod[index] +
+      (classObject.startPeriod[index] - 1) +
       classObject.periodsCount[index],
   ]);
 
@@ -64,10 +75,11 @@ export function _serializeClassTime(classObject: ClassObject) {
 export function _checkClassCollision({
   coursesMap,
   schedule,
+  noAdjacent,
+  minFreeDays,
 }: CheckClassCollisionParams) {
   const serialTimeline: number[][] = [];
 
-  // Can be memoize in generateSchedule(), reduce schedule serialization
   for (let classID of schedule) {
     const classObject = coursesMap
       .get(classID.courseKey)
@@ -85,134 +97,93 @@ export function _checkClassCollision({
     return a[0] > b[0] ? 1 : -1;
   });
 
+  // 2 adjacent subjects: give low minus points. (e.g. -1)
+  // 3 adjacent subjects: give high minus points. (e.g. -6)
+
   for (let i = 0; i < serialTimeline.length - 1; i++) {
+    // check collision
     if (serialTimeline[i][1] > serialTimeline[i + 1][0]) return false;
+
+    // 2 adjacent subjects and 3 adjacent subjects
+    if (noAdjacent && serialTimeline[i][1] == serialTimeline[i + 1][0])
+      return false;
+  }
+
+  // Free days: give bonus points. (e.g. +1)
+  if (minFreeDays) {
+    let checkFreeDay = -1;
+    let freeDayCounter = 0;
+    for (let i = 0; i < serialTimeline.length; i++) {
+      const hasClassDay = ~~(serialTimeline[i][0] / PERIODS_PER_DAY);
+
+      if (hasClassDay - checkFreeDay > 1)
+        freeDayCounter += hasClassDay - checkFreeDay - 1;
+      checkFreeDay = hasClassDay;
+    }
+
+    freeDayCounter += 5 - checkFreeDay; // add the remaining free days of the week
+    if (freeDayCounter < minFreeDays) return false;
   }
 
   return true;
 }
 
-export function generateSchedule(coursesMap: CoursesMap) {
-  let interSchedules: Schedules = [[]];
+export function generateSchedule(
+  coursesMap: CoursesMap,
+  noAdjacent: boolean = true,
+  minFreeDays: number = 1
+) {
+  let iterSchedules: Schedules = [[]];
   coursesMap.forEach((courseObject, courseKey) => {
-    if (!courseObject.activeClasses) return;
+    const activeClassesMap = getActiveClasses(courseObject);
+    if (!activeClassesMap.size) return;
     const nextIterSchedules: Schedules = [];
 
-    courseObject.classesMap.forEach((classObject, classKey) => {
-      if (!classObject.isActive) return;
-      for (const interSchedule of interSchedules) {
+    activeClassesMap.forEach((_, classKey) => {
+      for (const interSchedule of iterSchedules) {
         const schedule: Schedule = [...interSchedule, { courseKey, classKey }];
-        if (_checkClassCollision({ coursesMap, schedule })) {
+        if (
+          _checkClassCollision({
+            coursesMap,
+            schedule,
+            noAdjacent,
+            minFreeDays,
+          })
+        ) {
           nextIterSchedules.push(schedule);
         }
       }
     });
 
-    interSchedules = [...nextIterSchedules];
+    iterSchedules = [...nextIterSchedules];
   });
 
-  if (interSchedules.length == 0 || interSchedules[0].length == 0) {
+  if (iterSchedules.length == 0 || iterSchedules[0].length == 0) {
     return [];
   } else {
-    return interSchedules;
+    return iterSchedules;
   }
 }
 
-export function toggleClassState(
+export function mapToCompleteSchedule(
   coursesMap: CoursesMap,
-  classObject: ClassObject,
-  state?: boolean
-) {
-  if (state === classObject.isActive) return classObject.isActive;
+  schedule: Schedule
+): CompleteSchedule {
+  return schedule.map(({ classKey, courseKey }) => {
+    const courseObject = coursesMap.get(courseKey);
 
-  classObject.isActive = !classObject.isActive;
+    const classObject = courseObject?.classesMap.get(classKey);
 
-  const courseObject = coursesMap.get(classObject.courseID);
-  if (!courseObject) {
-    throw Error(
-      `Invalid ClassObject reference: ${classObject.courseID} - ${classObject.id}`
-    );
-  }
+    if (!courseObject || !classObject)
+      throw ReferenceError(
+        `Invalid ClassObject reference: ${courseKey} - ${classKey}`
+      );
 
-  if (classObject.isActive) {
-    courseObject.activeClasses += 1;
-  } else {
-    courseObject.activeClasses -= 1;
-  }
-
-  return classObject.isActive;
-}
-
-export function deleteClass(coursesMap: CoursesMap, classObject: ClassObject) {
-  const courseObject = coursesMap.get(classObject.courseID);
-  const classesMap = courseObject?.classesMap;
-  if (!courseObject || !classesMap?.has(classObject.id)) {
-    throw Error(
-      `Invalid ClassObject reference: ${classObject.courseID} - ${classObject.id}`
-    );
-  }
-
-  classesMap.delete(classObject.id);
-  if (classObject.isActive) {
-    courseObject.activeClasses -= 1;
-  }
-
-  if (courseObject.classesMap.size == 0) {
-    coursesMap.delete(courseObject.id);
-  }
-}
-
-export function getCourseState(courseObject: CourseObject) {
-  return courseObject.activeClasses == courseObject.classesMap.size;
-}
-
-export function toggleCourseState(
-  coursesMap: CoursesMap,
-  courseObject: CourseObject,
-  state?: boolean
-) {
-  const newState = !getCourseState(courseObject);
-  if (state === !newState) return state;
-
-  for (const classObject of courseObject.classesMap.values()) {
-    toggleClassState(coursesMap, classObject, newState);
-  }
-
-  return newState;
-}
-
-export function deleteCourse(
-  coursesMap: CoursesMap,
-  courseObject: CourseObject
-) {
-  if (!coursesMap.has(courseObject.id)) {
-    throw Error(`Invalid CourseObject reference: ${courseObject.id}`);
-  }
-
-  coursesMap.delete(courseObject.id);
-}
-
-export function getAllState(coursesMap: CoursesMap) {
-  for (const courseObject of coursesMap.values()) {
-    if (courseObject.activeClasses != courseObject.classesMap.size)
-      return false;
-  }
-  return true;
-}
-
-export function toggleAllState(coursesMap: CoursesMap, state?: boolean) {
-  const newState = !getAllState(coursesMap);
-  if (state === !newState) return state;
-
-  for (const courseObject of coursesMap.values()) {
-    toggleCourseState(coursesMap, courseObject, newState);
-  }
-
-  return newState;
-}
-
-export function deleteAll(coursesMap: CoursesMap) {
-  coursesMap.clear();
+    return {
+      classObject,
+      color: courseObject.color ?? BG_COLOR_PALETTE[0],
+    } as CompleteClass;
+  });
 }
 
 export function mapColor(coursesMap: CoursesMap) {

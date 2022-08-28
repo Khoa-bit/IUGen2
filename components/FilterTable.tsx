@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { ClassObject, CourseObject, CoursesMap } from "../lib/classInput";
+import { ClassObject, CourseObject, CoursesMap } from "lib/classInput";
 import {
   deleteClass,
   deleteCourse,
@@ -8,7 +8,7 @@ import {
   toggleAllState,
   toggleClassState,
   toggleCourseState,
-} from "../lib/schedule";
+} from "../lib/courseAndClassUtils";
 import ClassRow from "./ClassRow";
 import CourseRow from "./CourseRow";
 import FilterHeader from "./FilterHeader";
