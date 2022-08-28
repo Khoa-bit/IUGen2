@@ -218,3 +218,66 @@ export function parseClassInput(rawInputString: string, browser: Browser) {
     return _mapCoursesChromium(parseData);
   }
 }
+
+export function compressCoursesMap(coursesMap: CoursesMap) {
+  const coursesArr = [];
+  for (const courseObject of coursesMap.values()) {
+    const courseArr = [courseObject.id, courseObject.name];
+    const courseIdLen = courseObject.id.length;
+    const classesArr = [];
+    for (const classObject of courseObject.classesMap.values()) {
+      const classArr = [
+        classObject.id.substring(courseIdLen),
+        classObject.date.join("_"),
+        classObject.startPeriod.join("_"),
+        classObject.periodsCount.join("_"),
+        classObject.location.join("_"),
+        classObject.lecturer.join("_"),
+      ];
+      classesArr.push(classArr.join(")"));
+    }
+    courseArr.push(classesArr.join("("));
+    coursesArr.push(courseArr.join("*"));
+  }
+  return coursesArr.join("!");
+}
+
+export function decompressCoursesStr(
+  coursesStr: string,
+  isActive: boolean = false
+) {
+  const coursesMap: CoursesMap = new Map();
+  try {
+    const coursesArr = coursesStr.split(/\!/);
+    for (const courseStr of coursesArr) {
+      const courseArr = courseStr.split(/\*/);
+      const classesArr = courseArr.at(-1)?.split(/\(/);
+      if (!classesArr)
+        throw new Error("Failed to parse: The given URL is invalid.");
+      const classesMap: ClassesMap = new Map();
+      coursesMap.set(courseArr[0], {
+        id: courseArr[0],
+        name: courseArr[1],
+        classesMap,
+      });
+      for (const classStr of classesArr) {
+        const classArr = classStr.split(/\)/);
+        const classId = courseArr[0] + classArr[0]; // courseID + group + practice
+        classesMap.set(classId, {
+          id: classId,
+          courseID: courseArr[0],
+          courseName: courseArr[1],
+          isActive: isActive,
+          date: classArr[1].split("_") as WeekDate[],
+          startPeriod: classArr[2].split("_").map((v) => Number(v)),
+          periodsCount: classArr[3].split("_").map((v) => Number(v)),
+          location: classArr[4].split("_"),
+          lecturer: classArr[5].split("_"),
+        });
+      }
+    }
+  } catch (e) {
+    throw new Error("Failed to parse: The given URL is invalid.");
+  }
+  return coursesMap;
+}
