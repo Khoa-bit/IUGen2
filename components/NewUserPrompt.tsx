@@ -1,10 +1,13 @@
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Button from "./Button";
 
 const NewUserPrompt = () => {
-  let [isOpen, setIsOpen] = useState(isUserNew());
+  let [isOpen, setIsOpen] = useState<boolean>(false);
+  useEffect(() => {
+    isUserNew();
+  }, []);
 
   return (
     <Transition show={isOpen} as={Fragment}>
