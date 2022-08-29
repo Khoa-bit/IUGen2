@@ -36,7 +36,7 @@ const DocsIndex: NextPage = () => {
           <ChromeIcon className="h-8"></ChromeIcon>
           <EdgeIcon className="h-8"></EdgeIcon>
         </h2>
-        <blockquote>Note: Safari official support comming soon.</blockquote>
+        <blockquote>Note: Safari official support is coming soon.</blockquote>
 
         <h3>Video Guide</h3>
         <div className="overflow-clip rounded-lg border">
