@@ -46,6 +46,10 @@ a more user-friendly interface of IUGen.
     <br/>IUGen in Production early 2022
 </p>
 
+## Try it out
+
+IUGen is currently online on Vercel at: [https://iugen.vercel.app](https://iugen.vercel.app)
+
 ## Run it yourself
 
 First, clone IUGen2 Github repository locally.
@@ -53,7 +57,7 @@ First, clone IUGen2 Github repository locally.
 Second, run the development server:
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. Done! :3
