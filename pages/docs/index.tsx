@@ -24,8 +24,9 @@ const DocsIndex: NextPage = () => {
         <meta name="twitter:card" content={Description} />
       </Head>
       <article
-        className="prose prose-slate prose-a:text-sky-600 hover:prose-a:text-sky-400
-      prose-code:text-indigo-500 w-full max-w-screen-lg rounded border border-slate-100 p-8 shadow"
+        className="prose prose-slate w-full max-w-screen-lg rounded border 
+        border-slate-100 p-8 shadow prose-a:text-sky-600 
+        hover:prose-a:text-sky-400 prose-code:text-indigo-500"
       >
         <h1>Documentation</h1>
         <p>Welcome to IUGen documentation!</p>
@@ -41,7 +42,7 @@ const DocsIndex: NextPage = () => {
         <div className="overflow-clip rounded-lg border">
           <iframe
             className="aspect-video w-full"
-            src="https://www.youtube-nocookie.com/embed/S0HC4vGi-kc"
+            src="https://www.youtube-nocookie.com/embed/zg7g8RqVZnA"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
