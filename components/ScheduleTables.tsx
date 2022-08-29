@@ -1,4 +1,4 @@
-import { FunnelIcon } from "@heroicons/react/24/solid";
+import { FunnelIcon, ShareIcon } from "@heroicons/react/24/solid";
 import { CoursesMap } from "lib/classInput";
 import {
   CompleteSchedule,
@@ -70,8 +70,8 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
         <FunnelIcon className="h-4 shrink-0 text-sky-500"></FunnelIcon>
         <label htmlFor="noAdjacent">No adjacent classes:</label>
         <input
-          className="h-[18px] w-[18px] rounded 
-          border border-slate-300 text-sky-500 transition-colors hover:text-sky-300 
+          className="h-[18px] w-[18px] rounded border border-slate-300
+          text-sky-500 shadow shadow-slate-300 transition-colors hover:text-sky-300 
           focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
           type="checkbox"
           name="noAdjacent"
@@ -137,7 +137,9 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
             setPerPage(Number(event.currentTarget.value));
           }}
         />
-        <CopyClipboard className="ml-auto" text={href}></CopyClipboard>
+        <CopyClipboard className="ml-auto" text={href}>
+          <ShareIcon className="h-5 shrink-0 text-white"></ShareIcon>
+        </CopyClipboard>
       </form>
       <header
         className={`flex w-full items-center gap-2 rounded 

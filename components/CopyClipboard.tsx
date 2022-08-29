@@ -1,13 +1,12 @@
 import { Transition } from "@headlessui/react";
-import { ClipboardIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-interface CopyClipboardProps {
+interface CopyClipboardProps extends React.PropsWithChildren {
   text: string;
   className?: string;
 }
 
-const CopyClipboard = ({ text, className }: CopyClipboardProps) => {
+const CopyClipboard = ({ text, className, ...props }: CopyClipboardProps) => {
   const [isShowing, setIsShowing] = useState(false);
   const count = 60;
 
@@ -15,12 +14,12 @@ const CopyClipboard = ({ text, className }: CopyClipboardProps) => {
     <div className={`relative ${className}`}>
       <button
         aria-label="Copy URL to share"
-        className={`transition-colorsfocus:border-sky-300 rounded p-2 text-white
-          focus:outline-none focus:ring focus:ring-sky-200 focus:ring-offset-2 
+        className={`rounded p-2 text-white shadow shadow-slate-300 transition-colors 
+        focus:outline-none focus:ring focus:ring-offset-2
           ${
             isShowing
-              ? "bg-emerald-400 hover:bg-emerald-400"
-              : "bg-sky-500 hover:bg-sky-400"
+              ? "bg-emerald-400 hover:bg-emerald-400 focus:border-emerald-300 focus:ring-emerald-200"
+              : "bg-sky-400 hover:bg-sky-300 focus:border-sky-300 focus:ring-sky-200"
           }`}
         title={text.slice(0, count) + (text.length > count ? "..." : "")}
         onClick={(event) => {
@@ -33,7 +32,7 @@ const CopyClipboard = ({ text, className }: CopyClipboardProps) => {
           });
         }}
       >
-        <ClipboardIcon className="h-5 shrink-0 text-white"></ClipboardIcon>
+        {props.children}
       </button>
       <Transition
         show={isShowing}
