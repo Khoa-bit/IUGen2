@@ -36,8 +36,8 @@ const Header = () => {
             className="rounded-full"
             src={profilePic}
             alt="Picture of the me"
-            width={30}
-            height={30}
+            width={32}
+            height={32}
             objectFit="cover"
           ></Image>
           <p className="mr-3 font-bold">Nguyễn Anh Khoa</p>
