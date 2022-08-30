@@ -64,7 +64,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
   return (
     <section className="flex w-full max-w-screen-lg flex-col gap-8 xl:grid xl:max-w-none xl:grid-cols-2">
       <form
-        className="flex w-full items-center gap-2 rounded 
+        className="flex w-full items-center gap-2 overflow-x-auto whitespace-nowrap rounded
         py-2 px-3 text-slate-900 shadow xl:col-span-2 xl:mx-auto xl:max-w-screen-lg"
       >
         <FunnelIcon className="h-4 shrink-0 text-sky-500"></FunnelIcon>
@@ -137,7 +137,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
             setPerPage(Number(event.currentTarget.value));
           }}
         />
-        <CopyClipboard className="ml-auto" text={href}>
+        <CopyClipboard className="ml-auto pl-5" text={href}>
           <ShareIcon className="h-5 shrink-0 text-white"></ShareIcon>
         </CopyClipboard>
       </form>

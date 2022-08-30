@@ -53,7 +53,11 @@ drop-shadow-[0px_2px_2px_rgba(148,163,184,0.5)]"
 
 function BrowserRadioGroup({ browser, setBrowser }: BrowserRadioGroupProps) {
   return (
-    <RadioGroup value={browser} onChange={setBrowser} className="flex gap-2">
+    <RadioGroup
+      value={browser}
+      onChange={setBrowser}
+      className="flex items-center gap-2"
+    >
       <RadioGroup.Label className="sr-only">
         Select your Browser
       </RadioGroup.Label>

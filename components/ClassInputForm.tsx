@@ -35,21 +35,18 @@ const ClassInputForm = ({
       items-center gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex space-x-5">
+      <div className="col-span-2 flex space-x-5 sm:col-span-1">
         <label className="mr-auto font-semibold" htmlFor="rawInputString">
           Paste courses table here:
         </label>
-        <div className="flex space-x-1.5">
-          <BrowserRadioGroup
-            browser={browser}
-            setBrowser={setBrowser}
-          ></BrowserRadioGroup>
-        </div>
+        <BrowserRadioGroup
+          browser={browser}
+          setBrowser={setBrowser}
+        ></BrowserRadioGroup>
         <HelpPrompt></HelpPrompt>
       </div>
-      <div></div>
       <input
-        className="rounded border border-slate-300
+        className="row-start-2 rounded border border-slate-300
         focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
         type="text"
         id="rawInputString"
@@ -68,7 +65,7 @@ const ClassInputForm = ({
         })}
       />
       <Button
-        className="ml-2 h-full w-fit shadow shadow-slate-300 md:ml-5"
+        className="row-start-2 ml-2 h-full w-fit shadow shadow-slate-300 md:ml-5"
         type="submit"
       >
         Add
