@@ -63,84 +63,86 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
 
   return (
     <section className="flex w-full max-w-screen-lg flex-col gap-8 xl:grid xl:max-w-none xl:grid-cols-2">
-      <form
-        className="flex w-full items-center gap-2 overflow-x-auto whitespace-nowrap rounded
+      <div
+        className="flex w-full items-center whitespace-nowrap rounded
         py-2 px-3 text-slate-900 shadow xl:col-span-2 xl:mx-auto xl:max-w-screen-lg"
       >
-        <FunnelIcon className="h-4 shrink-0 text-sky-500"></FunnelIcon>
-        <label htmlFor="noAdjacent">No adjacent classes:</label>
-        <input
-          className="h-[18px] w-[18px] rounded border border-slate-300
+        <div className="flex items-center gap-2 overflow-x-auto">
+          <FunnelIcon className="h-4 shrink-0 text-sky-500"></FunnelIcon>
+          <label htmlFor="noAdjacent">No adjacent classes:</label>
+          <input
+            className="h-[18px] w-[18px] rounded border border-slate-300
           text-sky-500 shadow shadow-slate-300 transition-colors hover:text-sky-300 
           focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
-          type="checkbox"
-          name="noAdjacent"
-          id="noAdjacent"
-          onChange={() => {
-            setNoAdjacent((noAdjacent) => !noAdjacent);
-          }}
-          checked={noAdjacent}
-        />
+            type="checkbox"
+            name="noAdjacent"
+            id="noAdjacent"
+            onChange={() => {
+              setNoAdjacent((noAdjacent) => !noAdjacent);
+            }}
+            checked={noAdjacent}
+          />
 
-        <label htmlFor="minFreeDays" className="ml-5">
-          Minimum free days:
-        </label>
-        <input
-          className="w-16 rounded border border-slate-300
+          <label htmlFor="minFreeDays" className="ml-5">
+            Minimum free days:
+          </label>
+          <input
+            className="w-16 rounded border border-slate-300
         focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
-          type="number"
-          name="minFreeDays"
-          id="minFreeDays"
-          min="0"
-          max="6"
-          defaultValue={1}
-          onChange={(event) => {
-            const target = event.currentTarget;
-            target.focus();
-            debounceBlur(target);
-          }}
-          onBlur={(event) => {
-            const curVal = event.currentTarget.value;
-            event.currentTarget.value = Math.max(
-              0,
-              Math.min(6, Number(curVal))
-            ).toString();
-            setMinFreeDays(Number(event.currentTarget.value));
-          }}
-        />
+            type="number"
+            name="minFreeDays"
+            id="minFreeDays"
+            min="0"
+            max="6"
+            defaultValue={1}
+            onChange={(event) => {
+              const target = event.currentTarget;
+              target.focus();
+              debounceBlur(target);
+            }}
+            onBlur={(event) => {
+              const curVal = event.currentTarget.value;
+              event.currentTarget.value = Math.max(
+                0,
+                Math.min(6, Number(curVal))
+              ).toString();
+              setMinFreeDays(Number(event.currentTarget.value));
+            }}
+          />
 
-        <label htmlFor="perPage" className="ml-5">
-          Schedules per page:
-        </label>
-        <input
-          className="w-[4.2rem] rounded border border-slate-300
+          <label htmlFor="perPage" className="ml-5">
+            Schedules per page:
+          </label>
+          <input
+            className="w-[4.2rem] rounded border border-slate-300
         focus:border-sky-300 focus:ring focus:ring-sky-200 focus:ring-offset-2"
-          type="number"
-          name="perPage"
-          id="perPage"
-          min="2"
-          max="20"
-          step="2"
-          defaultValue={10}
-          onChange={(event) => {
-            const target = event.currentTarget;
-            target.focus();
-            debounceBlur(target);
-          }}
-          onBlur={(event) => {
-            const curVal = event.currentTarget.value;
-            event.currentTarget.value = Math.max(
-              2,
-              Math.min(20, ~~(Number(curVal) / 2) * 2)
-            ).toString();
-            setPage(1);
-            setPerPage(Number(event.currentTarget.value));
-          }}
-        />
+            type="number"
+            name="perPage"
+            id="perPage"
+            min="2"
+            max="20"
+            step="2"
+            defaultValue={10}
+            onChange={(event) => {
+              const target = event.currentTarget;
+              target.focus();
+              debounceBlur(target);
+            }}
+            onBlur={(event) => {
+              const curVal = event.currentTarget.value;
+              event.currentTarget.value = Math.max(
+                2,
+                Math.min(20, ~~(Number(curVal) / 2) * 2)
+              ).toString();
+              setPage(1);
+              setPerPage(Number(event.currentTarget.value));
+            }}
+          />
+        </div>
         <CopyClipboard className="ml-auto pl-5" text={href}>
           <ShareIcon className="h-5 shrink-0 text-white"></ShareIcon>
         </CopyClipboard>
-      </form>
+      </div>
       <header
         className={`flex w-full items-center gap-2 rounded 
         py-2 px-3 text-white shadow xl:col-span-2 xl:mx-auto xl:max-w-screen-lg ${
