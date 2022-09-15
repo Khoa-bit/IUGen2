@@ -6,7 +6,7 @@ import Button from "./Button";
 const NewUserPrompt = () => {
   let [isOpen, setIsOpen] = useState<boolean>(false);
   useEffect(() => {
-    isUserNew();
+    setIsOpen(isUserNew());
   }, []);
 
   return (
