@@ -42,7 +42,7 @@ const DocsIndex: NextPage = () => {
         <div className="overflow-clip rounded-lg border">
           <iframe
             className="aspect-video w-full"
-            src="https://www.youtube-nocookie.com/embed/zg7g8RqVZnA"
+            src="https://www.youtube-nocookie.com/embed/JHlX93NdsBo"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
