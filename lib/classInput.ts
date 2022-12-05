@@ -147,7 +147,7 @@ function _splitDataChromium11to17(classData: string[]) {
   if (classInfoClump == undefined)
     throw new Error("Failed to match: Missing columns");
 
-  const groupedClump = classInfoClump.replaceAll(/\*___/g, "* ");
+  const groupedClump = classInfoClump.replaceAll(/(\*___)+/g, "* ");
   const parsedClassInfo = groupedClump.split(/[ "]+/);
   return classData.concat(parsedClassInfo);
 }
