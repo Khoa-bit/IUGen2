@@ -151,7 +151,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
           completeSchedules.length
             ? "bg-emerald-400 shadow-emerald-300"
             : hasAnyActive
-            ? "bg-yellow-600 shadow-yellow-500"
+            ? "bg-yellow-400 shadow-yellow-300"
             : "bg-stone-400 shadow-stone-300"
         }`}
       >
