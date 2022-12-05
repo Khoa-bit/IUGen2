@@ -21,11 +21,12 @@ const ClassInputForm = ({
   browser,
   setBrowser,
 }: ClassInputFormProps) => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit, reset } = useForm<Inputs>();
   const [isInputFocus, setIsInputFocus] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     inputHandler(data.rawInputString);
+    reset();
   };
 
   return (
