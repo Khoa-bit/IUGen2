@@ -113,6 +113,50 @@ describe("_mapCoursesChromium()", () => {
       '{"id":"PE018IU10","courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"location":["ONLINE"],"lecturer":["H.Y.Linh"],"isActive":true}'
     );
   });
+
+  it("should return courses Map with respective course ID where a course has 3 sessions", function () {
+    const parseData = [
+      "BM092IU",
+      "BM092IU",
+      "Cell/Tissue - Biomaterial Interaction",
+      "01",
+      "01",
+      "4",
+      "4",
+      "BEBE19IU11",
+      "20",
+      "20",
+      "*___Wed___Fri 1___1 4___3 LA2.413___A2.510 H.C.Khon___H.C.Khon 27/02/2023--07/05/2023___30/01/2023--28/05/2023",
+      "BM093IU",
+      "BM093IU",
+      "Tissue Engineering I",
+      "01",
+      "01",
+      "4",
+      "4",
+      "BEBE19IU11",
+      "20",
+      "20",
+      "*___*___Wed___Wed___Fri 7___7___4 4___4___3 LA2.413___LA2.210___A2.510 T.N.Thùy___T.N.Thùy___T.N.Thùy 27/02/2023--26/03/2023___10/04/2023--07/05/2023___30/01/2023--28/05/2023",
+    ];
+    const coursesMap = _mapCoursesChromium(parseData);
+
+    expect(coursesMap.size).toEqual(2);
+    expect(coursesMap.has("BM092IU")).toBeTruthy();
+    expect(coursesMap.has("BM093IU")).toBeTruthy();
+    expect(coursesMap.get("BM092IU")?.classesMap.size).toEqual(1);
+    expect(coursesMap.get("BM093IU")?.classesMap.size).toEqual(1);
+
+    const class0 = coursesMap.get("BM092IU")?.classesMap.get("BM092IU0101");
+    expect(JSON.stringify(class0)).toMatch(
+      '{"id":"BM092IU0101","courseID":"BM092IU","courseName":"Cell/Tissue - Biomaterial Interaction","date":["Wed","Fri"],"startPeriod":[1,1],"periodsCount":[4,3],"location":["LA2.413","A2.510"],"lecturer":["H.C.Khon","H.C.Khon"],"isActive":true}'
+    );
+
+    const class1 = coursesMap.get("BM093IU")?.classesMap.get("BM093IU0101");
+    expect(JSON.stringify(class1)).toMatch(
+      '{"id":"BM093IU0101","courseID":"BM093IU","courseName":"Tissue Engineering I","date":["Wed","Wed","Fri"],"startPeriod":[7,7,4],"periodsCount":[4,4,3],"location":["LA2.413","LA2.210","A2.510"],"lecturer":["T.N.Thùy","T.N.Thùy","T.N.Thùy"],"isActive":true}'
+    );
+  });
 });
 
 describe("_fillOptionalFields()", function () {
@@ -420,6 +464,23 @@ describe("parseClassInput() - Firefox", () => {
     );
   });
 
+  it("should parse raw class input string where a course has 3 sessions into CoursesMap Map", () => {
+    const rawInputString =
+      "BM092IU 	BM092IU 	 Cell/Tissue - Biomaterial Interaction 	01	01	4	4	BEBE19IU11	20 	20 	 *   	 Tư   Sáu 	 1   1 	 4   3 	 LA2.413   A2.510 	 H.C.Khon   H.C.Khon 	 27/02/2023--07/05/2023   30/01/2023--28/05/2023 	BM093IU 	BM093IU 	 Tissue Engineering I 	01	01	4	4	BEBE19IU11	20 	20 	 *   *   	 Tư   Tư   Sáu 	 7   7   4 	 4   4   3 	 LA2.413   LA2.210   A2.510 	 T.N.Thùy   T.N.Thùy   T.N.Thùy 	 27/02/2023--26/03/2023   10/04/2023--07/05/2023   30/01/2023--28/05/2023";
+
+    const coursesMap = parseClassInput(rawInputString, "firefox");
+
+    const class0 = coursesMap.get("BM092IU")?.classesMap.get("BM092IU0101");
+    expect(JSON.stringify(class0)).toMatch(
+      '{"id":"BM092IU0101","courseID":"BM092IU","courseName":"Cell/Tissue - Biomaterial Interaction","date":["Wed","Fri"],"startPeriod":[1,1],"periodsCount":[4,3],"location":["LA2.413","A2.510"],"lecturer":["H.C.Khon","H.C.Khon"],"isActive":true}'
+    );
+
+    const class1 = coursesMap.get("BM093IU")?.classesMap.get("BM093IU0101");
+    expect(JSON.stringify(class1)).toMatch(
+      '{"id":"BM093IU0101","courseID":"BM093IU","courseName":"Tissue Engineering I","date":["Wed","Wed","Fri"],"startPeriod":[7,7,4],"periodsCount":[4,4,3],"location":["LA2.413","LA2.210","A2.510"],"lecturer":["T.N.Thùy","T.N.Thùy","T.N.Thùy"],"isActive":true}'
+    );
+  });
+
   it("should parse raw Google Sheet class input string into CoursesMap Map", () => {
     // !DEPRECATED Google Sheet Parsing.
     const rawInputString = `IT134IU	IT134IU	Internet of Things	1	1	4	4	ITIT19CE	30	9	*	"Mon   Sat"	"7   4"	"4   3"	"LA1.607   L201"	"L.D.Tân   L.D.Tân"	"07/03/2022--15/05/2022   07/02/2022--05/06/2022"	 PE018IU	PE018IU	History of Vietnamese Communist Party	10		2	2	ITIT19CS1	75	3		Wed	9	2	ONLINE	H.Y.Linh	07/02/2022--05/06/2022	`;
@@ -466,6 +527,22 @@ describe("parseClassInput() - Chromium", () => {
     const class1 = coursesMap.get("PE018IU")?.classesMap.get("PE018IU10");
     expect(JSON.stringify(class1)).toMatch(
       '{"id":"PE018IU10","courseID":"PE018IU","courseName":"History of Vietnamese Communist Party","date":["Wed"],"startPeriod":[9],"periodsCount":[2],"location":["ONLINE"],"lecturer":["H.Y.Linh"],"isActive":true}'
+    );
+  });
+
+  it("should parse raw class input string where a course has 3 sessions into CoursesMap Map", () => {
+    const rawInputString =
+      "BM092IU	BM092IU	 Cell/Tissue - Biomaterial Interaction	01	01	4	4	BEBE19IU11	20	20	 *   Wed   Fri 1   1 4   3 LA2.413   A2.510 H.C.Khon   H.C.Khon 27/02/2023--07/05/2023   30/01/2023--28/05/2023 	BM093IU	BM093IU	 Tissue Engineering I	01	01	4	4	BEBE19IU11	20	20	 *   *   Wed   Wed   Fri 7   7   4 4   4   3 LA2.413   LA2.210   A2.510 T.N.Thùy   T.N.Thùy   T.N.Thùy 27/02/2023--26/03/2023   10/04/2023--07/05/2023   30/01/2023--28/05/2023";
+    const coursesMap = parseClassInput(rawInputString, "chromium");
+
+    const class0 = coursesMap.get("BM092IU")?.classesMap.get("BM092IU0101");
+    expect(JSON.stringify(class0)).toMatch(
+      '{"id":"BM092IU0101","courseID":"BM092IU","courseName":"Cell/Tissue - Biomaterial Interaction","date":["Wed","Fri"],"startPeriod":[1,1],"periodsCount":[4,3],"location":["LA2.413","A2.510"],"lecturer":["H.C.Khon","H.C.Khon"],"isActive":true}'
+    );
+
+    const class1 = coursesMap.get("BM093IU")?.classesMap.get("BM093IU0101");
+    expect(JSON.stringify(class1)).toMatch(
+      '{"id":"BM093IU0101","courseID":"BM093IU","courseName":"Tissue Engineering I","date":["Wed","Wed","Fri"],"startPeriod":[7,7,4],"periodsCount":[4,4,3],"location":["LA2.413","LA2.210","A2.510"],"lecturer":["T.N.Thùy","T.N.Thùy","T.N.Thùy"],"isActive":true}'
     );
   });
 
