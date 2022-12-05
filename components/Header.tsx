@@ -40,7 +40,9 @@ const Header = () => {
             height={32}
             objectFit="cover"
           ></Image>
-          <p className="mr-3 font-bold">Nguyễn Anh Khoa</p>
+          <p className="mr-3 font-bold" title="ITITIU19141 - Computer Science">
+            Nguyễn Anh Khoa
+          </p>
         </a>
       </nav>
     </header>

@@ -26,6 +26,14 @@ const Footer = () => {
           >
             Code of conduct
           </a>
+          <a
+            className="block text-sky-600 transition-colors hover:text-sky-400 hover:underline"
+            href="https://hcmiu.edu.vn/en/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            HCMC International University
+          </a>
         </section>
         <section>
           <h4 className="font-bold md:mb-3">About me</h4>
