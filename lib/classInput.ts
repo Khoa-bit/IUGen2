@@ -209,8 +209,9 @@ export function _fillOptionalFields(classData: string[]) {
 export function parseClassInput(rawInputString: string, browser: Browser) {
   const parseData = rawInputString
     .trim()
-    .replaceAll(/[ "]{3,}/g, "___")
-    .replaceAll(/\t \t/g, "\t-___-\t") // add - for blank fields (Firefox)
+    .replaceAll(/[\u00a0]/g, " ") // replace invisible characters (U+00a0) with spaces
+    .replaceAll(/[ "]{3,}/g, "___") // replace 3 adjacent spaces and double quotes with _
+    .replaceAll(/\t \t/g, "\t-___-\t") // add - for blank fields at the * columns (Firefox)
     .split(/[ "]*\t[ "]*/);
   if (browser == "firefox") {
     return _mapCoursesFirefox(parseData);
