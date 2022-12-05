@@ -30,15 +30,15 @@ const VNToEngDates = new Map<string, WeekDate>(
     Tư: "Wed",
     Năm: "Thu",
     Sáu: "Fri",
-    Bảy: "Sun",
-    Nhật: "Sat",
+    Bảy: "Sat",
+    Nhật: "Sun",
     Mon: "Mon",
     Tue: "Tue",
     Wed: "Wed",
     Thu: "Thu",
     Fri: "Fri",
-    Sun: "Sun",
     Sat: "Sat",
+    Sun: "Sun",
   })
 );
 
