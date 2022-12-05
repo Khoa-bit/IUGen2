@@ -19,6 +19,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
   const deferredCoursesMap = useDeferredValue(coursesMap);
   const [href, setHref] = useState<string>("");
   const [noAdjacent, setNoAdjacent] = useState<boolean>(true);
+  const [hasAnyActive, setHasAnyActive] = useState<boolean>(true);
   const [minFreeDays, setMinFreeDays] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(10);
   const [schedulesJSX, setSchedulesJSX] = useState<JSX.Element[]>([]);
@@ -32,11 +33,12 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
   }, [deferredCoursesMap]);
 
   useEffect(() => {
-    const schedules = generateSchedule(
+    const { schedules, hasAnyActive } = generateSchedule(
       deferredCoursesMap,
       noAdjacent,
       minFreeDays
     );
+    setHasAnyActive(hasAnyActive);
     setCompleteSchedules(
       schedules.map((schedule) =>
         mapToCompleteSchedule(deferredCoursesMap, schedule)
@@ -148,6 +150,8 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
         py-2 px-3 text-white shadow xl:col-span-2 xl:mx-auto xl:max-w-screen-lg ${
           completeSchedules.length
             ? "bg-emerald-400 shadow-emerald-300"
+            : hasAnyActive
+            ? "bg-yellow-600 shadow-yellow-500"
             : "bg-stone-400 shadow-stone-300"
         }`}
       >
@@ -156,9 +160,13 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
           <p>
             Schedule(s) generated: <b>{completeSchedules.length}</b>
           </p>
-        ) : (
+        ) : hasAnyActive ? (
           <p>
             <b>No schedule</b> can be generated from the above combination
+          </p>
+        ) : (
+          <p>
+            <b>No courses</b> have been added
           </p>
         )}
       </header>

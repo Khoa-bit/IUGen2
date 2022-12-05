@@ -146,7 +146,7 @@ describe("Schedule Generator", () => {
 
   describe("generateSchedule()", () => {
     it("should generate schedules when all classes are active", function () {
-      const schedules = generateSchedule(coursesMap, false, 0);
+      const { schedules } = generateSchedule(coursesMap, false, 0);
 
       expect(schedules).toStrictEqual([
         [
@@ -171,7 +171,11 @@ describe("Schedule Generator", () => {
 
       // Disable C202 Class
       toggleClassState(coursesMap, C202);
-      const schedulesC202 = generateSchedule(coursesMap, false, 0);
+      const { schedules: schedulesC202 } = generateSchedule(
+        coursesMap,
+        false,
+        0
+      );
       toggleClassState(coursesMap, C202);
 
       expect(schedulesC202).toStrictEqual([
@@ -187,7 +191,11 @@ describe("Schedule Generator", () => {
 
       // Disable C201 Class
       toggleClassState(coursesMap, C201);
-      const schedulesC201 = generateSchedule(coursesMap, false, 0);
+      const { schedules: schedulesC201 } = generateSchedule(
+        coursesMap,
+        false,
+        0
+      );
       toggleClassState(coursesMap, C201);
 
       expect(schedulesC201).toStrictEqual([
@@ -209,7 +217,11 @@ describe("Schedule Generator", () => {
       // Disable both C201 and C202 Classes
       toggleClassState(coursesMap, C201);
       toggleClassState(coursesMap, C202);
-      const schedulesC201C202 = generateSchedule(coursesMap, false, 0);
+      const { schedules: schedulesC201C202 } = generateSchedule(
+        coursesMap,
+        false,
+        0
+      );
       toggleClassState(coursesMap, C201);
       toggleClassState(coursesMap, C202);
 
@@ -220,12 +232,12 @@ describe("Schedule Generator", () => {
     });
 
     it("should return an empty array when there is no schedule generated.", () => {
-      const schedules = generateSchedule(new Map(), false, 0);
+      const { schedules } = generateSchedule(new Map(), false, 0);
       expect(schedules).toStrictEqual([]);
     });
 
     it("should generate schedules with free days conditions", function () {
-      const schedules = generateSchedule(coursesMap, false, 4);
+      const { schedules } = generateSchedule(coursesMap, false, 4);
 
       expect(schedules).toStrictEqual([
         [
@@ -237,8 +249,16 @@ describe("Schedule Generator", () => {
 
     it("should generate schedules with free days conditions", function () {
       addAdjacentCourses(coursesMap);
-      const adjacentSchedules = generateSchedule(coursesMap, false, 0);
-      const noAdjacentSchedules = generateSchedule(coursesMap, true, 0);
+      const { schedules: adjacentSchedules } = generateSchedule(
+        coursesMap,
+        false,
+        0
+      );
+      const { schedules: noAdjacentSchedules } = generateSchedule(
+        coursesMap,
+        true,
+        0
+      );
 
       expect(adjacentSchedules.length).toBe(9);
       expect(noAdjacentSchedules.length).toBe(5);
@@ -323,7 +343,7 @@ describe("parseClassInput() and generateSchedule()", () => {
   });
 
   it("should generate all schedules from raw input string", function () {
-    const schedules = generateSchedule(coursesMap, false, 0);
+    const { schedules } = generateSchedule(coursesMap, false, 0);
 
     expect(schedules).toStrictEqual([
       [
@@ -373,7 +393,7 @@ describe("parseClassInput() and generateSchedule()", () => {
 
     toggleClassState(coursesMap, IT092IU0102);
     toggleClassState(coursesMap, PE018IU10);
-    const schedules = generateSchedule(coursesMap);
+    const { schedules } = generateSchedule(coursesMap);
     toggleClassState(coursesMap, IT092IU0102);
     toggleClassState(coursesMap, PE018IU10);
 

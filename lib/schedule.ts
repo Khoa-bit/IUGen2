@@ -134,9 +134,11 @@ export function generateSchedule(
   minFreeDays: number = 1
 ) {
   let iterSchedules: Schedules = [[]];
+  let hasAnyActive = false;
   coursesMap.forEach((courseObject, courseKey) => {
     const activeClassesMap = getActiveClasses(courseObject);
     if (!activeClassesMap.size) return;
+    hasAnyActive = true;
     const nextIterSchedules: Schedules = [];
 
     activeClassesMap.forEach((_, classKey) => {
@@ -159,9 +161,9 @@ export function generateSchedule(
   });
 
   if (iterSchedules.length == 0 || iterSchedules[0].length == 0) {
-    return [];
+    return { schedules: [], hasAnyActive };
   } else {
-    return iterSchedules;
+    return { schedules: iterSchedules, hasAnyActive };
   }
 }
 
