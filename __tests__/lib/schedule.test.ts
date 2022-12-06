@@ -146,7 +146,11 @@ describe("Schedule Generator", () => {
 
   describe("generateSchedule()", () => {
     it("should generate schedules when all classes are active", function () {
-      const { schedules } = generateSchedule(coursesMap, false, 0);
+      const { schedules, hasAnyActive } = generateSchedule(
+        coursesMap,
+        false,
+        0
+      );
 
       expect(schedules).toStrictEqual([
         [
@@ -162,6 +166,8 @@ describe("Schedule Generator", () => {
           { courseKey: "C2", classKey: "C202" },
         ],
       ] as ClassID[][]);
+
+      expect(hasAnyActive).toBe(true);
     });
 
     it("should generate some schedules when some classes aren't active", function () {
@@ -171,11 +177,8 @@ describe("Schedule Generator", () => {
 
       // Disable C202 Class
       toggleClassState(coursesMap, C202);
-      const { schedules: schedulesC202 } = generateSchedule(
-        coursesMap,
-        false,
-        0
-      );
+      const { schedules: schedulesC202, hasAnyActive: hasAnyActiveC202 } =
+        generateSchedule(coursesMap, false, 0);
       toggleClassState(coursesMap, C202);
 
       expect(schedulesC202).toStrictEqual([
@@ -189,13 +192,12 @@ describe("Schedule Generator", () => {
         ],
       ] as ClassID[][]);
 
+      expect(hasAnyActiveC202).toBe(true);
+
       // Disable C201 Class
       toggleClassState(coursesMap, C201);
-      const { schedules: schedulesC201 } = generateSchedule(
-        coursesMap,
-        false,
-        0
-      );
+      const { schedules: schedulesC201, hasAnyActive: hasAnyActiveC201 } =
+        generateSchedule(coursesMap, false, 0);
       toggleClassState(coursesMap, C201);
 
       expect(schedulesC201).toStrictEqual([
@@ -204,6 +206,8 @@ describe("Schedule Generator", () => {
           { courseKey: "C2", classKey: "C202" },
         ],
       ] as ClassID[][]);
+
+      expect(hasAnyActiveC201).toBe(true);
     });
 
     it("should generate C1 schedules when all classes in C1 aren't active", function () {
@@ -217,7 +221,7 @@ describe("Schedule Generator", () => {
       // Disable both C201 and C202 Classes
       toggleClassState(coursesMap, C201);
       toggleClassState(coursesMap, C202);
-      const { schedules: schedulesC201C202 } = generateSchedule(
+      const { schedules: schedulesC201C202, hasAnyActive } = generateSchedule(
         coursesMap,
         false,
         0
@@ -229,15 +233,23 @@ describe("Schedule Generator", () => {
         [{ courseKey: "C1", classKey: "C10101" }],
         [{ courseKey: "C1", classKey: "C10102" }],
       ] as ClassID[][]);
+
+      expect(hasAnyActive).toBe(true);
     });
 
     it("should return an empty array when there is no schedule generated.", () => {
-      const { schedules } = generateSchedule(new Map(), false, 0);
+      const { schedules, hasAnyActive } = generateSchedule(new Map(), false, 0);
       expect(schedules).toStrictEqual([]);
+
+      expect(hasAnyActive).toBe(false);
     });
 
     it("should generate schedules with free days conditions", function () {
-      const { schedules } = generateSchedule(coursesMap, false, 4);
+      const { schedules, hasAnyActive } = generateSchedule(
+        coursesMap,
+        false,
+        4
+      );
 
       expect(schedules).toStrictEqual([
         [
@@ -245,20 +257,20 @@ describe("Schedule Generator", () => {
           { courseKey: "C2", classKey: "C201" },
         ],
       ] as ClassID[][]);
+
+      expect(hasAnyActive).toBe(true);
     });
 
     it("should generate schedules with free days conditions", function () {
       addAdjacentCourses(coursesMap);
-      const { schedules: adjacentSchedules } = generateSchedule(
-        coursesMap,
-        false,
-        0
-      );
-      const { schedules: noAdjacentSchedules } = generateSchedule(
-        coursesMap,
-        true,
-        0
-      );
+      const {
+        schedules: adjacentSchedules,
+        hasAnyActive: hasAnyActiveAdjacent,
+      } = generateSchedule(coursesMap, false, 0);
+      const {
+        schedules: noAdjacentSchedules,
+        hasAnyActive: hasAnyActiveNoAdjacent,
+      } = generateSchedule(coursesMap, true, 0);
 
       expect(adjacentSchedules.length).toBe(9);
       expect(noAdjacentSchedules.length).toBe(5);
@@ -290,6 +302,9 @@ describe("Schedule Generator", () => {
           { courseKey: "C3", classKey: "C303" },
         ],
       ] as ClassID[][]);
+
+      expect(hasAnyActiveAdjacent).toBe(true);
+      expect(hasAnyActiveNoAdjacent).toBe(true);
     });
   });
 
