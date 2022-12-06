@@ -7,6 +7,8 @@ import FirefoxIcon from "../../components/icons/FirefoxIcon";
 import { CanonicalURL } from "../../lib/utils";
 import highlightClasses from "../../public/highlightClasses.png";
 import pasteClassInput from "../../public/pasteClassInput.png";
+import selectFilterClasses from "../../public/Select_Filter_Classes.png";
+import generatedSchedules from "../../public/Generated_Schedules.png";
 
 const Description = "Get started with IUGen in the official documentation.";
 
@@ -85,9 +87,27 @@ const DocsIndex: NextPage = () => {
         <blockquote>
           The input box may look weird but don&apos;t worry :3
         </blockquote>
+        <p>Click the Add button.</p>
+        <div className="overflow-clip rounded-lg border">
+          <Image
+            src={selectFilterClasses}
+            alt="Image of selecting and filtering classes in the IUGen table"
+          ></Image>
+        </div>
+        <p>You will be presented with a table of courses. </p>
         <p>
-          Click the Add button. You see that your schedule is generated
-          instantly!
+          Select the classes that you generate schedules for and apply
+          conditions (&quot;No adjacent classes&quot; or &quot;Minimum free
+          days&quot;)
+        </p>
+        <div className="overflow-clip rounded-lg border">
+          <Image
+            src={generatedSchedules}
+            alt="Image of all possible schedules got IUGen"
+          ></Image>
+        </div>
+        <p>
+          <b>Instantly ⚡</b>, You will see that your schedule is generated! ⚙️
         </p>
       </article>
     </>
