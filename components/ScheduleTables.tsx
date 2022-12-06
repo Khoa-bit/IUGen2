@@ -19,7 +19,7 @@ const ScheduleTables = ({ coursesMap }: ScheduleTablesProps) => {
   const deferredCoursesMap = useDeferredValue(coursesMap);
   const [href, setHref] = useState<string>("");
   const [noAdjacent, setNoAdjacent] = useState<boolean>(true);
-  const [hasAnyActive, setHasAnyActive] = useState<boolean>(true);
+  const [hasAnyActive, setHasAnyActive] = useState<boolean>(false);
   const [minFreeDays, setMinFreeDays] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(10);
   const [schedulesJSX, setSchedulesJSX] = useState<JSX.Element[]>([]);
