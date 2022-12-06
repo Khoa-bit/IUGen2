@@ -34,8 +34,8 @@ export const SERIAL_DATE = new Map(
     Wed: 2,
     Thu: 3,
     Fri: 4,
-    Sun: 5,
-    Sat: 6,
+    Sat: 5,
+    Sun: 6,
   })
 );
 
